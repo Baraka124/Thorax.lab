@@ -1,0 +1,2807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThoraxLab | Clinical-Industry Innovation Platform</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    
+    <style>
+        /* ===== CSS RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Professional Healthcare Colors */
+            --clinical-blue: #1A56DB;
+            --clinical-light: #3B82F6;
+            --industry-teal: #0E9F6E;
+            --industry-light: #14B8A6;
+            --accent-purple: #7E3AF2;
+            --accent-pink: #DB2777;
+            
+            /* Neutral Scale */
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+            
+            /* UI Tokens */
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-primary: var(--gray-900);
+            --text-secondary: var(--gray-600);
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            
+            /* Spacing */
+            --space-xs: 0.5rem;
+            --space-sm: 0.75rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            
+            /* Typography */
+            --font-sans: 'Inter', -apple-system, system-ui, sans-serif;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: var(--space-xs); }
+        .gap-3 { gap: var(--space-sm); }
+        .gap-4 { gap: var(--space-md); }
+        .gap-6 { gap: var(--space-lg); }
+        .p-4 { padding: var(--space-md); }
+        .p-6 { padding: var(--space-lg); }
+        .px-4 { padding-left: var(--space-md); padding-right: var(--space-md); }
+        .px-6 { padding-left: var(--space-lg); padding-right: var(--space-lg); }
+        .py-3 { padding-top: var(--space-sm); padding-bottom: var(--space-sm); }
+        .py-4 { padding-top: var(--space-md); padding-bottom: var(--space-md); }
+        .mb-4 { margin-bottom: var(--space-md); }
+        .mb-6 { margin-bottom: var(--space-lg); }
+        .mb-8 { margin-bottom: var(--space-xl); }
+        .w-full { width: 100%; }
+        .max-w-4xl { max-width: 56rem; }
+        .max-w-6xl { max-width: 72rem; }
+        .text-center { text-align: center; }
+        .text-sm { font-size: var(--text-sm); }
+        .text-base { font-size: var(--text-base); }
+        .text-lg { font-size: var(--text-lg); }
+        .text-xl { font-size: var(--text-xl); }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .leading-tight { line-height: 1.25; }
+        .rounded { border-radius: var(--radius-md); }
+        .rounded-lg { border-radius: var(--radius-lg); }
+        .rounded-xl { border-radius: var(--radius-xl); }
+        .border { border: 1px solid var(--border); }
+        .shadow-sm { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); }
+        .shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .bg-white { background: white; }
+        .bg-gray-50 { background: var(--gray-50); }
+        .bg-gray-100 { background: var(--gray-100); }
+        .bg-clinical { background: var(--clinical-blue); }
+        .bg-industry { background: var(--industry-teal); }
+        .text-white { color: white; }
+        .text-gray-500 { color: var(--gray-500); }
+        .text-gray-600 { color: var(--gray-600); }
+        .text-gray-700 { color: var(--gray-700); }
+        .text-clinical { color: var(--clinical-blue); }
+        .text-industry { color: var(--industry-teal); }
+        .text-accent { color: var(--accent-purple); }
+        .transition { transition: all 0.2s ease; }
+        .hover\:bg-gray-50:hover { background: var(--gray-50); }
+        .hover\:shadow-lg:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+
+        /* ===== AUTHENTICATION SCREEN ===== */
+        .auth-screen {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: var(--space-xl);
+            background: linear-gradient(135deg, #F0F9FF 0%, #ECFDF5 100%);
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border);
+        }
+
+        .auth-header {
+            padding: var(--space-xl);
+            background: linear-gradient(135deg, var(--clinical-blue) 0%, var(--industry-teal) 100%);
+            text-align: center;
+            color: white;
+        }
+
+        .brand-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xs);
+        }
+
+        .auth-body {
+            padding: var(--space-xl);
+        }
+
+        .auth-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--clinical-blue), var(--industry-teal));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin: 0 auto var(--space-lg);
+            border: 3px solid white;
+            box-shadow: var(--shadow);
+        }
+
+        /* ===== FORMS ===== */
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            color: var(--text-primary);
+            font-size: var(--text-sm);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            font-family: inherit;
+            font-size: var(--text-sm);
+            background: var(--bg-card);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--clinical-blue);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.25rem;
+            padding-right: 2.5rem;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-lg);
+            font-family: inherit;
+            font-size: var(--text-sm);
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--clinical-blue) 0%, var(--industry-teal) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--clinical-blue);
+            background: var(--bg-secondary);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--clinical-blue);
+            border: 2px solid var(--clinical-blue);
+        }
+
+        .btn-outline:hover {
+            background: var(--clinical-blue);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* NEW: Sync/Import buttons */
+        .btn-sync {
+            background: linear-gradient(135deg, var(--accent-purple), #9333ea);
+            color: white;
+            border: 2px solid var(--accent-purple);
+        }
+
+        .btn-sync:hover {
+            background: linear-gradient(135deg, #9333ea, #7c3aed);
+            transform: translateY(-1px);
+        }
+
+        .btn-import {
+            background: linear-gradient(135deg, var(--industry-teal), #0d9488);
+            color: white;
+            border: 2px solid var(--industry-teal);
+        }
+
+        .btn-import:hover {
+            background: linear-gradient(135deg, #0d9488, #0e9f6e);
+            transform: translateY(-1px);
+        }
+
+        /* ===== PROJECT STICKERS ===== */
+        .project-sticker {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-left: 6px;
+            border: 1.5px solid;
+        }
+
+        .sticker-traci {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.05));
+            color: #2563eb;
+            border-color: #2563eb;
+        }
+
+        .sticker-synced {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05));
+            color: #8b5cf6;
+            border-color: #8b5cf6;
+        }
+
+        .sticker-clinical {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+            color: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        /* ===== MAIN APP LAYOUT ===== */
+        #mainApp {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        .app-header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-xl);
+            padding: var(--space-md) var(--space-xl);
+        }
+
+        .brand-main {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--clinical-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .nav-main {
+            display: flex;
+            gap: 0.25rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 0.75rem 1.25rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: var(--text-sm);
+            border-radius: var(--radius-lg);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            color: var(--clinical-blue);
+            background: var(--bg-secondary);
+        }
+
+        .nav-link.active {
+            color: var(--clinical-blue);
+            background: var(--bg-secondary);
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .user-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--clinical-blue), var(--industry-teal));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: var(--text-sm);
+            border: 2px solid white;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            padding: var(--space-xl) 0;
+            background: var(--bg-secondary);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+        }
+
+        .page {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page-header {
+            margin-bottom: var(--space-xl);
+            padding: var(--space-xl);
+            background: linear-gradient(135deg, var(--clinical-blue) 0%, var(--industry-teal) 100%);
+            border-radius: var(--radius-xl);
+            color: white;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.125rem;
+        }
+
+        /* ===== ENHANCED PROJECT CARDS ===== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            padding: var(--space-lg);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            border-color: var(--clinical-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--clinical-blue), var(--industry-teal));
+        }
+
+        .project-card.from-traci::before {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-md);
+        }
+
+        .project-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .badge-clinical {
+            background: rgba(26, 86, 219, 0.1);
+            color: var(--clinical-blue);
+        }
+
+        .badge-industry {
+            background: rgba(14, 159, 110, 0.1);
+            color: var(--industry-teal);
+        }
+
+        .badge-collaboration {
+            background: rgba(126, 58, 242, 0.1);
+            color: var(--accent-purple);
+        }
+
+        .badge-private {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .badge-internal {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+        }
+
+        .badge-public {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin-bottom: var(--space-md);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .project-tag {
+            padding: 0.25rem 0.5rem;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .project-team {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .team-avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: var(--gray-300);
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 2px solid white;
+        }
+
+        .project-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-light);
+        }
+
+        .project-stats {
+            display: flex;
+            gap: var(--space-lg);
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        /* ===== DISCUSSION CARDS ===== */
+        .discussion-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            transition: all 0.2s ease;
+        }
+
+        .discussion-card:hover {
+            border-color: var(--clinical-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .discussion-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+
+        .discussion-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .discussion-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .discussion-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-lg);
+        }
+
+        .discussion-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-light);
+        }
+
+        /* ===== MODALS ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: var(--space-md);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-500);
+            cursor: pointer;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* ===== TOAST NOTIFICATIONS ===== */
+        .toast-container {
+            position: fixed;
+            top: var(--space-xl);
+            right: var(--space-xl);
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-md) var(--space-lg);
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            min-width: 300px;
+            border-left: 4px solid var(--clinical-blue);
+        }
+
+        .toast.success { border-left-color: #10B981; }
+        .toast.error { border-left-color: #EF4444; }
+        .toast.warning { border-left-color: #F59E0B; }
+        .toast.info { border-left-color: #3B82F6; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ===== LOADING STATES ===== */
+        .loading {
+            text-align: center;
+            padding: var(--space-xl);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 2.5rem;
+            height: 2.5rem;
+            border: 3px solid var(--gray-200);
+            border-radius: 50%;
+            border-top-color: var(--clinical-blue);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: var(--space-md);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== EMPTY STATES ===== */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-xl);
+            color: var(--text-secondary);
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--space-md);
+            }
+            
+            .header-container {
+                flex-wrap: wrap;
+                gap: var(--space-md);
+            }
+            
+            .nav-main {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .user-section {
+                margin-left: auto;
+            }
+            
+            .page-header {
+                padding: var(--space-lg);
+            }
+            
+            .page-title {
+                font-size: 1.75rem;
+            }
+            
+            .modal-content {
+                padding: var(--space-lg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-body {
+                padding: var(--space-lg);
+            }
+            
+            .project-stats {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Toast Container -->
+        <div id="toastContainer" class="toast-container"></div>
+        
+        <!-- Authentication Screen -->
+        <div id="authScreen" class="auth-screen">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <div class="brand-logo">
+                        <i class="fas fa-handshake"></i>
+                        ThoraxLab
+                    </div>
+                    <p class="brand-subtitle">Clinical-Industry Innovation Collaboration Platform</p>
+                </div>
+                
+                <div class="auth-body">
+                    <div class="auth-avatar" id="authAvatar">?</div>
+                    
+                    <div class="text-center mb-8">
+                        <h2 class="text-xl font-bold mb-2">Welcome to ThoraxLab</h2>
+                        <p class="text-gray-600">Enter your name to start collaborating</p>
+                    </div>
+                    
+                    <form id="authForm">
+                        <div class="form-group">
+                            <label for="fullName" class="form-label">Your Name *</label>
+                            <input type="text" id="fullName" class="form-input" 
+                                   placeholder="Dr. Alexander Chen or Jane Smith" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="userType" class="form-label">I am a *</label>
+                            <select id="userType" class="form-input form-select" required>
+                                <option value="">Select your role</option>
+                                <option value="clinical">Clinical Professional</option>
+                                <option value="industry">Industry Professional</option>
+                                <option value="guest">Guest Contributor</option>
+                            </select>
+                        </div>
+                        
+                        <div id="clinicalFields" class="hidden">
+                            <div class="form-group">
+                                <label for="clinicalSpecialty" class="form-label">Clinical Specialty</label>
+                                <input type="text" id="clinicalSpecialty" class="form-input" 
+                                       placeholder="e.g., Pulmonology, Cardiology">
+                            </div>
+                            <div class="form-group">
+                                <label for="institution" class="form-label">Hospital/Institution</label>
+                                <input type="text" id="institution" class="form-input" 
+                                       placeholder="e.g., Massachusetts General Hospital">
+                            </div>
+                        </div>
+                        
+                        <div id="industryFields" class="hidden">
+                            <div class="form-group">
+                                <label for="professionalRole" class="form-label">Professional Role</label>
+                                <input type="text" id="professionalRole" class="form-input" 
+                                       placeholder="e.g., R&D Engineer, Product Manager">
+                            </div>
+                            <div class="form-group">
+                                <label for="company" class="form-label">Company/Organization</label>
+                                <input type="text" id="company" class="form-input" 
+                                       placeholder="e.g., MedTech Solutions Inc.">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="expertise" class="form-label">Areas of Expertise (comma-separated)</label>
+                            <input type="text" id="expertise" class="form-input" 
+                                   placeholder="e.g., COPD, Digital Health, Medical Devices">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-full">
+                            <i class="fas fa-rocket mr-2"></i>
+                            Enter Innovation Hub
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Application -->
+        <div id="mainApp" class="hidden">
+            <!-- Header -->
+            <header class="app-header">
+                <div class="container">
+                    <div class="header-container">
+                        <a href="#dashboard" class="brand-main">
+                            <i class="fas fa-handshake"></i>
+                            ThoraxLab
+                        </a>
+                        
+                        <nav class="nav-main">
+                            <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                                <i class="fas fa-chart-line"></i>
+                                Dashboard
+                            </a>
+                            <a href="#projects" class="nav-link" data-page="projects">
+                                <i class="fas fa-project-diagram"></i>
+                                All Projects
+                            </a>
+                            <a href="#myprojects" class="nav-link" data-page="myprojects">
+                                <i class="fas fa-folder"></i>
+                                My Projects
+                            </a>
+                            <a href="#discussions" class="nav-link" data-page="discussions">
+                                <i class="fas fa-comments"></i>
+                                Discussions
+                            </a>
+                            <a href="#fromtraci" class="nav-link" data-page="fromtraci">
+                                <i class="fas fa-hospital"></i>
+                                From TRAci
+                            </a>
+                        </nav>
+                        
+                        <div class="user-section">
+                            <div class="user-avatar" id="userAvatar" title="Click to edit profile">?</div>
+                            <button id="logoutBtn" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="container">
+                    <!-- Dashboard Page -->
+                    <div id="dashboardPage" class="page">
+                        <div class="page-header">
+                            <h1 class="page-title" id="welcomeMessage">Innovation Dashboard</h1>
+                            <p class="page-subtitle">Monitor your clinical-industry collaborations</p>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <div class="bg-white rounded-xl border p-6">
+                                <div class="flex items-center justify-between mb-6">
+                                    <h2 class="text-xl font-bold">Platform Overview</h2>
+                                    <button id="newProjectBtn" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i>
+                                        New Project
+                                    </button>
+                                </div>
+                                <div id="statsContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <!-- Dynamic stats -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-2">
+                                <div class="bg-white rounded-xl border p-6">
+                                    <div class="flex items-center justify-between mb-6">
+                                        <h2 class="text-xl font-bold">Active Collaborations</h2>
+                                        <a href="#projects" class="btn btn-secondary">
+                                            View All
+                                            <i class="fas fa-arrow-right ml-2"></i>
+                                        </a>
+                                    </div>
+                                    <div id="activeProjects" class="projects-grid">
+                                        <!-- Dynamic projects -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="bg-white rounded-xl border p-6 h-full">
+                                    <h2 class="text-xl font-bold mb-6">Recent Activity</h2>
+                                    <div id="activityFeed" class="space-y-4">
+                                        <!-- Dynamic activity -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- All Projects Page -->
+                    <div id="projectsPage" class="page hidden">
+                        <div class="page-header">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div>
+                                    <h1 class="page-title">All Innovation Projects</h1>
+                                    <p class="page-subtitle">Explore clinical-industry collaborations</p>
+                                </div>
+                                <div class="flex flex-col sm:flex-row gap-4">
+                                    <div class="relative">
+                                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                        <input type="text" id="projectSearch" class="form-input pl-10 w-full" 
+                                               placeholder="Search projects...">
+                                    </div>
+                                    <select id="projectFilter" class="form-input form-select">
+                                        <option value="all">All Projects</option>
+                                        <option value="clinical">Clinical-Led</option>
+                                        <option value="industry">Industry-Led</option>
+                                        <option value="collaboration">Active Collaboration</option>
+                                        <option value="fromtraci">From TRAci</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="allProjects" class="projects-grid">
+                            <!-- Dynamic projects -->
+                        </div>
+                    </div>
+                    
+                    <!-- From TRAci Projects Page -->
+                    <div id="fromtraciPage" class="page hidden">
+                        <div class="page-header">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div>
+                                    <h1 class="page-title">Projects from TRAci</h1>
+                                    <p class="page-subtitle">Clinical innovations published for collaboration</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="traciProjects" class="projects-grid">
+                            <!-- TRAci projects loaded dynamically -->
+                        </div>
+                    </div>
+                    
+                    <!-- My Projects Page -->
+                    <div id="myProjectsPage" class="page hidden">
+                        <div class="page-header">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h1 class="page-title">My Projects</h1>
+                                    <p class="page-subtitle">Manage your innovation initiatives</p>
+                                </div>
+                                <button id="createMyProjectBtn" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i>
+                                    New Project
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="myProjects" class="projects-grid">
+                            <!-- Dynamic projects -->
+                        </div>
+                    </div>
+                    
+                    <!-- Discussions Page -->
+                    <div id="discussionsPage" class="page hidden">
+                        <div class="page-header">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h1 class="page-title">Discussion Threads</h1>
+                                    <p class="page-subtitle">Join the conversation on innovation</p>
+                                </div>
+                                <button id="newDiscussionBtn" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i>
+                                    New Discussion
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="max-w-4xl mx-auto">
+                            <div id="discussionsList">
+                                <!-- Dynamic discussions -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        
+        <!-- New Project Modal -->
+        <div id="newProjectModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Start New Innovation Project</h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <form id="projectForm">
+                    <div class="form-group">
+                        <label for="projectTitle" class="form-label">Project Title *</label>
+                        <input type="text" id="projectTitle" class="form-input" 
+                               placeholder="e.g., Smart Inhaler Adherence System for COPD Patients" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectDescription" class="form-label">Description *</label>
+                        <textarea id="projectDescription" class="form-input form-textarea" 
+                                  placeholder="Describe the clinical need, innovation approach, and expected outcomes..." 
+                                  rows="5" required></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-group">
+                            <label for="projectType" class="form-label">Project Type *</label>
+                            <select id="projectType" class="form-input form-select" required>
+                                <option value="">Select type</option>
+                                <option value="clinical">Clinical-Led Innovation</option>
+                                <option value="industry">Industry-Led Development</option>
+                                <option value="collaboration">Joint Clinical-Industry</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="projectVisibility" class="form-label">Visibility *</label>
+                            <select id="projectVisibility" class="form-input form-select" required>
+                                <option value="private">Private (Team Only)</option>
+                                <option value="internal">Internal (Registered Professionals)</option>
+                                <option value="public">Public (Open Collaboration)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectTags" class="form-label">Tags & Keywords</label>
+                        <input type="text" id="projectTags" class="form-input" 
+                               placeholder="e.g., COPD, digital health, medical device, adherence, telemedicine">
+                    </div>
+                    <div class="flex gap-3 justify-end mt-8">
+                        <button type="button" class="btn btn-secondary modal-close">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-rocket"></i>
+                            Launch Project
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- New Discussion Modal -->
+        <div id="newDiscussionModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Start New Discussion</h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <form id="discussionForm">
+                    <div class="form-group">
+                        <label for="discussionTitle" class="form-label">Discussion Title *</label>
+                        <input type="text" id="discussionTitle" class="form-input" 
+                               placeholder="e.g., Best practices for remote patient monitoring in COPD" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="discussionContent" class="form-label">Discussion Content *</label>
+                        <textarea id="discussionContent" class="form-input form-textarea" 
+                                  placeholder="Share your thoughts, questions, or insights..." 
+                                  rows="6" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="discussionProject" class="form-label">Link to Project (Optional)</label>
+                        <select id="discussionProject" class="form-input form-select">
+                            <option value="">Select project (optional)</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-3 justify-end mt-8">
+                        <button type="button" class="btn btn-secondary modal-close">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Post Discussion
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Import to TRAci Modal -->
+        <div id="importToTraciModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Import to TRAci</h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="importProjectId">
+                    
+                    <div class="form-group">
+                        <label for="importReviewStatus" class="form-label">TRAci Review Status *</label>
+                        <select id="importReviewStatus" class="form-input form-select" required>
+                            <option value="needs_review">Needs Review (Default)</option>
+                            <option value="archived">Archived (For Reference)</option>
+                        </select>
+                        <small style="font-size: 0.75rem; color: var(--gray-500);">
+                            Archived projects are for reference only. Needs Review requires admin attention.
+                        </small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="importNotes" class="form-label">Notes for TRAci Team (Optional)</label>
+                        <textarea id="importNotes" class="form-input form-textarea" 
+                                  placeholder="Add context about this project for the clinical team..." rows="3"></textarea>
+                    </div>
+                    
+                    <div class="moderation-panel">
+                        <h4 style="margin-bottom: 8px; color: var(--warning);">
+                            <i class="fas fa-info-circle"></i>
+                            Import Information
+                        </h4>
+                        <ul style="font-size: 0.875rem; color: var(--gray-600); padding-left: 20px; margin: 8px 0;">
+                            <li>Project will be created as "archived" in TRAci initially</li>
+                            <li>TRAci admin can activate and modify the project</li>
+                            <li>Sync will be recorded in cross-platform audit logs</li>
+                            <li>Project gets "Imported from ThoraxLab" sticker</li>
+                        </ul>
+                    </div>
+                    
+                    <button id="confirmImportBtn" class="btn btn-import w-full" style="margin-top: 16px;">
+                        <i class="fas fa-download"></i>
+                        Import to TRAci
+                    </button>
+                    
+                    <div id="importError" class="error-message" style="display: none; margin-top: 16px;"></div>
+                    <div id="importSuccess" class="success-message" style="display: none; margin-top: 16px;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Project Detail Modal -->
+        <div id="projectDetailModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="modalProjectTitle"></h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div id="modalProjectContent">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Discussion Detail Modal -->
+        <div id="discussionDetailModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="modalDiscussionTitle"></h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div id="modalDiscussionContent">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <script>
+// ===== SUPABASE CONFIGURATION =====
+const SUPABASE_URL = 'https://bledpouekiytppuhxeqq.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_zdlIM8UbOrRIFpmYLJOmWQ_4QqNi_5C';
+
+// ===== THORAXLAB APPLICATION =====
+const ThoraxLab = {
+    // ===== CORE PROPERTIES =====
+    supabase: null,
+    currentUser: null,
+    cache: {
+        projects: [],
+        discussions: [],
+        traciProjects: [],
+        profiles: new Map()
+    },
+    
+    // ===== INITIALIZATION =====
+    init() {
+        try {
+            this.supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            this.setupEventListeners();
+            this.setupRouter();
+            this.initializeUser();
+        } catch (error) {
+            console.error('Failed to initialize ThoraxLab:', error);
+            this.showToast('Failed to initialize application', 'error');
+        }
+    },
+    
+    // ===== USER MANAGEMENT =====
+    async initializeUser() {
+        try {
+            const savedUser = localStorage.getItem('thoraxlab_user');
+            
+            if (savedUser) {
+                this.currentUser = JSON.parse(savedUser);
+                this.showApp();
+                this.updateUserDisplay();
+                await this.loadInitialData();
+                this.navigateTo(window.location.hash.substring(1) || 'dashboard');
+            } else {
+                this.showAuth();
+            }
+        } catch (error) {
+            console.error('Error loading user:', error);
+            this.showAuth();
+        }
+    },
+    
+    showAuth() {
+        document.getElementById('authScreen').classList.remove('hidden');
+        document.getElementById('mainApp').classList.add('hidden');
+        this.updateAuthAvatar();
+    },
+    
+    showApp() {
+        document.getElementById('authScreen').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
+    },
+    
+    updateAuthAvatar() {
+        const nameInput = document.getElementById('fullName');
+        const avatar = document.getElementById('authAvatar');
+        
+        if (nameInput && avatar) {
+            nameInput.addEventListener('input', () => {
+                const name = nameInput.value.trim();
+                if (name) {
+                    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                    avatar.textContent = initials;
+                } else {
+                    avatar.textContent = '?';
+                }
+            });
+        }
+    },
+    
+    async handleAuthSubmit(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('fullName').value.trim();
+        const type = document.getElementById('userType').value;
+        
+        if (!name || !type) {
+            this.showToast('Please enter your name and select your role', 'error');
+            return;
+        }
+        
+        try {
+            // Generate user ID
+            const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            
+            // Store user locally (since we can't guarantee table exists)
+            this.currentUser = {
+                id: userId,
+                name: name,
+                type: type,
+                clinicalSpecialty: type === 'clinical' ? document.getElementById('clinicalSpecialty').value || null : null,
+                institution: type === 'clinical' ? document.getElementById('institution').value || null : null,
+                professionalRole: type === 'industry' ? document.getElementById('professionalRole').value || null : null,
+                company: type === 'industry' ? document.getElementById('company').value || null : null,
+                expertise: document.getElementById('expertise').value || '',
+                avatar: name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2),
+                joined: new Date().toISOString()
+            };
+            
+            localStorage.setItem('thoraxlab_user', JSON.stringify(this.currentUser));
+            
+            this.showApp();
+            this.updateUserDisplay();
+            this.showToast(`Welcome to ThoraxLab, ${name.split(' ')[0]}!`, 'success');
+            
+            // Try to save to database (optional)
+            try {
+                const userData = {
+                    user_id: userId,
+                    full_name: name,
+                    user_type: type,
+                    clinical_specialty: type === 'clinical' ? document.getElementById('clinicalSpecialty').value || null : null,
+                    hospital_institution: type === 'clinical' ? document.getElementById('institution').value || null : null,
+                    professional_role: type === 'industry' ? document.getElementById('professionalRole').value || null : null,
+                    company: type === 'industry' ? document.getElementById('company').value || null : null,
+                    expertise_tags: document.getElementById('expertise').value ? 
+                        document.getElementById('expertise').value.split(',').map(t => t.trim()).filter(t => t) : [],
+                    is_verified: false,
+                    bio: null
+                };
+                
+                await this.supabase
+                    .from('thoraxlab_profiles')
+                    .insert([userData]);
+            } catch (dbError) {
+                console.log('User saved locally, database save optional:', dbError);
+            }
+            
+            await this.loadInitialData();
+            this.navigateTo('dashboard');
+            
+        } catch (error) {
+            console.error('Authentication error:', error);
+            this.showToast('Welcome! Using local storage.', 'info');
+            this.showApp();
+            this.updateUserDisplay();
+            this.navigateTo('dashboard');
+        }
+    },
+    
+    updateUserDisplay() {
+        if (!this.currentUser) return;
+        
+        const avatar = document.getElementById('userAvatar');
+        const welcome = document.getElementById('welcomeMessage');
+        
+        if (avatar) {
+            avatar.textContent = this.currentUser.avatar;
+            avatar.style.background = this.currentUser.type === 'clinical' 
+                ? 'linear-gradient(135deg, var(--clinical-blue), var(--clinical-light))'
+                : this.currentUser.type === 'industry'
+                ? 'linear-gradient(135deg, var(--industry-teal), var(--industry-light))'
+                : 'linear-gradient(135deg, var(--accent-purple), var(--accent-pink))';
+        }
+        
+        if (welcome) {
+            const firstName = this.currentUser.name.split(' ')[0];
+            welcome.textContent = `Welcome back, ${firstName}!`;
+        }
+    },
+    
+    logout() {
+        this.currentUser = null;
+        localStorage.removeItem('thoraxlab_user');
+        this.cache = { projects: [], discussions: [], traciProjects: [], profiles: new Map() };
+        this.showAuth();
+        this.showToast('You have been logged out', 'info');
+    },
+    
+    // ===== ROUTER =====
+    setupRouter() {
+        window.addEventListener('hashchange', () => this.handleRoute());
+        this.handleRoute();
+    },
+    
+    handleRoute() {
+        if (!this.currentUser) return;
+        
+        const hash = window.location.hash.substring(1) || 'dashboard';
+        this.showPage(hash);
+        this.updateNavigation(hash);
+    },
+    
+    showPage(page) {
+        document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+        
+        const pageElement = document.getElementById(page + 'Page');
+        if (pageElement) {
+            pageElement.classList.remove('hidden');
+            
+            switch(page) {
+                case 'dashboard':
+                    this.loadDashboard();
+                    break;
+                case 'projects':
+                    this.loadAllProjects();
+                    break;
+                case 'fromtraci':
+                    this.loadTraciProjects();
+                    break;
+                case 'myprojects':
+                    this.loadMyProjects();
+                    break;
+                case 'discussions':
+                    this.loadDiscussionsPage();
+                    break;
+            }
+        }
+    },
+    
+    updateNavigation(page) {
+        document.querySelectorAll('.nav-link').forEach(link => {
+            const linkPage = link.getAttribute('href').substring(1);
+            link.classList.toggle('active', linkPage === page);
+        });
+    },
+    
+    navigateTo(page) {
+        window.location.hash = page;
+    },
+    
+    // ===== DASHBOARD =====
+    async loadDashboard() {
+        try {
+            await Promise.all([
+                this.loadStats(),
+                this.loadActiveProjects(),
+                this.loadRecentActivity()
+            ]);
+        } catch (error) {
+            console.error('Error loading dashboard:', error);
+        }
+    },
+    
+    async loadStats() {
+        const container = document.getElementById('statsContainer');
+        if (!container) return;
+        
+        try {
+            // Use simpler queries that won't fail
+            let totalProjects = 0;
+            let totalDiscussions = 0;
+            let totalUsers = 0;
+            let traciCount = 0;
+            
+            try {
+                // Try to get counts, but don't fail if tables don't exist
+                const projectsResult = await this.supabase
+                    .from('thoraxlab_projects')
+                    .select('id', { count: 'exact' });
+                
+                totalProjects = projectsResult.count || 0;
+                
+                const traciProjects = await this.supabase
+                    .from('thoraxlab_projects')
+                    .select('id')
+                    .not('source_traci_project_id', 'is', null);
+                
+                traciCount = traciProjects.data?.length || 0;
+            } catch (e) {
+                console.log('Stats partial failure:', e);
+            }
+            
+            // Fallback to reasonable defaults
+            container.innerHTML = `
+                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                    <div class="stat-value text-clinical text-2xl font-bold">${totalProjects}</div>
+                    <div class="stat-label text-gray-600">Total Projects</div>
+                </div>
+                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                    <div class="stat-value text-industry text-2xl font-bold">${totalDiscussions}</div>
+                    <div class="stat-label text-gray-600">Active Discussions</div>
+                </div>
+                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                    <div class="stat-value text-accent text-2xl font-bold">${totalUsers}</div>
+                    <div class="stat-label text-gray-600">Platform Members</div>
+                </div>
+                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                    <div class="stat-value text-purple-600 text-2xl font-bold">${traciCount}</div>
+                    <div class="stat-label text-gray-600">From TRAci</div>
+                </div>
+            `;
+            
+        } catch (error) {
+            console.error('Error loading stats:', error);
+            container.innerHTML = '<div class="col-span-4 text-center text-gray-500">Statistics loading...</div>';
+        }
+    },
+    
+    async loadActiveProjects() {
+        const container = document.getElementById('activeProjects');
+        if (!container) return;
+        
+        try {
+            // SIMPLE QUERY - no complex joins
+            const { data: projects, error } = await this.supabase
+                .from('thoraxlab_projects')
+                .select('*')
+                .eq('status', 'active')
+                .order('created_at', { ascending: false })
+                .limit(4);
+            
+            if (error) {
+                console.log('Using fallback for active projects');
+                // Show empty state if no projects
+                this.showEmptyState(container, 'No active projects found', 'Be the first to create a project');
+                return;
+            }
+            
+            await this.renderProjects(projects || [], container);
+            
+        } catch (error) {
+            console.error('Error loading active projects:', error);
+            this.showEmptyState(container, 'No active projects yet', 'Create the first project');
+        }
+    },
+    
+    async loadRecentActivity() {
+        const container = document.getElementById('activityFeed');
+        if (!container) return;
+        
+        try {
+            // SIMPLE QUERY - no joins
+            const { data: recentProjects } = await this.supabase
+                .from('thoraxlab_projects')
+                .select('id, title, created_at')
+                .order('created_at', { ascending: false })
+                .limit(3);
+            
+            const activities = (recentProjects || []).map(p => ({
+                type: 'project',
+                title: 'New project created',
+                item: p.title,
+                time: this.formatTimeAgo(p.created_at)
+            })).slice(0, 5);
+            
+            if (activities.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4 text-gray-500">
+                        No recent activity
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = activities.map(activity => `
+                <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center 
+                        ${activity.type === 'project' ? 'bg-clinical text-white' : 
+                          'bg-industry text-white'}">
+                        <i class="fas fa-${activity.type === 'project' ? 'project-diagram' : 'comments'} text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm font-medium text-gray-900">${activity.title}</div>
+                        <div class="text-xs text-gray-600">${activity.item}</div>
+                        <div class="text-xs text-gray-400 mt-1">${activity.time}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+        } catch (error) {
+            console.error('Error loading activity:', error);
+            container.innerHTML = '<div class="text-center text-gray-500">Activity feed loading...</div>';
+        }
+    },
+    
+    // ===== PROJECT MANAGEMENT =====
+    async loadInitialData() {
+        if (!this.currentUser) return;
+        
+        try {
+            // Load all data with error handling
+            await Promise.all([
+                this.loadProjects(),
+                this.loadDiscussions()
+            ]);
+            
+        } catch (error) {
+            console.error('Error loading initial data:', error);
+            // Don't show error - just continue
+        }
+    },
+    
+    // FIXED: Added missing loadDiscussions function
+    async loadDiscussions() {
+        try {
+            // SIMPLE QUERY - no complex joins
+            const { data: discussions, error } = await this.supabase
+                .from('thoraxlab_discussions')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                console.log('Discussions table might not exist:', error);
+                return [];
+            }
+            
+            this.cache.discussions = discussions || [];
+            return discussions || [];
+            
+        } catch (error) {
+            console.error('Error loading discussions:', error);
+            return [];
+        }
+    },
+    
+    async loadProjects() {
+        try {
+            // SIMPLE QUERY - no complex joins
+            const { data: projects, error } = await this.supabase
+                .from('thoraxlab_projects')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                console.log('Projects load error:', error);
+                return [];
+            }
+            
+            this.cache.projects = projects || [];
+            return projects || [];
+            
+        } catch (error) {
+            console.error('Error loading projects:', error);
+            return [];
+        }
+    },
+    
+    async loadTraciProjects() {
+        const container = document.getElementById('traciProjects');
+        if (!container) return;
+        
+        try {
+            const { data: projects, error } = await this.supabase
+                .from('thoraxlab_projects')
+                .select('*')
+                .not('source_traci_project_id', 'is', null)
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                this.showEmptyState(container, 'No projects from TRAci found', 'Clinical projects will appear here when published');
+                return;
+            }
+            
+            await this.renderProjects(projects || [], container, true);
+            
+        } catch (error) {
+            console.error('Error loading TRAci projects:', error);
+            this.showEmptyState(container, 'No projects from TRAci yet', 'Clinical projects will appear here when published');
+        }
+    },
+    
+    async loadAllProjects() {
+        const container = document.getElementById('allProjects');
+        if (!container) return;
+        
+        try {
+            const projects = await this.loadProjects();
+            
+            const searchTerm = (document.getElementById('projectSearch')?.value || '').toLowerCase();
+            const filterType = document.getElementById('projectFilter')?.value || 'all';
+            
+            let filteredProjects = projects.filter(project => {
+                if (searchTerm) {
+                    const searchFields = [
+                        project.title,
+                        project.description,
+                        project.tags?.join(' '),
+                        project.owner_name || ''
+                    ].filter(Boolean).join(' ').toLowerCase();
+                    
+                    if (!searchFields.includes(searchTerm)) return false;
+                }
+                
+                if (filterType === 'fromtraci' && !project.source_traci_project_id) return false;
+                if (filterType !== 'all' && filterType !== 'fromtraci' && project.project_type !== filterType) return false;
+                
+                return true;
+            });
+            
+            await this.renderProjects(filteredProjects, container);
+            
+        } catch (error) {
+            console.error('Error loading all projects:', error);
+            this.showEmptyState(container, 'Failed to load projects', 'Please try again later');
+        }
+    },
+    
+    async loadMyProjects() {
+        const container = document.getElementById('myProjects');
+        if (!container) return;
+        
+        if (!this.currentUser) {
+            this.showEmptyState(container, 'Please sign in to view your projects');
+            return;
+        }
+        
+        try {
+            const { data: projects, error } = await this.supabase
+                .from('thoraxlab_projects')
+                .select('*')
+                .eq('owner_id', this.currentUser.id)
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                this.showEmptyState(container, 'No projects yet', 'Create your first project');
+                return;
+            }
+            
+            await this.renderProjects(projects || [], container);
+            
+        } catch (error) {
+            console.error('Error loading my projects:', error);
+            this.showEmptyState(container, 'No projects yet', 'Create your first project');
+        }
+    },
+    
+    async renderProjects(projects, container, isTraciPage = false) {
+        if (!container) return;
+        
+        if (!projects || projects.length === 0) {
+            this.showEmptyState(container, 
+                isTraciPage ? 'No projects from TRAci yet' : 'No projects found',
+                isTraciPage ? 'Clinical projects will appear here when published from TRAci' : 'Be the first to create a project');
+            return;
+        }
+        
+        // Try to get user profiles for owners
+        const ownerIds = projects.map(p => p.owner_id).filter(Boolean);
+        const userMap = new Map();
+        
+        if (ownerIds.length > 0) {
+            try {
+                const { data: profiles } = await this.supabase
+                    .from('thoraxlab_profiles')
+                    .select('user_id, full_name, user_type')
+                    .in('user_id', ownerIds);
+                
+                if (profiles) {
+                    profiles.forEach(profile => {
+                        userMap.set(profile.user_id, profile);
+                    });
+                }
+            } catch (error) {
+                console.log('Could not load user profiles:', error);
+            }
+        }
+        
+        container.innerHTML = projects.map(project => {
+            const owner = userMap.get(project.owner_id) || {};
+            const avatarText = owner.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 
+                             project.owner_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 
+                             '??';
+            const userType = owner.user_type || project.owner_type || 'guest';
+            
+            const typeClass = project.project_type === 'clinical' ? 'badge-clinical' :
+                            project.project_type === 'industry' ? 'badge-industry' : 'badge-collaboration';
+            
+            const visibilityClass = project.visibility === 'private' ? 'badge-private' :
+                                  project.visibility === 'internal' ? 'badge-internal' : 'badge-public';
+            
+            // Check if from TRAci
+            const isFromTraci = !!project.source_traci_project_id;
+            
+            // Stickers
+            let stickers = '';
+            if (isFromTraci) {
+                stickers += `<span class="project-sticker sticker-traci"><i class="fas fa-hospital"></i> From TRAci</span>`;
+            }
+            
+            // Import button (not for TRAci projects)
+            let importButton = '';
+            if (!isFromTraci) {
+                importButton = `
+                    <button class="btn btn-sm btn-import" onclick="ThoraxLab.showImportModal('${project.id}', '${this.escapeHtml(project.title)}')">
+                        <i class="fas fa-download"></i>
+                        Import to TRAci
+                    </button>
+                `;
+            }
+            
+            return `
+                <div class="project-card ${isFromTraci ? 'from-traci' : ''}" data-project-id="${project.id}">
+                    <div class="project-header">
+                        <span class="project-badge ${typeClass}">
+                            <i class="fas ${project.project_type === 'clinical' ? 'fa-user-md' : 
+                                             project.project_type === 'industry' ? 'fa-industry' : 
+                                             'fa-handshake'}"></i>
+                            ${project.project_type === 'clinical' ? 'Clinical-Led' : 
+                              project.project_type === 'industry' ? 'Industry-Led' : 
+                              'Joint Collaboration'}
+                        </span>
+                        <span class="project-badge ${visibilityClass}">
+                            <i class="fas ${project.visibility === 'private' ? 'fa-lock' : 
+                                             project.visibility === 'internal' ? 'fa-users' : 
+                                             'fa-globe'}"></i>
+                            ${project.visibility.charAt(0).toUpperCase() + project.visibility.slice(1)}
+                        </span>
+                    </div>
+                    
+                    <h3 class="project-title">
+                        ${this.escapeHtml(project.title)}
+                        ${stickers}
+                    </h3>
+                    
+                    <p class="project-description">${this.escapeHtml(project.description?.substring(0, 200) || 'No description')}...</p>
+                    
+                    ${project.tags?.length ? `
+                        <div class="project-tags">
+                            ${project.tags.slice(0, 5).map(tag => `
+                                <span class="project-tag">${this.escapeHtml(tag)}</span>
+                            `).join('')}
+                            ${project.tags.length > 5 ? `
+                                <span class="project-tag">+${project.tags.length - 5}</span>
+                            ` : ''}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="project-team">
+                        <div class="team-avatar" style="
+                            background: ${userType === 'clinical' ? 'var(--clinical-blue)' : 
+                                         userType === 'industry' ? 'var(--industry-teal)' : 
+                                         'var(--accent-purple)'};
+                            color: white;
+                        " title="${owner.full_name || project.owner_name || 'Unknown'}">
+                            ${avatarText}
+                        </div>
+                        <span class="text-sm text-gray-600">
+                            ${isFromTraci ? 'TRAci Platform' : (owner.full_name || project.owner_name || 'Unknown User')}
+                        </span>
+                    </div>
+                    
+                    <div class="project-footer">
+                        <div class="project-stats">
+                            <span class="stat-item">
+                                <i class="far fa-comment"></i>
+                                ${project.comment_count || 0} discussions
+                            </span>
+                            <span class="stat-item">
+                                <i class="far fa-thumbs-up"></i>
+                                ${project.like_count || 0} likes
+                            </span>
+                        </div>
+                        <div class="flex gap-2">
+                            ${importButton}
+                            <div class="text-sm text-gray-500">
+                                ${this.formatTimeAgo(project.created_at)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        // Add click handlers
+        container.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (!e.target.closest('button')) {
+                    const projectId = card.dataset.projectId;
+                    this.showProjectDetails(projectId);
+                }
+            });
+        });
+    },
+    
+    async createProject(e) {
+        e.preventDefault();
+        
+        if (!this.currentUser) {
+            this.showToast('Please sign in to create a project', 'error');
+            this.showAuth();
+            return;
+        }
+        
+        const title = document.getElementById('projectTitle').value.trim();
+        const description = document.getElementById('projectDescription').value.trim();
+        const type = document.getElementById('projectType').value;
+        const visibility = document.getElementById('projectVisibility').value;
+        const tagsInput = document.getElementById('projectTags').value.trim();
+        
+        if (!title || !description || !type || !visibility) {
+            this.showToast('All required fields must be filled', 'error');
+            return;
+        }
+        
+        const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()).filter(t => t) : [];
+        
+        try {
+            const projectData = {
+                title: title,
+                description: description,
+                project_type: type,
+                visibility: visibility,
+                tags: tags,
+                owner_id: this.currentUser.id,
+                owner_name: this.currentUser.name,
+                owner_type: this.currentUser.type,
+                status: 'active',
+                comment_count: 0,
+                like_count: 0,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            };
+            
+            const { data: project, error } = await this.supabase
+                .from('thoraxlab_projects')
+                .insert([projectData])
+                .select()
+                .single();
+            
+            if (error) throw error;
+            
+            // Create initial discussion thread
+            try {
+                await this.supabase
+                    .from('thoraxlab_discussions')
+                    .insert([{
+                        title: `Discussion: ${title}`,
+                        content: `Let's discuss the "${title}" project. Share your thoughts, ideas, and feedback!`,
+                        project_id: project.id,
+                        author_id: this.currentUser.id,
+                        author_name: this.currentUser.name,
+                        comment_count: 0,
+                        like_count: 0,
+                        created_at: new Date().toISOString()
+                    }]);
+            } catch (discussionError) {
+                console.log('Discussion creation optional:', discussionError);
+            }
+            
+            this.showToast('Project created successfully!', 'success');
+            this.hideModal('newProjectModal');
+            
+            // Reset form
+            document.getElementById('projectForm').reset();
+            
+            await this.loadProjects();
+            this.navigateTo('myprojects');
+            
+        } catch (error) {
+            console.error('Error creating project:', error);
+            this.showToast('Failed to create project: ' + error.message, 'error');
+        }
+    },
+    
+    // ===== IMPORT TO TRAci =====
+    async showImportModal(projectId, projectTitle) {
+        if (!this.currentUser) {
+            this.showToast('Please sign in to import projects', 'error');
+            return;
+        }
+        
+        document.getElementById('importProjectId').value = projectId;
+        document.getElementById('importError').style.display = 'none';
+        document.getElementById('importSuccess').style.display = 'none';
+        document.getElementById('importNotes').value = '';
+        
+        // Update modal title
+        const modalTitle = document.querySelector('#importToTraciModal .modal-title');
+        if (modalTitle) {
+            modalTitle.textContent = `Import "${projectTitle}" to TRAci`;
+        }
+        
+        this.showModal('importToTraciModal');
+    },
+    
+    async importToTraci(projectId, reviewStatus, notes = '') {
+        try {
+            if (!this.currentUser) {
+                throw new Error('Please sign in to import projects');
+            }
+            
+            // Get ThoraxLab project
+            const { data: thoraxlabProject, error: fetchError } = await this.supabase
+                .from('thoraxlab_projects')
+                .select('*')
+                .eq('id', projectId)
+                .single();
+            
+            if (fetchError) throw fetchError;
+            
+            // Check if already has TRAci reference
+            if (thoraxlabProject.source_traci_project_id) {
+                throw new Error('This project is already linked to TRAci');
+            }
+            
+            // Create project in TRAci projects table
+            const traciProject = {
+                name: thoraxlabProject.title,
+                description: `[Imported from ThoraxLab Collaboration]\n\n${thoraxlabProject.description}\n\n**Project Type:** ${thoraxlabProject.project_type}\n**Visibility:** ${thoraxlabProject.visibility}\n\n**Import Notes:** ${notes}`,
+                status: 'archived',
+                progress: 0,
+                needs_feedback: reviewStatus === 'needs_review',
+                feedback_type: 'industry_collaboration',
+                visibility: 'private',
+                review_status: reviewStatus,
+                edit_code: null,
+                last_updated: new Date().toISOString(),
+                created_at: new Date().toISOString(),
+                doctor_id: this.currentUser.id,
+                is_proposal: false
+            };
+            
+            const { data: newTraciProject, error: createError } = await this.supabase
+                .from('projects')
+                .insert([traciProject])
+                .select()
+                .single();
+            
+            if (createError) {
+                // If projects table doesn't exist, create in traci_projects
+                const { data: altTraciProject, error: altError } = await this.supabase
+                    .from('traci_projects')
+                    .insert([traciProject])
+                    .select()
+                    .single();
+                
+                if (altError) throw altError;
+                
+                // Update ThoraxLab project with reference
+                await this.supabase
+                    .from('thoraxlab_projects')
+                    .update({ source_traci_project_id: altTraciProject.id })
+                    .eq('id', projectId);
+                
+                this.showToast('✅ Project imported to TRAci successfully!', 'success');
+            } else {
+                // Update ThoraxLab project with reference
+                await this.supabase
+                    .from('thoraxlab_projects')
+                    .update({ source_traci_project_id: newTraciProject.id })
+                    .eq('id', projectId);
+                
+                this.showToast('✅ Project imported to TRAci successfully!', 'success');
+            }
+            
+            this.hideModal('importToTraciModal');
+            
+            // Refresh data
+            await this.loadProjects();
+            const currentPage = window.location.hash.substring(1);
+            if (currentPage === 'projects') {
+                this.loadAllProjects();
+            } else if (currentPage === 'myprojects') {
+                this.loadMyProjects();
+            }
+            
+        } catch (error) {
+            console.error('Error importing to TRAci:', error);
+            document.getElementById('importError').textContent = 'Failed to import: ' + error.message;
+            document.getElementById('importError').style.display = 'block';
+        }
+    },
+    
+    // ===== PROJECT DETAILS =====
+    async showProjectDetails(projectId) {
+        try {
+            const { data: project, error } = await this.supabase
+                .from('thoraxlab_projects')
+                .select('*')
+                .eq('id', projectId)
+                .single();
+            
+            if (error) throw error;
+            
+            const isFromTraci = !!project.source_traci_project_id;
+            
+            // Try to get owner info
+            let ownerInfo = {};
+            try {
+                if (project.owner_id) {
+                    const { data: profile } = await this.supabase
+                        .from('thoraxlab_profiles')
+                        .select('*')
+                        .eq('user_id', project.owner_id)
+                        .maybeSingle();
+                    
+                    if (profile) {
+                        ownerInfo = profile;
+                    }
+                }
+            } catch (profileError) {
+                console.log('Owner profile optional:', profileError);
+            }
+            
+            const avatarText = ownerInfo.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 
+                             project.owner_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 
+                             '??';
+            const userType = ownerInfo.user_type || project.owner_type || 'guest';
+            
+            document.getElementById('modalProjectTitle').textContent = project.title;
+            
+            let traciSection = '';
+            if (isFromTraci) {
+                traciSection = `
+                    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-hospital text-blue-600"></i>
+                            <span class="font-semibold text-blue-700">Published from TRAci Platform</span>
+                        </div>
+                        <p class="text-sm text-blue-600">
+                            This clinical project was published from our internal TRAci platform for industry collaboration.
+                        </p>
+                    </div>
+                `;
+            }
+            
+            // Load related discussions
+            let discussionsSection = '';
+            try {
+                const { data: discussions } = await this.supabase
+                    .from('thoraxlab_discussions')
+                    .select('id, title, created_at, comment_count')
+                    .eq('project_id', projectId)
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                
+                if (discussions && discussions.length > 0) {
+                    discussionsSection = `
+                        <div class="mt-6">
+                            <h4 class="font-bold mb-3">Related Discussions</h4>
+                            <div class="space-y-2">
+                                ${discussions.map(discussion => `
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer"
+                                         onclick="ThoraxLab.showDiscussionDetails('${discussion.id}')">
+                                        <div>
+                                            <div class="font-medium">${this.escapeHtml(discussion.title)}</div>
+                                            <div class="text-sm text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            <i class="far fa-comment"></i> ${discussion.comment_count || 0}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (discussionError) {
+                console.log('Discussions optional:', discussionError);
+            }
+            
+            document.getElementById('modalProjectContent').innerHTML = `
+                <div class="space-y-6">
+                    ${traciSection}
+                    
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="team-avatar" style="
+                                background: ${userType === 'clinical' ? 'var(--clinical-blue)' : 
+                                             userType === 'industry' ? 'var(--industry-teal)' : 
+                                             'var(--accent-purple)'};
+                                color: white;
+                                width: 3rem;
+                                height: 3rem;
+                                font-size: 1rem;
+                            " title="${ownerInfo.full_name || project.owner_name || 'Unknown'}">
+                                ${avatarText}
+                            </div>
+                            <div>
+                                <div class="font-semibold">${isFromTraci ? 'TRAci Platform' : (ownerInfo.full_name || project.owner_name || 'Unknown User')}</div>
+                                ${!isFromTraci ? `
+                                    <div class="text-sm text-gray-500">
+                                        ${userType === 'clinical' ? ownerInfo.clinical_specialty || 'Clinical Professional' : 
+                                          userType === 'industry' ? ownerInfo.professional_role || 'Industry Professional' : 
+                                          'Guest Contributor'}
+                                        ${ownerInfo.company ? ` • ${ownerInfo.company}` : ''}
+                                    </div>
+                                ` : ''}
+                                <div class="text-sm text-gray-500">${this.formatTimeAgo(project.created_at)}</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="project-badge ${project.visibility === 'private' ? 'badge-private' : 
+                                                          project.visibility === 'internal' ? 'badge-internal' : 
+                                                          'badge-public'}">
+                                ${project.visibility.charAt(0).toUpperCase() + project.visibility.slice(1)}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold mb-3">Description</h4>
+                        <div class="prose max-w-none">
+                            ${this.escapeHtml(project.description || 'No description').replace(/\n/g, '<br>')}
+                        </div>
+                    </div>
+                    
+                    ${project.tags?.length ? `
+                        <div>
+                            <h4 class="font-bold mb-3">Tags</h4>
+                            <div class="flex flex-wrap gap-2">
+                                ${project.tags.map(tag => `
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                                        ${this.escapeHtml(tag)}
+                                    </span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${discussionsSection}
+                    
+                    <div class="pt-6 border-t">
+                        <div class="flex gap-3 justify-end">
+                            ${!isFromTraci ? `
+                                <button class="btn btn-import" onclick="ThoraxLab.showImportModal('${projectId}', '${this.escapeHtml(project.title)}')">
+                                    <i class="fas fa-download"></i>
+                                    Import to TRAci
+                                </button>
+                            ` : ''}
+                            <button class="btn btn-outline modal-close">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            this.showModal('projectDetailModal');
+            
+        } catch (error) {
+            console.error('Error loading project details:', error);
+            this.showToast('Failed to load project details', 'error');
+        }
+    },
+    
+    // ===== DISCUSSION MANAGEMENT =====
+    async loadDiscussionsPage() {
+        const container = document.getElementById('discussionsList');
+        if (!container) return;
+        
+        try {
+            const discussions = await this.loadDiscussions();
+            
+            if (!discussions || discussions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-comments text-4xl mb-4 opacity-50"></i>
+                        <div class="text-xl font-semibold mb-2">No discussions yet</div>
+                        <p class="text-gray-600 mb-6">Start the first discussion about clinical-industry innovation</p>
+                        <button class="btn btn-primary" onclick="ThoraxLab.showModal('newDiscussionModal')">
+                            <i class="fas fa-plus"></i>
+                            Start Discussion
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = discussions.map(discussion => {
+                const authorName = discussion.author_name || 'Unknown User';
+                const avatarText = authorName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                
+                return `
+                    <div class="discussion-card" data-discussion-id="${discussion.id}">
+                        <div class="discussion-header">
+                            <div class="discussion-author">
+                                <div class="team-avatar" style="
+                                    background: var(--accent-purple);
+                                    color: white;
+                                " title="${authorName}">
+                                    ${avatarText}
+                                </div>
+                                <div>
+                                    <div class="font-semibold">${authorName}</div>
+                                    <div class="text-sm text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="discussion-title">${this.escapeHtml(discussion.title)}</h3>
+                        
+                        <div class="discussion-content">
+                            ${this.escapeHtml(discussion.content.substring(0, 300))}${discussion.content.length > 300 ? '...' : ''}
+                        </div>
+                        
+                        ${discussion.project_id ? `
+                            <div class="mb-4">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-700">
+                                    <i class="fas fa-project-diagram mr-2"></i>
+                                    Linked to Project
+                                </span>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="discussion-actions">
+                            <div>
+                                <button class="btn btn-sm btn-outline" onclick="ThoraxLab.showDiscussionDetails('${discussion.id}')">
+                                    <i class="fas fa-comment"></i>
+                                    View Discussion
+                                </button>
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                <i class="far fa-comment"></i>
+                                ${discussion.comment_count || 0} comments
+                                <span class="mx-2">•</span>
+                                <i class="far fa-thumbs-up"></i>
+                                ${discussion.like_count || 0} likes
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+        } catch (error) {
+            console.error('Error loading discussions:', error);
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-triangle text-4xl mb-4 opacity-50"></i>
+                    <div class="text-xl font-semibold mb-2">Failed to load discussions</div>
+                    <p class="text-gray-600">Please try again later</p>
+                </div>
+            `;
+        }
+    },
+    
+    async createDiscussion(e) {
+        e.preventDefault();
+        
+        if (!this.currentUser) {
+            this.showToast('Please sign in to create a discussion', 'error');
+            this.showAuth();
+            return;
+        }
+        
+        const title = document.getElementById('discussionTitle').value.trim();
+        const content = document.getElementById('discussionContent').value.trim();
+        const projectId = document.getElementById('discussionProject')?.value || null;
+        
+        if (!title || !content) {
+            this.showToast('Title and content are required', 'error');
+            return;
+        }
+        
+        try {
+            const discussionData = {
+                title: title,
+                content: content,
+                project_id: projectId,
+                author_id: this.currentUser.id,
+                author_name: this.currentUser.name,
+                comment_count: 0,
+                like_count: 0,
+                created_at: new Date().toISOString()
+            };
+            
+            const { data: discussion, error } = await this.supabase
+                .from('thoraxlab_discussions')
+                .insert([discussionData])
+                .select()
+                .single();
+            
+            if (error) throw error;
+            
+            this.showToast('Discussion started successfully!', 'success');
+            this.hideModal('newDiscussionModal');
+            
+            // Reset form
+            if (document.getElementById('discussionForm')) {
+                document.getElementById('discussionForm').reset();
+            }
+            
+            await this.loadDiscussions();
+            this.navigateTo('discussions');
+            
+        } catch (error) {
+            console.error('Error creating discussion:', error);
+            this.showToast('Failed to create discussion: ' + error.message, 'error');
+        }
+    },
+    
+    async showDiscussionDetails(discussionId) {
+        try {
+            const { data: discussion, error } = await this.supabase
+                .from('thoraxlab_discussions')
+                .select('*')
+                .eq('id', discussionId)
+                .single();
+            
+            if (error) throw error;
+            
+            const authorName = discussion.author_name || 'Unknown User';
+            const avatarText = authorName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            
+            // Load comments for this discussion
+            let commentsSection = '';
+            try {
+                const { data: comments } = await this.supabase
+                    .from('thoraxlab_comments')
+                    .select('*')
+                    .eq('discussion_id', discussionId)
+                    .order('created_at', { ascending: true });
+                
+                if (comments && comments.length > 0) {
+                    commentsSection = `
+                        <div class="mt-6">
+                            <h4 class="font-bold mb-3">Comments (${comments.length})</h4>
+                            <div class="space-y-4">
+                                ${comments.map(comment => {
+                                    const commentAuthor = comment.author_name || 'Unknown User';
+                                    const commentAvatar = commentAuthor.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                                    
+                                    return `
+                                        <div class="p-4 bg-gray-50 rounded-lg">
+                                            <div class="flex items-center gap-2 mb-2">
+                                                <div class="team-avatar" style="
+                                                    background: var(--accent-purple);
+                                                    color: white;
+                                                    width: 1.75rem;
+                                                    height: 1.75rem;
+                                                    font-size: 0.75rem;
+                                                ">
+                                                    ${commentAvatar}
+                                                </div>
+                                                <span class="font-medium">${commentAuthor}</span>
+                                                <span class="text-sm text-gray-500">${this.formatTimeAgo(comment.created_at)}</span>
+                                            </div>
+                                            <div class="text-gray-700">${this.escapeHtml(comment.content)}</div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (commentError) {
+                console.log('Comments optional:', commentError);
+            }
+            
+            document.getElementById('modalDiscussionTitle').textContent = discussion.title;
+            
+            document.getElementById('modalDiscussionContent').innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex items-start gap-3">
+                        <div class="team-avatar" style="
+                            background: var(--accent-purple);
+                            color: white;
+                            width: 3rem;
+                            height: 3rem;
+                            font-size: 1rem;
+                        " title="${authorName}">
+                            ${avatarText}
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-semibold">${authorName}</div>
+                            <div class="text-sm text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="prose max-w-none">
+                        ${this.escapeHtml(discussion.content).replace(/\n/g, '<br>')}
+                    </div>
+                    
+                    ${commentsSection}
+                    
+                    <div class="pt-6 border-t">
+                        <div class="flex gap-3 justify-end">
+                            <button class="btn btn-outline modal-close">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            this.showModal('discussionDetailModal');
+            
+        } catch (error) {
+            console.error('Error loading discussion details:', error);
+            this.showToast('Failed to load discussion', 'error');
+        }
+    },
+    
+    // ===== UTILITY METHODS =====
+    showEmptyState(container, title, description = '') {
+        container.innerHTML = `
+            <div class="col-span-full">
+                <div class="empty-state">
+                    <i class="fas fa-folder-open text-4xl mb-4 opacity-50"></i>
+                    <div class="text-xl font-semibold mb-2">${title}</div>
+                    ${description ? `<p class="text-gray-600 mb-6">${description}</p>` : ''}
+                    <button class="btn btn-primary" onclick="ThoraxLab.showModal('newProjectModal')">
+                        <i class="fas fa-plus"></i>
+                        Create First Project
+                    </button>
+                </div>
+            </div>
+        `;
+    },
+    
+    showModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+    
+    hideModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    },
+    
+    showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            warning: 'fa-exclamation-triangle',
+            info: 'fa-info-circle'
+        };
+        
+        toast.innerHTML = `
+            <i class="fas ${icons[type] || 'fa-info-circle'}" 
+               style="color: ${type === 'success' ? '#10B981' :
+                         type === 'error' ? '#EF4444' :
+                         type === 'warning' ? '#F59E0B' : '#3B82F6'}"></i>
+            <span class="flex-1">${this.escapeHtml(message)}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+        `;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            if (toast.parentElement === container) {
+                toast.remove();
+            }
+        }, 5000);
+    },
+    
+    formatTimeAgo(dateString) {
+        try {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffDays < 7) return `${diffDays}d ago`;
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        } catch (error) {
+            return 'Recently';
+        }
+    },
+    
+    escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    },
+    
+    // ===== EVENT LISTENERS =====
+    setupEventListeners() {
+        // Authentication
+        const authForm = document.getElementById('authForm');
+        if (authForm) {
+            authForm.addEventListener('submit', (e) => this.handleAuthSubmit(e));
+        }
+        
+        const userTypeSelect = document.getElementById('userType');
+        if (userTypeSelect) {
+            userTypeSelect.addEventListener('change', (e) => {
+                document.getElementById('clinicalFields').classList.toggle('hidden', e.target.value !== 'clinical');
+                document.getElementById('industryFields').classList.toggle('hidden', e.target.value !== 'industry');
+            });
+        }
+        
+        // Navigation
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => this.logout());
+        }
+        
+        const userAvatar = document.getElementById('userAvatar');
+        if (userAvatar) {
+            userAvatar.addEventListener('click', () => this.showProfileModal());
+        }
+        
+        // Project actions
+        const newProjectBtn = document.getElementById('newProjectBtn');
+        if (newProjectBtn) {
+            newProjectBtn.addEventListener('click', () => this.showModal('newProjectModal'));
+        }
+        
+        const createMyProjectBtn = document.getElementById('createMyProjectBtn');
+        if (createMyProjectBtn) {
+            createMyProjectBtn.addEventListener('click', () => this.showModal('newProjectModal'));
+        }
+        
+        const projectForm = document.getElementById('projectForm');
+        if (projectForm) {
+            projectForm.addEventListener('submit', (e) => this.createProject(e));
+        }
+        
+        // Discussion actions
+        const newDiscussionBtn = document.getElementById('newDiscussionBtn');
+        if (newDiscussionBtn) {
+            newDiscussionBtn.addEventListener('click', () => this.showModal('newDiscussionModal'));
+        }
+        
+        const discussionForm = document.getElementById('discussionForm');
+        if (discussionForm) {
+            discussionForm.addEventListener('submit', (e) => this.createDiscussion(e));
+        }
+        
+        // Import to TRAci
+        const confirmImportBtn = document.getElementById('confirmImportBtn');
+        if (confirmImportBtn) {
+            confirmImportBtn.addEventListener('click', async () => {
+                const projectId = document.getElementById('importProjectId').value;
+                const reviewStatus = document.getElementById('importReviewStatus').value;
+                const notes = document.getElementById('importNotes').value.trim();
+                
+                confirmImportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importing...';
+                confirmImportBtn.disabled = true;
+                
+                await this.importToTraci(projectId, reviewStatus, notes);
+                
+                confirmImportBtn.innerHTML = '<i class="fas fa-download"></i> Import to TRAci';
+                confirmImportBtn.disabled = false;
+            });
+        }
+        
+        // Search and filter
+        const projectSearch = document.getElementById('projectSearch');
+        if (projectSearch) {
+            projectSearch.addEventListener('input', () => this.loadAllProjects());
+        }
+        
+        const projectFilter = document.getElementById('projectFilter');
+        if (projectFilter) {
+            projectFilter.addEventListener('change', () => this.loadAllProjects());
+        }
+        
+        // Modal close handlers
+        document.querySelectorAll('.modal-close').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const modal = e.target.closest('.modal-overlay');
+                if (modal) this.hideModal(modal.id);
+            });
+        });
+        
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) this.hideModal(modal.id);
+            });
+        });
+        
+        // Escape key to close modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                    this.hideModal(modal.id);
+                });
+            }
+        });
+    },
+    
+    // ===== PROFILE MODAL =====
+    showProfileModal() {
+        this.showToast('Profile editing coming soon!', 'info');
+    }
+};
+
+// Initialize application when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    ThoraxLab.init();
+});
+
+// Make ThoraxLab available globally
+window.ThoraxLab = ThoraxLab;
+</script>
+</body>
+</html>
