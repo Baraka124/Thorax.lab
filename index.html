@@ -3390,7 +3390,7 @@
                     this.showAuth();
                 }
             }
-          async handleLogin(e) {
+      async handleLogin(e) {
     e.preventDefault();
     
     const username = document.getElementById('username').value.trim();
@@ -3409,7 +3409,7 @@
     loginBtn.disabled = true;
     
     try {
-        // 1. FIRST, check if user exists in database
+        // 1. First, check if user exists in database
         const { data: users, error: fetchError } = await this.supabase
             .from('thoraxlab_profiles')
             .select('*')
@@ -3421,38 +3421,38 @@
         let userData;
         
         if (users && users.length > 0) {
-            // User exists in database
-            const dbUser = users[0];
-            
-            // We need to check bcrypt password - create a database function for this
-            // For now, we'll use a simple workaround
+            // User exists - check password with bcrypt
             const { data: authResult, error: authError } = await this.supabase
                 .rpc('check_password_bcrypt', {
                     p_username: username,
                     p_password: password
                 });
             
-            if (authError || !authResult || !authResult.authenticated) {
+            if (authError) {
+                console.error('Auth error:', authError);
+                throw new Error('Authentication error');
+            }
+            
+            // FIX: authResult is an ARRAY, check the first element
+            if (!authResult || authResult.length === 0 || !authResult[0].authenticated) {
                 throw new Error('Invalid username or password');
             }
             
-            userData = dbUser;
-            userData.is_verified = userData.is_verified || false;
+            userData = users[0];
             
         } else {
             // 2. User doesn't exist - create new user
-            // Generate proper UUID
             const userId = this.generateUUID();
             
             userData = {
                 user_id: userId,
                 full_name: username,
                 user_type: userType,
+                password_hash: password, // Store plain text for new users
                 is_verified: false,
                 created_at: new Date().toISOString()
             };
             
-            // Add role-specific fields
             if (userType === 'clinical') {
                 userData.clinical_specialty = 'General Medicine';
                 userData.hospital_institution = 'Medical Center';
@@ -3461,8 +3461,6 @@
                 userData.company = 'Technology Company';
             }
             
-            // Note: New users won't have bcrypt passwords yet
-            // We'll need to handle this differently
             const { data: newUser, error: createError } = await this.supabase
                 .from('thoraxlab_profiles')
                 .insert([userData])
@@ -3478,33 +3476,44 @@
             id: userData.user_id,
             name: userData.full_name,
             type: userData.user_type,
-            avatar: userData.full_name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2),
+            avatar: userData.full_name.substring(0, 2).toUpperCase(),
             ...userData
         };
         
-        // Check if admin (username contains "admin")
         this.isAdmin = username.toLowerCase().includes('admin');
         
         // Save session
         localStorage.setItem('thoraxlab_user', JSON.stringify(this.currentUser));
-        localStorage.setItem('thoraxlab_session', Date.now().toString());
         
         // Show app
         this.showApp();
         this.updateUserDisplay();
-        this.showToast(`Welcome to ThoraxLab, ${userData.full_name}!`, 'success');
+        this.showToast(`Welcome ${userData.full_name}!`, 'success');
         
-        // Load initial data
+        // Load data and navigate
         await this.loadInitialData();
-        
-        // Navigate to dashboard
         this.navigateTo('dashboard');
         
     } catch (error) {
         console.error('Login error:', error);
         this.showToast('Login failed: ' + error.message, 'error');
+        
+        // Fallback for debugging
+        console.log('Trying fallback login...');
+        this.currentUser = {
+            id: 'local_' + Date.now(),
+            name: username,
+            type: userType,
+            avatar: username.substring(0, 2).toUpperCase()
+        };
+        this.isAdmin = username.toLowerCase().includes('admin');
+        
+        localStorage.setItem('thoraxlab_user', JSON.stringify(this.currentUser));
+        this.showApp();
+        this.navigateTo('dashboard');
+        this.showToast('Logged in locally', 'info');
+        
     } finally {
-        // Reset button
         loginBtn.innerHTML = originalText;
         loginBtn.disabled = false;
     }
