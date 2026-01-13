@@ -645,6 +645,56 @@
             gap: 0.375rem;
         }
 
+        /* ===== DISCUSSION CARDS ===== */
+        .discussion-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            transition: all 0.2s ease;
+        }
+
+        .discussion-card:hover {
+            border-color: var(--clinical-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .discussion-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+
+        .discussion-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .discussion-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .discussion-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-lg);
+        }
+
+        .discussion-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-light);
+        }
+
         /* ===== MODALS ===== */
         .modal-overlay {
             position: fixed;
@@ -1131,12 +1181,50 @@
                                placeholder="e.g., COPD, digital health, medical device, adherence, telemedicine">
                     </div>
                     <div class="flex gap-3 justify-end mt-8">
-                        <button type="button" class="btn btn-secondary" onclick="thoraxlab.hideModal('newProjectModal')">
+                        <button type="button" class="btn btn-secondary modal-close">
                             Cancel
                         </button>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-rocket"></i>
                             Launch Project
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- New Discussion Modal -->
+        <div id="newDiscussionModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Start New Discussion</h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <form id="discussionForm">
+                    <div class="form-group">
+                        <label for="discussionTitle" class="form-label">Discussion Title *</label>
+                        <input type="text" id="discussionTitle" class="form-input" 
+                               placeholder="e.g., Best practices for remote patient monitoring in COPD" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="discussionContent" class="form-label">Discussion Content *</label>
+                        <textarea id="discussionContent" class="form-input form-textarea" 
+                                  placeholder="Share your thoughts, questions, or insights..." 
+                                  rows="6" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="discussionProject" class="form-label">Link to Project (Optional)</label>
+                        <select id="discussionProject" class="form-input form-select">
+                            <option value="">Select project (optional)</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-3 justify-end mt-8">
+                        <button type="button" class="btn btn-secondary modal-close">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Post Discussion
                         </button>
                     </div>
                 </form>
@@ -1206,6 +1294,19 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Discussion Detail Modal -->
+        <div id="discussionDetailModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="modalDiscussionTitle"></h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div id="modalDiscussionContent">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -1214,13 +1315,15 @@ const SUPABASE_URL = 'https://bledpouekiytppuhxeqq.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_zdlIM8UbOrRIFpmYLJOmWQ_4QqNi_5C';
 
 // ===== THORAXLAB APPLICATION =====
-const thoraxlab = {
+const ThoraxLab = {
+    // ===== CORE PROPERTIES =====
     supabase: null,
     currentUser: null,
     cache: {
         projects: [],
         discussions: [],
-        traciProjects: []
+        traciProjects: [],
+        profiles: new Map()
     },
     
     // ===== INITIALIZATION =====
@@ -1330,10 +1433,11 @@ const thoraxlab = {
                 if (updateError) throw updateError;
                 userProfile = updatedUser;
             } else {
-                // Create new user
+                // Create new user with proper user_id format
+                const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 const { data: newUser, error: insertError } = await this.supabase
                     .from('thoraxlab_profiles')
-                    .insert([userData])
+                    .insert([{ user_id: userId, ...userData }])
                     .select()
                     .single();
                 
@@ -1394,7 +1498,7 @@ const thoraxlab = {
     logout() {
         this.currentUser = null;
         localStorage.removeItem('thoraxlab_user');
-        this.cache = { projects: [], discussions: [], traciProjects: [] };
+        this.cache = { projects: [], discussions: [], traciProjects: [], profiles: new Map() };
         this.showAuth();
         this.showToast('You have been logged out', 'info');
     },
@@ -1453,11 +1557,16 @@ const thoraxlab = {
     
     // ===== DASHBOARD =====
     async loadDashboard() {
-        await Promise.all([
-            this.loadStats(),
-            this.loadActiveProjects(),
-            this.loadRecentActivity()
-        ]);
+        try {
+            await Promise.all([
+                this.loadStats(),
+                this.loadActiveProjects(),
+                this.loadRecentActivity()
+            ]);
+        } catch (error) {
+            console.error('Error loading dashboard:', error);
+            this.showToast('Failed to load dashboard', 'error');
+        }
     },
     
     async loadStats() {
@@ -1511,7 +1620,7 @@ const thoraxlab = {
                 .from('thoraxlab_projects')
                 .select(`
                     *,
-                    thoraxlab_profiles!inner(
+                    thoraxlab_profiles (
                         user_id,
                         full_name,
                         user_type
@@ -1542,12 +1651,12 @@ const thoraxlab = {
             ] = await Promise.all([
                 this.supabase
                     .from('thoraxlab_projects')
-                    .select('id, title, created_at, thoraxlab_profiles!inner(full_name)')
+                    .select('id, title, created_at, thoraxlab_profiles(full_name)')
                     .order('created_at', { ascending: false })
                     .limit(3),
                 this.supabase
                     .from('thoraxlab_discussions')
-                    .select('id, title, created_at, thoraxlab_profiles!inner(full_name)')
+                    .select('id, title, created_at, thoraxlab_profiles(full_name)')
                     .order('created_at', { ascending: false })
                     .limit(3)
             ]);
@@ -1555,13 +1664,13 @@ const thoraxlab = {
             const activities = [
                 ...(recentProjects || []).map(p => ({
                     type: 'project',
-                    title: `${p.thoraxlab_profiles?.full_name} created a new project`,
+                    title: `${p.thoraxlab_profiles?.full_name || 'Someone'} created a new project`,
                     item: p.title,
                     time: this.formatTimeAgo(p.created_at)
                 })),
                 ...(recentDiscussions || []).map(d => ({
                     type: 'discussion',
-                    title: `${d.thoraxlab_profiles?.full_name} started a discussion`,
+                    title: `${d.thoraxlab_profiles?.full_name || 'Someone'} started a discussion`,
                     item: d.title,
                     time: this.formatTimeAgo(d.created_at)
                 }))
@@ -1632,7 +1741,7 @@ const thoraxlab = {
                 .from('thoraxlab_projects')
                 .select(`
                     *,
-                    thoraxlab_profiles!inner(
+                    thoraxlab_profiles (
                         user_id,
                         full_name,
                         user_type
@@ -1640,13 +1749,17 @@ const thoraxlab = {
                 `)
                 .order('created_at', { ascending: false });
             
-            if (error) throw error;
+            if (error) {
+                console.error('Supabase error:', error);
+                throw error;
+            }
             
             this.cache.projects = projects || [];
             return projects || [];
             
         } catch (error) {
             console.error('Error loading projects:', error);
+            this.showToast('Failed to load projects', 'error');
             return [];
         }
     },
@@ -1669,7 +1782,7 @@ const thoraxlab = {
                 .from('thoraxlab_projects')
                 .select(`
                     *,
-                    thoraxlab_profiles!inner(
+                    thoraxlab_profiles (
                         user_id,
                         full_name,
                         user_type
@@ -1705,7 +1818,7 @@ const thoraxlab = {
         try {
             const projects = await this.loadProjects();
             
-            const searchTerm = document.getElementById('projectSearch')?.value.toLowerCase() || '';
+            const searchTerm = (document.getElementById('projectSearch')?.value || '').toLowerCase();
             const filterType = document.getElementById('projectFilter')?.value || 'all';
             
             let filteredProjects = projects.filter(project => {
@@ -1748,7 +1861,7 @@ const thoraxlab = {
                 .from('thoraxlab_projects')
                 .select(`
                     *,
-                    thoraxlab_profiles!inner(
+                    thoraxlab_profiles (
                         user_id,
                         full_name,
                         user_type
@@ -1820,7 +1933,7 @@ const thoraxlab = {
             let importButton = '';
             if (!isFromTraci && !isImportedToTraci) {
                 importButton = `
-                    <button class="btn btn-sm btn-import" onclick="thoraxlab.showImportModal('${project.id}', '${this.escapeHtml(project.title)}')">
+                    <button class="btn btn-sm btn-import" onclick="ThoraxLab.showImportModal('${project.id}', '${this.escapeHtml(project.title)}')">
                         <i class="fas fa-download"></i>
                         Import to TRAci
                     </button>
@@ -1909,6 +2022,79 @@ const thoraxlab = {
                 }
             });
         });
+    },
+    
+    async createProject(e) {
+        e.preventDefault();
+        
+        if (!this.currentUser) {
+            this.showToast('Please sign in to create a project', 'error');
+            this.showAuth();
+            return;
+        }
+        
+        const title = document.getElementById('projectTitle').value.trim();
+        const description = document.getElementById('projectDescription').value.trim();
+        const type = document.getElementById('projectType').value;
+        const visibility = document.getElementById('projectVisibility').value;
+        const tagsInput = document.getElementById('projectTags').value.trim();
+        
+        if (!title || !description || !type || !visibility) {
+            this.showToast('All required fields must be filled', 'error');
+            return;
+        }
+        
+        const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()).filter(t => t) : [];
+        
+        try {
+            const projectData = {
+                title: title,
+                description: description,
+                project_type: type,
+                visibility: visibility,
+                tags: tags,
+                owner_id: this.currentUser.id,
+                status: 'active',
+                comment_count: 0,
+                like_count: 0,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            };
+            
+            const { data: project, error } = await this.supabase
+                .from('thoraxlab_projects')
+                .insert([projectData])
+                .select()
+                .single();
+            
+            if (error) throw error;
+            
+            // Create initial discussion thread
+            await this.supabase
+                .from('thoraxlab_discussions')
+                .insert([{
+                    title: `Discussion: ${title}`,
+                    content: `Let's discuss the "${title}" project. Share your thoughts, ideas, and feedback!`,
+                    project_id: project.id,
+                    author_id: this.currentUser.id,
+                    comment_count: 0,
+                    like_count: 0,
+                    created_at: new Date().toISOString()
+                }]);
+            
+            this.showToast('Project created successfully!', 'success');
+            this.hideModal('newProjectModal');
+            
+            // Reset form
+            document.getElementById('projectForm').reset();
+            
+            await this.loadProjects();
+            this.navigateTo('myprojects');
+            
+        } catch (error) {
+            console.error('Error creating project:', error);
+            this.showToast('Failed to create project: ' + error.message, 'error');
+        }
     },
     
     // ===== IMPORT TO TRAci =====
@@ -2024,7 +2210,12 @@ const thoraxlab = {
             
             // Refresh data
             await this.loadProjects();
-            this.renderProjects(this.cache.projects, document.getElementById('allProjects'));
+            const currentPage = window.location.hash.substring(1);
+            if (currentPage === 'projects') {
+                this.loadAllProjects();
+            } else if (currentPage === 'myprojects') {
+                this.loadMyProjects();
+            }
             
         } catch (error) {
             console.error('Error importing to TRAci:', error);
@@ -2040,7 +2231,7 @@ const thoraxlab = {
                 .from('thoraxlab_projects')
                 .select(`
                     *,
-                    thoraxlab_profiles!inner(
+                    thoraxlab_profiles (
                         user_id,
                         full_name,
                         user_type,
@@ -2054,7 +2245,7 @@ const thoraxlab = {
             
             if (error) throw error;
             
-            const author = project.thoraxlab_profiles;
+            const author = project.thoraxlab_profiles || {};
             const avatarText = author.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??';
             const userType = author.user_type || 'guest';
             const isFromTraci = !!project.source_traci_project_id;
@@ -2072,6 +2263,37 @@ const thoraxlab = {
                         <p class="text-sm text-blue-600">
                             This clinical project was published from our internal TRAci platform for industry collaboration.
                         </p>
+                    </div>
+                `;
+            }
+            
+            // Load related discussions
+            const { data: discussions } = await this.supabase
+                .from('thoraxlab_discussions')
+                .select('id, title, created_at, comment_count')
+                .eq('project_id', projectId)
+                .order('created_at', { ascending: false })
+                .limit(5);
+            
+            let discussionsSection = '';
+            if (discussions && discussions.length > 0) {
+                discussionsSection = `
+                    <div class="mt-6">
+                        <h4 class="font-bold mb-3">Related Discussions</h4>
+                        <div class="space-y-2">
+                            ${discussions.map(discussion => `
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer"
+                                     onclick="ThoraxLab.showDiscussionDetails('${discussion.id}')">
+                                    <div>
+                                        <div class="font-medium">${this.escapeHtml(discussion.title)}</div>
+                                        <div class="text-sm text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        <i class="far fa-comment"></i> ${discussion.comment_count || 0}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                 `;
             }
@@ -2135,15 +2357,17 @@ const thoraxlab = {
                         </div>
                     ` : ''}
                     
+                    ${discussionsSection}
+                    
                     <div class="pt-6 border-t">
                         <div class="flex gap-3 justify-end">
                             ${!isFromTraci ? `
-                                <button class="btn btn-import" onclick="thoraxlab.showImportModal('${projectId}', '${this.escapeHtml(project.title)}')">
+                                <button class="btn btn-import" onclick="ThoraxLab.showImportModal('${projectId}', '${this.escapeHtml(project.title)}')">
                                     <i class="fas fa-download"></i>
                                     Import to TRAci
                                 </button>
                             ` : ''}
-                            <button class="btn btn-outline" onclick="thoraxlab.hideModal('projectDetailModal')">
+                            <button class="btn btn-outline modal-close">
                                 Close
                             </button>
                         </div>
@@ -2159,23 +2383,367 @@ const thoraxlab = {
         }
     },
     
-    // ===== DISCUSSION MANAGEMENT (simplified) =====
+    // ===== DISCUSSION MANAGEMENT =====
+    async loadDiscussions() {
+        try {
+            const { data: discussions, error } = await this.supabase
+                .from('thoraxlab_discussions')
+                .select(`
+                    *,
+                    thoraxlab_profiles (
+                        user_id,
+                        full_name,
+                        user_type,
+                        clinical_specialty,
+                        professional_role,
+                        company
+                    ),
+                    thoraxlab_projects (
+                        id,
+                        title
+                    )
+                `)
+                .order('created_at', { ascending: false });
+            
+            if (error) throw error;
+            
+            this.cache.discussions = discussions || [];
+            return discussions || [];
+            
+        } catch (error) {
+            console.error('Error loading discussions:', error);
+            return [];
+        }
+    },
+    
     async loadDiscussionsPage() {
-        // Implementation simplified for focus on sync functionality
         const container = document.getElementById('discussionsList');
         if (!container) return;
         
         container.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-comments text-4xl mb-4 opacity-50"></i>
-                <div class="text-xl font-semibold mb-2">Discussion System Coming Soon</div>
-                <p class="text-gray-600 mb-6">Focusing on project collaboration features first.</p>
-                <button class="btn btn-primary" onclick="thoraxlab.showModal('newProjectModal')">
-                    <i class="fas fa-plus"></i>
-                    Start a Project Instead
-                </button>
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading discussions...</p>
             </div>
         `;
+        
+        try {
+            const discussions = await this.loadDiscussions();
+            
+            if (!discussions || discussions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-comments text-4xl mb-4 opacity-50"></i>
+                        <div class="text-xl font-semibold mb-2">No discussions yet</div>
+                        <p class="text-gray-600 mb-6">Start the first discussion about clinical-industry innovation</p>
+                        <button class="btn btn-primary" onclick="ThoraxLab.showModal('newDiscussionModal')">
+                            <i class="fas fa-plus"></i>
+                            Start Discussion
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Populate project dropdown in new discussion modal
+            await this.populateProjectDropdown();
+            
+            container.innerHTML = discussions.map(discussion => {
+                const author = discussion.thoraxlab_profiles || {};
+                const avatarText = author.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??';
+                const userType = author.user_type || 'guest';
+                
+                return `
+                    <div class="discussion-card" data-discussion-id="${discussion.id}">
+                        <div class="discussion-header">
+                            <div class="discussion-author">
+                                <div class="team-avatar" style="
+                                    background: ${userType === 'clinical' ? 'var(--clinical-blue)' : 
+                                                 userType === 'industry' ? 'var(--industry-teal)' : 
+                                                 'var(--accent-purple)'};
+                                    color: white;
+                                " title="${author.full_name || 'Unknown'}">
+                                    ${avatarText}
+                                </div>
+                                <div>
+                                    <div class="font-semibold">${author.full_name || 'Unknown User'}</div>
+                                    <div class="text-sm text-gray-500">
+                                        ${author.user_type === 'clinical' ? author.clinical_specialty || 'Clinical Professional' : 
+                                          author.user_type === 'industry' ? author.professional_role || 'Industry Professional' : 
+                                          'Guest Contributor'}
+                                        ${author.company ? ` • ${author.company}` : ''}
+                                    </div>
+                                    <div class="text-sm text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="discussion-title">${this.escapeHtml(discussion.title)}</h3>
+                        
+                        <div class="discussion-content">
+                            ${this.escapeHtml(discussion.content.substring(0, 300))}${discussion.content.length > 300 ? '...' : ''}
+                        </div>
+                        
+                        ${discussion.project_id ? `
+                            <div class="mb-4">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-700">
+                                    <i class="fas fa-project-diagram mr-2"></i>
+                                    Project: ${discussion.thoraxlab_projects?.title || 'Unknown Project'}
+                                </span>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="discussion-actions">
+                            <div>
+                                <button class="btn btn-sm btn-outline" onclick="ThoraxLab.showDiscussionDetails('${discussion.id}')">
+                                    <i class="fas fa-comment"></i>
+                                    View Discussion
+                                </button>
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                <i class="far fa-comment"></i>
+                                ${discussion.comment_count || 0} comments
+                                <span class="mx-2">•</span>
+                                <i class="far fa-thumbs-up"></i>
+                                ${discussion.like_count || 0} likes
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+        } catch (error) {
+            console.error('Error loading discussions:', error);
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-triangle text-4xl mb-4 opacity-50"></i>
+                    <div class="text-xl font-semibold mb-2">Failed to load discussions</div>
+                    <p class="text-gray-600">Please try again later</p>
+                </div>
+            `;
+        }
+    },
+    
+    async populateProjectDropdown() {
+        const select = document.getElementById('discussionProject');
+        if (!select) return;
+        
+        try {
+            const { data: projects } = await this.supabase
+                .from('thoraxlab_projects')
+                .select('id, title')
+                .order('title');
+            
+            select.innerHTML = '<option value="">Select project (optional)</option>';
+            
+            if (projects) {
+                projects.forEach(project => {
+                    const option = document.createElement('option');
+                    option.value = project.id;
+                    option.textContent = project.title;
+                    select.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Error populating project dropdown:', error);
+        }
+    },
+    
+    async createDiscussion(e) {
+        e.preventDefault();
+        
+        if (!this.currentUser) {
+            this.showToast('Please sign in to create a discussion', 'error');
+            this.showAuth();
+            return;
+        }
+        
+        const title = document.getElementById('discussionTitle').value.trim();
+        const content = document.getElementById('discussionContent').value.trim();
+        const projectId = document.getElementById('discussionProject').value;
+        
+        if (!title || !content) {
+            this.showToast('Title and content are required', 'error');
+            return;
+        }
+        
+        try {
+            const discussionData = {
+                title: title,
+                content: content,
+                project_id: projectId || null,
+                author_id: this.currentUser.id,
+                comment_count: 0,
+                like_count: 0,
+                created_at: new Date().toISOString()
+            };
+            
+            const { data: discussion, error } = await this.supabase
+                .from('thoraxlab_discussions')
+                .insert([discussionData])
+                .select()
+                .single();
+            
+            if (error) throw error;
+            
+            // Update project comment count if linked to a project
+            if (projectId) {
+                await this.supabase.rpc('increment_comment_count', { row_id: projectId });
+            }
+            
+            this.showToast('Discussion started successfully!', 'success');
+            this.hideModal('newDiscussionModal');
+            
+            // Reset form
+            document.getElementById('discussionForm').reset();
+            
+            await this.loadDiscussions();
+            this.navigateTo('discussions');
+            
+        } catch (error) {
+            console.error('Error creating discussion:', error);
+            this.showToast('Failed to create discussion: ' + error.message, 'error');
+        }
+    },
+    
+    async showDiscussionDetails(discussionId) {
+        try {
+            const { data: discussion, error } = await this.supabase
+                .from('thoraxlab_discussions')
+                .select(`
+                    *,
+                    thoraxlab_profiles (
+                        user_id,
+                        full_name,
+                        user_type,
+                        clinical_specialty,
+                        professional_role,
+                        company
+                    ),
+                    thoraxlab_projects (
+                        id,
+                        title
+                    )
+                `)
+                .eq('id', discussionId)
+                .single();
+            
+            if (error) throw error;
+            
+            const author = discussion.thoraxlab_profiles || {};
+            const avatarText = author.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??';
+            const userType = author.user_type || 'guest';
+            
+            // Load comments for this discussion
+            const { data: comments } = await this.supabase
+                .from('thoraxlab_comments')
+                .select(`
+                    *,
+                    thoraxlab_profiles (
+                        user_id,
+                        full_name,
+                        user_type
+                    )
+                `)
+                .eq('discussion_id', discussionId)
+                .order('created_at', { ascending: true });
+            
+            let commentsSection = '';
+            if (comments && comments.length > 0) {
+                commentsSection = `
+                    <div class="mt-6">
+                        <h4 class="font-bold mb-3">Comments (${comments.length})</h4>
+                        <div class="space-y-4">
+                            ${comments.map(comment => {
+                                const commentAuthor = comment.thoraxlab_profiles || {};
+                                const commentAvatar = commentAuthor.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??';
+                                const commentUserType = commentAuthor.user_type || 'guest';
+                                
+                                return `
+                                    <div class="p-4 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <div class="team-avatar" style="
+                                                background: ${commentUserType === 'clinical' ? 'var(--clinical-blue)' : 
+                                                             commentUserType === 'industry' ? 'var(--industry-teal)' : 
+                                                             'var(--accent-purple)'};
+                                                color: white;
+                                                width: 1.75rem;
+                                                height: 1.75rem;
+                                                font-size: 0.75rem;
+                                            ">
+                                                ${commentAvatar}
+                                            </div>
+                                            <span class="font-medium">${commentAuthor.full_name || 'Unknown User'}</span>
+                                            <span class="text-sm text-gray-500">${this.formatTimeAgo(comment.created_at)}</span>
+                                        </div>
+                                        <div class="text-gray-700">${this.escapeHtml(comment.content)}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('modalDiscussionTitle').textContent = discussion.title;
+            
+            document.getElementById('modalDiscussionContent').innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex items-start gap-3">
+                        <div class="team-avatar" style="
+                            background: ${userType === 'clinical' ? 'var(--clinical-blue)' : 
+                                         userType === 'industry' ? 'var(--industry-teal)' : 
+                                         'var(--accent-purple)'};
+                            color: white;
+                            width: 3rem;
+                            height: 3rem;
+                            font-size: 1rem;
+                        " title="${author.full_name || 'Unknown'}">
+                            ${avatarText}
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-semibold">${author.full_name || 'Unknown User'}</div>
+                            <div class="text-sm text-gray-500">
+                                ${author.user_type === 'clinical' ? author.clinical_specialty || 'Clinical Professional' : 
+                                  author.user_type === 'industry' ? author.professional_role || 'Industry Professional' : 
+                                  'Guest Contributor'}
+                                ${author.company ? ` • ${author.company}` : ''}
+                            </div>
+                            <div class="text-sm text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="prose max-w-none">
+                        ${this.escapeHtml(discussion.content).replace(/\n/g, '<br>')}
+                    </div>
+                    
+                    ${discussion.project_id ? `
+                        <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div class="text-sm text-blue-700">
+                                <i class="fas fa-project-diagram mr-2"></i>
+                                Related to project: <strong>${discussion.thoraxlab_projects?.title || 'Unknown Project'}</strong>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${commentsSection}
+                    
+                    <div class="pt-6 border-t">
+                        <div class="flex gap-3 justify-end">
+                            <button class="btn btn-outline modal-close">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            this.showModal('discussionDetailModal');
+            
+        } catch (error) {
+            console.error('Error loading discussion details:', error);
+            this.showToast('Failed to load discussion', 'error');
+        }
     },
     
     // ===== UTILITY METHODS =====
@@ -2186,7 +2754,7 @@ const thoraxlab = {
                     <i class="fas fa-folder-open text-4xl mb-4 opacity-50"></i>
                     <div class="text-xl font-semibold mb-2">${title}</div>
                     ${description ? `<p class="text-gray-600 mb-6">${description}</p>` : ''}
-                    <button class="btn btn-primary" onclick="thoraxlab.showModal('newProjectModal')">
+                    <button class="btn btn-primary" onclick="ThoraxLab.showModal('newProjectModal')">
                         <i class="fas fa-plus"></i>
                         Create First Project
                     </button>
@@ -2208,9 +2776,6 @@ const thoraxlab = {
         if (modal) {
             modal.classList.remove('active');
             document.body.style.overflow = '';
-            
-            const form = modal.querySelector('form');
-            if (form) form.reset();
         }
     },
     
@@ -2310,6 +2875,22 @@ const thoraxlab = {
             createMyProjectBtn.addEventListener('click', () => this.showModal('newProjectModal'));
         }
         
+        const projectForm = document.getElementById('projectForm');
+        if (projectForm) {
+            projectForm.addEventListener('submit', (e) => this.createProject(e));
+        }
+        
+        // Discussion actions
+        const newDiscussionBtn = document.getElementById('newDiscussionBtn');
+        if (newDiscussionBtn) {
+            newDiscussionBtn.addEventListener('click', () => this.showModal('newDiscussionModal'));
+        }
+        
+        const discussionForm = document.getElementById('discussionForm');
+        if (discussionForm) {
+            discussionForm.addEventListener('submit', (e) => this.createDiscussion(e));
+        }
+        
         // Import to TRAci
         const confirmImportBtn = document.getElementById('confirmImportBtn');
         if (confirmImportBtn) {
@@ -2340,7 +2921,7 @@ const thoraxlab = {
         }
         
         // Modal close handlers
-        document.querySelectorAll('.modal-close, .btn-secondary[onclick*="hideModal"]').forEach(btn => {
+        document.querySelectorAll('.modal-close').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const modal = e.target.closest('.modal-overlay');
                 if (modal) this.hideModal(modal.id);
@@ -2363,19 +2944,19 @@ const thoraxlab = {
         });
     },
     
-    // ===== PROFILE MODAL (placeholder) =====
+    // ===== PROFILE MODAL =====
     showProfileModal() {
-        this.showToast('Profile editing coming soon', 'info');
+        this.showToast('Profile editing coming soon!', 'info');
     }
 };
 
 // Initialize application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    thoraxlab.init();
+    ThoraxLab.init();
 });
 
-// Make thoraxlab available globally for button onclick handlers
-window.thoraxlab = thoraxlab;
+// Make ThoraxLab available globally
+window.ThoraxLab = ThoraxLab;
     </script>
 </body>
 </html>
