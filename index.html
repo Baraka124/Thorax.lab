@@ -3435,6 +3435,7 @@
             
             // FIX: authResult is an ARRAY, check the first element
             if (!authResult || authResult.length === 0 || !authResult[0].authenticated) {
+
                 throw new Error('Invalid username or password');
             }
             
