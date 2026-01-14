@@ -4495,152 +4495,246 @@
         // ============================================
         
         showImportModal(projectId = null, projectTitle = '') {
-            if (!this.currentUser) {
-                this.showToast('Please sign in to import projects', 'error');
-                return;
-            }
-            
-            if (projectId) {
-                document.getElementById('importProjectId').value = projectId;
-                const modalTitle = document.getElementById('importModalTitle');
-                if (modalTitle) {
-                    modalTitle.textContent = `Import "${projectTitle}" to TRAci`;
-                }
-            }
-            
-            // Reset modal state
-            const importError = document.getElementById('importError');
-            const importSuccess = document.getElementById('importSuccess');
-            if (importError) importError.classList.add('hidden');
-            if (importSuccess) importSuccess.classList.add('hidden');
-            
-            const importNotes = document.getElementById('importNotes');
-            if (importNotes) importNotes.value = '';
-            
-            this.showModal('importToTraciModal');
+    if (!this.currentUser) {
+        this.showToast('Please sign in to import projects', 'error');
+        return;
+    }
+    
+    if (projectId) {
+        document.getElementById('importProjectId').value = projectId;
+        const modalTitle = document.getElementById('importModalTitle');
+        if (modalTitle) {
+            modalTitle.textContent = `Import "${projectTitle.substring(0, 50)}${projectTitle.length > 50 ? '...' : ''}" to TRAci`;
+        }
+    }
+    
+    // Reset modal state
+    const importError = document.getElementById('importError');
+    const importSuccess = document.getElementById('importSuccess');
+    if (importError) importError.classList.add('hidden');
+    if (importSuccess) importSuccess.classList.add('hidden');
+    
+    const importNotes = document.getElementById('importNotes');
+    if (importNotes) importNotes.value = '';
+    
+    const importReviewStatus = document.getElementById('importReviewStatus');
+    if (importReviewStatus) importReviewStatus.value = 'needs_review';
+    
+    this.showModal('importToTraciModal');
+}
+        async handleImport() {
+    const projectId = document.getElementById('importProjectId')?.value;
+    const reviewStatus = document.getElementById('importReviewStatus')?.value || 'needs_review';
+    const notes = document.getElementById('importNotes')?.value.trim() || '';
+    
+    if (!projectId) {
+        this.showToast('Please select a project to import', 'error');
+        return;
+    }
+    
+    const importBtn = document.getElementById('confirmImportBtn');
+    const originalText = importBtn.innerHTML;
+    importBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importing...';
+    importBtn.disabled = true;
+    
+    // Reset modal messages
+    document.getElementById('importError').classList.add('hidden');
+    document.getElementById('importSuccess').classList.add('hidden');
+    
+    try {
+        // Get project data
+        const project = this.cache.projects.find(p => p.id === projectId);
+        if (!project) {
+            throw new Error('Project not found');
         }
         
-        async handleImport() {
-            const projectId = document.getElementById('importProjectId')?.value;
-            const reviewStatus = document.getElementById('importReviewStatus')?.value || 'needs_review';
-            const notes = document.getElementById('importNotes')?.value.trim() || '';
-            
-            if (!projectId) {
-                this.showToast('Please select a project to import', 'error');
-                return;
-            }
-            
-            const importBtn = document.getElementById('confirmImportBtn');
-            const originalText = importBtn.innerHTML;
-            importBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importing...';
-            importBtn.disabled = true;
-            
-            try {
-                // Get project data
-                const project = this.cache.projects.find(p => p.id === projectId);
-                if (!project) {
-                    throw new Error('Project not found');
-                }
-                
-                // Check if already linked to TRAci
-                if (project.source_traci_project_id) {
-                    throw new Error('This project is already linked to TRAci');
-                }
-                
-                // 1. Create project in TRAci database
-                const traciProjectData = {
-                    name: project.title,
-                    description: `[Imported from ThoraxLab Collaboration Platform]\n\n${project.description}\n\n**Import Notes:** ${notes}`,
-                    status: reviewStatus === 'active' ? 'development' : 'planning',
-                    review_status: reviewStatus === 'active' ? 'none' : reviewStatus,
-                    doctor_id: 'thoraxlab-import',
-                    is_proposal: false,
-                    visibility: 'private',
-                    progress: 0,
-                    tags: project.tags || [],
-                    created_at: new Date().toISOString(),
-                    last_updated: new Date().toISOString()
-                };
-                
-                // Insert into TRAci projects table
-                const { data: traciProject, error: traciError } = await this.supabase
-                    .from('projects')
-                    .insert([traciProjectData])
-                    .select()
-                    .single();
-                
-                if (traciError) throw traciError;
-                
-                // 2. Update ThoraxLab project with traci_project_id
-                const { error: updateError } = await this.supabase
-                    .from('thoraxlab_projects')
-                    .update({ 
-                        source_traci_project_id: traciProject.id,
-                        updated_at: new Date().toISOString()
-                    })
-                    .eq('id', projectId);
-                
-                if (updateError) throw updateError;
-                
-                // 3. Create sync record
-                const syncData = {
-                    traci_project_id: traciProject.id,
-                    thoraxlab_project_id: projectId,
-                    sync_direction: 'thoraxlab_to_traci',
-                    sync_purpose: 'industry_to_clinical',
-                    initiated_by: this.currentUser.id,
-                    initiated_at: new Date().toISOString(),
-                    status: 'completed',
-                    sync_notes: notes
-                };
-                
-                const { error: syncError } = await this.supabase
-                    .from('project_sync')
-                    .insert([syncData]);
-                
-                if (syncError) throw syncError;
-                
-                // Update cache
-                project.source_traci_project_id = traciProject.id;
-                
-                // Show success
-                const importSuccess = document.getElementById('importSuccess');
-                const importSuccessText = document.getElementById('importSuccessText');
-                if (importSuccess && importSuccessText) {
-                    importSuccessText.textContent = '✅ Project successfully imported to TRAci! It will appear in TRAci after admin review.';
-                    importSuccess.classList.remove('hidden');
-                }
-                
-                this.showToast('✅ Project imported to TRAci successfully!', 'success');
-                
-                // Close modal after delay
-                setTimeout(() => {
-                    this.hideModal('importToTraciModal');
-                    
-                    // Refresh data
-                    this.loadProjects().then(() => {
-                        if (this.state.currentPage === 'projects') {
-                            this.loadAllProjects();
-                        } else if (this.state.currentPage === 'myprojects') {
-                            this.loadMyProjects();
-                        }
-                    });
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Import error:', error);
-                const importError = document.getElementById('importError');
-                const importErrorText = document.getElementById('importErrorText');
-                if (importError && importErrorText) {
-                    importErrorText.textContent = 'Import failed: ' + error.message;
-                    importError.classList.remove('hidden');
-                }
-                this.showToast('Failed to import project: ' + error.message, 'error');
-            } finally {
-                importBtn.innerHTML = originalText;
-                importBtn.disabled = false;
-            }
+        // Check if already linked to TRAci
+        if (project.source_traci_project_id) {
+            throw new Error('This project is already linked to TRAci');
         }
+        
+        // 1. Create project in TRAci database
+        const traciProjectData = {
+            name: project.title,
+            description: `[Imported from ThoraxLab Collaboration Platform]\n\n${project.description}\n\n**Import Notes:** ${notes}`,
+            status: reviewStatus === 'active' ? 'development' : 'planning',
+            review_status: reviewStatus === 'active' ? 'none' : reviewStatus,
+            doctor_id: null, // NULL is allowed in doctor_id column
+            is_proposal: false,
+            visibility: 'private',
+            progress: 0,
+            created_at: new Date().toISOString(),
+            last_updated: new Date().toISOString()
+        };
+        
+        // Add tags if they exist (optional column)
+        if (project.tags && project.tags.length > 0) {
+            traciProjectData.tags = project.tags;
+        }
+        
+        console.log('Creating TRAci project:', traciProjectData);
+        
+        // Insert into TRAci projects table
+        let traciProject;
+        try {
+            const { data, error } = await this.supabase
+                .from('projects')
+                .insert([traciProjectData])
+                .select()
+                .single();
+            
+            if (error) {
+                // If error is about tags column, retry without it
+                if (error.message.includes('tags') && traciProjectData.tags) {
+                    console.log('Tags column not found, retrying without tags...');
+                    delete traciProjectData.tags;
+                    const { data: retryData, error: retryError } = await this.supabase
+                        .from('projects')
+                        .insert([traciProjectData])
+                        .select()
+                        .single();
+                    
+                    if (retryError) throw retryError;
+                    traciProject = retryData;
+                } else {
+                    throw error;
+                }
+            } else {
+                traciProject = data;
+            }
+        } catch (insertError) {
+            console.error('Error inserting into projects:', insertError);
+            throw new Error(`Failed to create TRAci project: ${insertError.message}`);
+        }
+        
+        // 2. Update ThoraxLab project with traci_project_id
+        const { error: updateError } = await this.supabase
+            .from('thoraxlab_projects')
+            .update({ 
+                source_traci_project_id: traciProject.id,
+                updated_at: new Date().toISOString()
+            })
+            .eq('id', projectId);
+        
+        if (updateError) {
+            throw new Error(`Failed to update ThoraxLab project: ${updateError.message}`);
+        }
+        
+        // 3. Create sync record
+        const syncData = {
+            traci_project_id: traciProject.id,
+            thoraxlab_project_id: projectId,
+            sync_direction: 'thoraxlab_to_traci',
+            sync_purpose: 'industry_to_clinical',
+            initiated_by: this.currentUser.id,
+            initiated_at: new Date().toISOString(),
+            status: 'completed',
+            sync_notes: notes
+        };
+        
+        const { error: syncError } = await this.supabase
+            .from('project_sync')
+            .insert([syncData]);
+        
+        if (syncError) {
+            console.warn('Failed to create sync record:', syncError);
+            // Continue anyway, this is not critical
+        }
+        
+        // 4. Create cross-platform audit log
+        const auditData = {
+            user_name: this.currentUser.name,
+            action: 'project_imported',
+            platform: 'thoraxlab',
+            details: `Imported project "${project.title}" to TRAci`,
+            metadata: { 
+                thoraxlab_project_id: projectId,
+                traci_project_id: traciProject.id,
+                review_status: reviewStatus
+            },
+            created_at: new Date().toISOString()
+        };
+        
+        try {
+            await this.supabase
+                .from('cross_platform_audit')
+                .insert([auditData]);
+        } catch (auditError) {
+            console.warn('Failed to create cross-platform audit log:', auditError);
+            // Continue anyway
+        }
+        
+        // 5. Create TRAci audit log
+        const traciAuditData = {
+            user_id: 'thoraxlab-system',
+            user_name: 'ThoraxLab Platform',
+            user_role: 'system',
+            action: 'project_imported_from_thoraxlab',
+            details: JSON.stringify({
+                project_name: project.title,
+                imported_by: this.currentUser.name,
+                notes: notes,
+                review_status: reviewStatus
+            }),
+            project_id: traciProject.id,
+            created_at: new Date().toISOString()
+        };
+        
+        try {
+            await this.supabase
+                .from('audit_logs')
+                .insert([traciAuditData]);
+        } catch (traciAuditError) {
+            console.warn('Failed to create TRAci audit log:', traciAuditError);
+            // Continue anyway
+        }
+        
+        // Update cache
+        project.source_traci_project_id = traciProject.id;
+        
+        // Show success message in modal
+        document.getElementById('importSuccessText').textContent = `✅ Project "${project.title.substring(0, 50)}..." successfully imported to TRAci! It will appear in TRAci after admin review.`;
+        document.getElementById('importSuccess').classList.remove('hidden');
+        
+        this.showToast('✅ Project imported to TRAci successfully!', 'success');
+        
+        // Close modal after delay and refresh data
+        setTimeout(() => {
+            this.hideModal('importToTraciModal');
+            
+            // Refresh project data
+            this.loadProjects().then(() => {
+                // Refresh current view based on active page
+                switch(this.state.currentPage) {
+                    case 'projects':
+                        this.loadAllProjects();
+                        break;
+                    case 'myprojects':
+                        this.loadMyProjects();
+                        break;
+                    case 'fromtraci':
+                        this.loadTraciProjects();
+                        break;
+                    case 'dashboard':
+                        this.loadDashboard();
+                        break;
+                }
+            });
+        }, 2000);
+        
+    } catch (error) {
+        console.error('Import error:', error);
+        
+        // Show error in modal
+        document.getElementById('importErrorText').textContent = `Import failed: ${error.message}`;
+        document.getElementById('importError').classList.remove('hidden');
+        
+        this.showToast(`Failed to import project: ${error.message}`, 'error');
+    } finally {
+        importBtn.innerHTML = originalText;
+        importBtn.disabled = false;
+    }
+}
         
         async syncTraciProjects() {
             if (!this.currentUser) {
