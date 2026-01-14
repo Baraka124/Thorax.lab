@@ -3390,7 +3390,7 @@
                     this.showAuth();
                 }
             }
-      async handleLogin(e) {
+   async handleLogin(e) {
     e.preventDefault();
     
     const username = document.getElementById('username').value.trim();
@@ -3409,79 +3409,115 @@
     loginBtn.disabled = true;
     
     try {
-        // 1. First, check if user exists in database
+        // ✅ FIXED: Use dashboard_users table for authentication
         const { data: users, error: fetchError } = await this.supabase
-            .from('thoraxlab_profiles')
+            .from('dashboard_users')
             .select('*')
-            .eq('full_name', username)
-            .eq('user_type', userType);
+            .eq('username', username)
+            .eq('role', userType);
         
         if (fetchError) throw fetchError;
         
         let userData;
         
         if (users && users.length > 0) {
-            // User exists - check password with bcrypt
-            const { data: authResult, error: authError } = await this.supabase
-                .rpc('check_password_bcrypt', {
-                    p_username: username,
-                    p_password: password
-                });
+            // User exists in dashboard_users - check password
+            const hashedPassword = await this.hashPassword(password);
+            const storedPassword = users[0].password_hash || users[0].password;
             
-            if (authError) {
-                console.error('Auth error:', authError);
-                throw new Error('Authentication error');
-            }
-            
-            // FIX: authResult is an ARRAY, check the first element
-            if (!authResult || authResult.length === 0 || !authResult[0].authenticated) {
-
+            if (hashedPassword !== storedPassword) {
                 throw new Error('Invalid username or password');
             }
             
             userData = users[0];
             
-        } else {
-            // 2. User doesn't exist - create new user
-            const userId = this.generateUUID();
+            // Check if profile exists in thoraxlab_profiles
+            const { data: profile, error: profileError } = await this.supabase
+                .from('thoraxlab_profiles')
+                .select('*')
+                .eq('user_id', userData.id)
+                .maybeSingle();
             
-            userData = {
-                user_id: userId,
-                full_name: username,
-                user_type: userType,
-                password_hash: password, // Store plain text for new users
-                is_verified: false,
-                created_at: new Date().toISOString()
-            };
-            
-            if (userType === 'clinical') {
-                userData.clinical_specialty = 'General Medicine';
-                userData.hospital_institution = 'Medical Center';
-            } else if (userType === 'industry') {
-                userData.professional_role = 'Professional';
-                userData.company = 'Technology Company';
+            if (!profile) {
+                // Create profile in thoraxlab_profiles
+                const newProfile = {
+                    user_id: userData.id,
+                    full_name: userData.full_name || userData.username,
+                    user_type: userData.role,
+                    created_at: new Date().toISOString()
+                };
+                
+                if (userData.role === 'clinical') {
+                    newProfile.clinical_specialty = 'General Medicine';
+                    newProfile.hospital_institution = userData.department || 'Medical Center';
+                } else if (userData.role === 'industry') {
+                    newProfile.professional_role = 'Professional';
+                    newProfile.company = userData.department || 'Technology Company';
+                }
+                
+                await this.supabase
+                    .from('thoraxlab_profiles')
+                    .insert([newProfile]);
             }
             
+        } else {
+            // User doesn't exist - create in dashboard_users
+            const userId = this.generateUUID();
+            const hashedPassword = await this.hashPassword(password);
+            
+            // Create in dashboard_users
+            userData = {
+                id: userId,
+                username: username,
+                password_hash: hashedPassword,
+                full_name: username,
+                role: userType,
+                email: username + '@example.com',
+                is_active: true,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            };
+            
             const { data: newUser, error: createError } = await this.supabase
-                .from('thoraxlab_profiles')
+                .from('dashboard_users')
                 .insert([userData])
                 .select()
                 .single();
             
             if (createError) throw createError;
             userData = newUser;
+            
+            // Create profile in thoraxlab_profiles
+            const profileData = {
+                user_id: userId,
+                full_name: username,
+                user_type: userType,
+                created_at: new Date().toISOString()
+            };
+            
+            if (userType === 'clinical') {
+                profileData.clinical_specialty = 'General Medicine';
+                profileData.hospital_institution = 'Medical Center';
+            } else if (userType === 'industry') {
+                profileData.professional_role = 'Professional';
+                profileData.company = 'Technology Company';
+            }
+            
+            await this.supabase
+                .from('thoraxlab_profiles')
+                .insert([profileData]);
         }
         
-        // 3. Set current user
+        // Set current user
         this.currentUser = {
-            id: userData.user_id,
-            name: userData.full_name,
-            type: userData.user_type,
-            avatar: userData.full_name.substring(0, 2).toUpperCase(),
+            id: userData.id,
+            name: userData.full_name || userData.username,
+            type: userData.role,
+            avatar: (userData.full_name || userData.username).substring(0, 2).toUpperCase(),
             ...userData
         };
         
-        this.isAdmin = username.toLowerCase().includes('admin');
+        this.isAdmin = username.toLowerCase().includes('admin') || userData.role === 'admin';
         
         // Save session
         localStorage.setItem('thoraxlab_user', JSON.stringify(this.currentUser));
@@ -3489,7 +3525,7 @@
         // Show app
         this.showApp();
         this.updateUserDisplay();
-        this.showToast(`Welcome ${userData.full_name}!`, 'success');
+        this.showToast(`Welcome ${userData.full_name || userData.username}!`, 'success');
         
         // Load data and navigate
         await this.loadInitialData();
@@ -3518,6 +3554,15 @@
         loginBtn.innerHTML = originalText;
         loginBtn.disabled = false;
     }
+}
+
+// Add this helper function if not exists
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
             
             logout() {
