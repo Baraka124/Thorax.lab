@@ -4531,7 +4531,7 @@
                 this.showModal('importToTraciModal');
             }
             
-         async function handleImport() {
+            async handleImport() {  // ✅ FIXED: Remove "function" keyword
     const projectId = document.getElementById('importProjectId').value;
     const reviewStatus = document.getElementById('importReviewStatus').value;
     const notes = document.getElementById('importNotes').value.trim();
@@ -4648,8 +4648,7 @@
         importBtn.innerHTML = originalText;
         importBtn.disabled = false;
     }
-}
-            
+}      
             // ============================================
             // ADMIN DASHBOARD
             // ============================================
