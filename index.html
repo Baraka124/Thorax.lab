@@ -4274,141 +4274,153 @@
                 });
             });
         }
-        
-        renderProjectCard(project, owner, options = {}) {
-            const { isFromTraci = false, isFeatured = false } = options;
-            const avatarText = owner.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??';
-            const userType = owner.user_type || 'guest';
-            
-            const typeClass = project.project_type === 'clinical' ? 'badge-clinical' :
-                            project.project_type === 'industry' ? 'badge-industry' : 'badge-collaboration';
-            
-            const visibilityClass = project.visibility === 'private' ? 'badge-private' :
-                                  project.visibility === 'internal' ? 'badge-internal' : 'badge-public';
-            
-            const statusClass = project.status === 'active' ? 'badge-active' :
-                              project.status === 'archived' ? 'badge-archived' : 'badge-private';
-            
-            let stickers = '';
-            if (isFromTraci) {
-                stickers += `<span class="project-sticker sticker-traci"><i class="fas fa-hospital"></i> From TRAci</span>`;
-            }
-            if (isFeatured) {
-                stickers += `<span class="project-sticker sticker-featured"><i class="fas fa-star"></i> Featured</span>`;
-            }
-            
-            let importButton = '';
-            if (!isFromTraci && this.currentUser) {
-                importButton = `
-                    <button class="btn btn-sm btn-import" onclick="event.stopPropagation(); window.thoraxLab.showImportModal('${project.id}', '${this.escapeHtml(project.title)}')">
-                        <i class="fas fa-download"></i>
-                        Import to TRAci
-                    </button>
-                `;
-            }
-            
-            // Add edit/delete buttons for project owners or admins
-            let actionButtons = '';
-            if (this.currentUser && (this.currentUser.id === project.owner_id || this.isAdmin)) {
-                actionButtons = `
-                    <div class="flex gap-1">
-                        <button class="btn btn-sm btn-secondary edit-btn" data-type="project" data-id="${project.id}" onclick="event.stopPropagation()">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger delete-btn" data-type="project" data-id="${project.id}" onclick="event.stopPropagation()">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-            }
-            
-            return `
-                <div class="project-card ${isFromTraci ? 'from-traci' : ''} ${isFeatured ? 'featured' : ''}" data-project-id="${project.id}">
-                    <div class="project-header">
-                        <div class="project-badges">
-                            <span class="project-badge ${typeClass}">
-                                <i class="fas ${project.project_type === 'clinical' ? 'fa-user-md' : 
-                                                 project.project_type === 'industry' ? 'fa-industry' : 
-                                                 'fa-handshake'}"></i>
-                                ${project.project_type === 'clinical' ? 'Clinical' : 
-                                  project.project_type === 'industry' ? 'Industry' : 
-                                  'Collaboration'}
-                            </span>
-                            <span class="project-badge ${visibilityClass}">
-                                <i class="fas ${project.visibility === 'private' ? 'fa-lock' : 
-                                                 project.visibility === 'internal' ? 'fa-users' : 
-                                                 'fa-globe'}"></i>
-                                ${project.visibility.charAt(0).toUpperCase() + project.visibility.slice(1)}
-                            </span>
-                            <span class="project-badge ${statusClass}">
-                                ${project.status.charAt(0).toUpperCase() + project.status.slice(1)}
-                            </span>
-                        </div>
-                        <div class="project-actions">
-                            ${importButton}
-                            ${actionButtons}
-                        </div>
-                    </div>
-                    
-                    <h3 class="project-title">
-                        ${this.escapeHtml(project.title)}
-                        ${stickers}
-                    </h3>
-                    
-                    <p class="project-description">${this.escapeHtml(project.description?.substring(0, 200) || 'No description')}...</p>
-                    
-                    ${project.tags?.length ? `
-                        <div class="project-tags">
-                            ${project.tags.slice(0, 5).map(tag => `
-                                <span class="project-tag">${this.escapeHtml(tag)}</span>
-                            `).join('')}
-                            ${project.tags.length > 5 ? `
-                                <span class="project-tag">+${project.tags.length - 5}</span>
-                            ` : ''}
-                        </div>
-                    ` : ''}
-                    
-                    <div class="project-team">
-                        <div class="flex items-center gap-2">
-                            <div class="team-avatar" style="
-                                background: ${userType === 'clinical' ? 'var(--clinical-blue)' : 
-                                             userType === 'industry' ? 'var(--industry-teal)' : 
-                                             'var(--accent-purple)'};
-                                color: white;
-                            " title="${owner.full_name || 'Unknown'}">
-                                ${avatarText}
-                            </div>
-                            <span class="text-sm text-gray-600">
-                                ${isFromTraci ? 'TRAci Platform' : (owner.full_name || 'Unknown User')}
-                            </span>
-                        </div>
-                        <div class="text-sm text-gray-500">
-                            ${this.formatTimeAgo(project.created_at)}
-                        </div>
-                    </div>
-                    
-                    <div class="project-footer">
-                        <div class="project-stats">
-                            <span class="stat-item like-btn" data-type="project" data-id="${project.id}">
-                                <i class="far fa-thumbs-up"></i>
-                                <span class="like-count">${project.like_count || 0}</span>
-                            </span>
-                            <span class="stat-item comment-btn" data-discussion-id="${project.id}">
-                                <i class="far fa-comment"></i>
-                                ${project.comment_count || 0}
-                            </span>
-                            <span class="stat-item">
-                                <i class="far fa-eye"></i>
-                                ${project.view_count || 0}
-                            </span>
-                        </div>
-                        <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); window.thoraxLab.showProjectDetails('${project.id}')">
-                            View Details
-                        </button>
-                    </div>
+     renderProjectCard(project, owner, options = {}) {
+    const { isFromTraci = false, isFeatured = false } = options;
+    
+    // Fix for TRAci projects
+    let avatarText;
+    let displayName;
+    
+    if (isFromTraci) {
+        avatarText = 'TR'; // TRAci initials
+        displayName = 'TRAci Clinical Platform';
+    } else {
+        avatarText = owner.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??';
+        displayName = owner.full_name || 'Unknown User';
+    }
+    
+    const userType = owner.user_type || 'guest';
+    
+    const typeClass = project.project_type === 'clinical' ? 'badge-clinical' :
+                    project.project_type === 'industry' ? 'badge-industry' : 'badge-collaboration';
+    
+    const visibilityClass = project.visibility === 'private' ? 'badge-private' :
+                          project.visibility === 'internal' ? 'badge-internal' : 'badge-public';
+    
+    const statusClass = project.status === 'active' ? 'badge-active' :
+                      project.status === 'archived' ? 'badge-archived' : 'badge-private';
+    
+    let stickers = '';
+    if (isFromTraci) {
+        stickers += `<span class="project-sticker sticker-traci"><i class="fas fa-hospital"></i> From TRAci</span>`;
+    }
+    if (isFeatured) {
+        stickers += `<span class="project-sticker sticker-featured"><i class="fas fa-star"></i> Featured</span>`;
+    }
+    
+    let importButton = '';
+    if (!isFromTraci && this.currentUser) {
+        importButton = `
+            <button class="btn btn-sm btn-import" onclick="event.stopPropagation(); window.thoraxLab.showImportModal('${project.id}', '${this.escapeHtml(project.title)}')">
+                <i class="fas fa-download"></i>
+                Import to TRAci
+            </button>
+        `;
+    }
+    
+    // Add edit/delete buttons for project owners or admins
+    let actionButtons = '';
+    if (this.currentUser && (this.currentUser.id === project.owner_id || this.isAdmin)) {
+        actionButtons = `
+            <div class="flex gap-1">
+                <button class="btn btn-sm btn-secondary edit-btn" data-type="project" data-id="${project.id}" onclick="event.stopPropagation()">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-danger delete-btn" data-type="project" data-id="${project.id}" onclick="event.stopPropagation()">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+    }
+    
+    return `
+        <div class="project-card ${isFromTraci ? 'from-traci' : ''} ${isFeatured ? 'featured' : ''}" data-project-id="${project.id}">
+            <div class="project-header">
+                <div class="project-badges">
+                    <span class="project-badge ${typeClass}">
+                        <i class="fas ${project.project_type === 'clinical' ? 'fa-user-md' : 
+                                         project.project_type === 'industry' ? 'fa-industry' : 
+                                         'fa-handshake'}"></i>
+                        ${project.project_type === 'clinical' ? 'Clinical' : 
+                          project.project_type === 'industry' ? 'Industry' : 
+                          'Collaboration'}
+                    </span>
+                    <span class="project-badge ${visibilityClass}">
+                        <i class="fas ${project.visibility === 'private' ? 'fa-lock' : 
+                                         project.visibility === 'internal' ? 'fa-users' : 
+                                         'fa-globe'}"></i>
+                        ${project.visibility.charAt(0).toUpperCase() + project.visibility.slice(1)}
+                    </span>
+                    <span class="project-badge ${statusClass}">
+                        ${project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+                    </span>
                 </div>
-            `;
-        }
+                <div class="project-actions">
+                    ${importButton}
+                    ${actionButtons}
+                </div>
+            </div>
+            
+            <h3 class="project-title">
+                ${this.escapeHtml(project.title)}
+                ${stickers}
+            </h3>
+            
+            <p class="project-description">${this.escapeHtml(project.description?.substring(0, 200) || 'No description')}...</p>
+            
+            ${project.tags?.length ? `
+                <div class="project-tags">
+                    ${project.tags.slice(0, 5).map(tag => `
+                        <span class="project-tag">${this.escapeHtml(tag)}</span>
+                    `).join('')}
+                    ${project.tags.length > 5 ? `
+                        <span class="project-tag">+${project.tags.length - 5}</span>
+                    ` : ''}
+                </div>
+            ` : ''}
+            
+            <div class="project-team">
+                <div class="flex items-center gap-2">
+                    <div class="team-avatar" style="
+                        background: ${isFromTraci ? 'var(--clinical-blue)' : 
+                                     userType === 'clinical' ? 'var(--clinical-blue)' : 
+                                     userType === 'industry' ? 'var(--industry-teal)' : 
+                                     'var(--accent-purple)'};
+                        color: white;
+                    " title="${displayName}">
+                        ${avatarText}
+                    </div>
+                    <span class="text-sm text-gray-600">
+                        ${displayName}
+                    </span>
+                </div>
+                <div class="text-sm text-gray-500">
+                    ${this.formatTimeAgo(project.created_at)}
+                </div>
+            </div>
+            
+            <div class="project-footer">
+                <div class="project-stats">
+                    <span class="stat-item like-btn" data-type="project" data-id="${project.id}">
+                        <i class="far fa-thumbs-up"></i>
+                        <span class="like-count">${project.like_count || 0}</span>
+                    </span>
+                    <span class="stat-item comment-btn" data-discussion-id="${project.id}">
+                        <i class="far fa-comment"></i>
+                        ${project.comment_count || 0}
+                    </span>
+                    <span class="stat-item">
+                        <i class="far fa-eye"></i>
+                        ${project.view_count || 0}
+                    </span>
+                </div>
+                <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); window.thoraxLab.showProjectDetails('${project.id}')">
+                    View Details
+                </button>
+            </div>
+        </div>
+    `;
+}
         
         async createProject(e) {
             e.preventDefault();
@@ -5047,177 +5059,177 @@
         // DETAIL VIEWS - COMPLETE IMPLEMENTATION
         // ============================================
         
-        async showProjectDetails(projectId) {
-            this.showLoading('Loading project details...');
-            
-            try {
-                const project = this.cache.projects.find(p => p.id === projectId);
-                if (!project) {
-                    throw new Error('Project not found');
-                }
-                
-                const owner = this.cache.profiles.get(project.owner_id) || {};
-                const isFromTraci = !!project.source_traci_project_id;
-                
-                // Get related discussions
-                const relatedDiscussions = this.cache.discussions.filter(d => d.project_id === projectId);
-                
-                // Set modal title
-                document.getElementById('modalProjectTitle').textContent = project.title;
-                
-                // Build content
-                let content = `
-                    <div class="space-y-6">
-                        ${isFromTraci ? `
-                            <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <i class="fas fa-hospital text-blue-600"></i>
-                                    <span class="font-semibold text-blue-700">Published from TRAci Platform</span>
-                                </div>
-                                <p class="text-sm text-blue-600">
-                                    This clinical project was published from our internal TRAci platform for industry collaboration.
-                                </p>
-                            </div>
-                        ` : ''}
-                        
-                        <div class="flex items-start justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="team-avatar" style="width: 3rem; height: 3rem; font-size: 1rem; background: ${owner.user_type === 'clinical' ? 'var(--clinical-blue)' : owner.user_type === 'industry' ? 'var(--industry-teal)' : 'var(--accent-purple)'}; color: white;" 
-                                     title="${owner.full_name || 'Unknown'}">
-                                    ${owner.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??'}
-                                </div>
-                                <div>
-                                    <div class="font-semibold">${isFromTraci ? 'TRAci Platform' : (owner.full_name || 'Unknown User')}</div>
-                                    ${!isFromTraci ? `
-                                        <div class="text-sm text-gray-500">
-                                            ${owner.user_type === 'clinical' ? owner.clinical_specialty || 'Clinical Professional' : 
-                                              owner.user_type === 'industry' ? owner.professional_role || 'Industry Professional' : 
-                                              'Guest Contributor'}
-                                            ${owner.company ? ` • ${owner.company}` : ''}
-                                        </div>
-                                    ` : ''}
-                                    <div class="text-sm text-gray-500">${this.formatTimeAgo(project.created_at)}</div>
-                                </div>
-                            </div>
-                            <div class="flex gap-2">
-                                <span class="project-badge ${project.visibility === 'private' ? 'badge-private' : 
-                                                          project.visibility === 'internal' ? 'badge-internal' : 
-                                                          'badge-public'}">
-                                    ${project.visibility.charAt(0).toUpperCase() + project.visibility.slice(1)}
-                                </span>
-                                <span class="project-badge ${project.status === 'active' ? 'badge-active' : 'badge-archived'}">
-                                    ${project.status.charAt(0).toUpperCase() + project.status.slice(1)}
-                                </span>
-                            </div>
+async showProjectDetails(projectId) {
+    this.showLoading('Loading project details...');
+    
+    try {
+        const project = this.cache.projects.find(p => p.id === projectId);
+        if (!project) {
+            throw new Error('Project not found');
+        }
+        
+        const owner = this.cache.profiles.get(project.owner_id) || {};
+        const isFromTraci = !!project.source_traci_project_id;
+        
+        // Get related discussions
+        const relatedDiscussions = this.cache.discussions.filter(d => d.project_id === projectId);
+        
+        // Set modal title
+        document.getElementById('modalProjectTitle').textContent = project.title;
+        
+        // Build content
+        let content = `
+            <div class="space-y-6">
+                ${isFromTraci ? `
+                    <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-hospital text-blue-600"></i>
+                            <span class="font-semibold text-blue-700">Published from TRAci Platform</span>
                         </div>
-                        
+                        <p class="text-sm text-blue-600">
+                            This clinical project was published from our internal TRAci platform for industry collaboration.
+                        </p>
+                    </div>
+                ` : ''}
+                
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="team-avatar" style="width: 3rem; height: 3rem; font-size: 1rem; background: ${isFromTraci ? 'var(--clinical-blue)' : owner.user_type === 'clinical' ? 'var(--clinical-blue)' : owner.user_type === 'industry' ? 'var(--industry-teal)' : 'var(--accent-purple)'}; color: white;" 
+                             title="${isFromTraci ? 'TRAci Platform' : (owner.full_name || 'Unknown')}">
+                            ${isFromTraci ? 'TR' : (owner.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??')}
+                        </div>
                         <div>
-                            <h4 class="font-bold mb-3 text-lg">Description</h4>
-                            <div class="prose max-w-none bg-gray-50 p-4 rounded-lg">
-                                ${this.escapeHtml(project.description || 'No description').replace(/\n/g, '<br>')}
-                            </div>
-                        </div>
-                        
-                        ${project.tags?.length ? `
-                            <div>
-                                <h4 class="font-bold mb-3 text-lg">Tags</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    ${project.tags.map(tag => `
-                                        <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                                            ${this.escapeHtml(tag)}
-                                        </span>
-                                    `).join('')}
+                            <div class="font-semibold">${isFromTraci ? 'TRAci Clinical Platform' : (owner.full_name || 'Unknown User')}</div>
+                            ${!isFromTraci ? `
+                                <div class="text-sm text-gray-500">
+                                    ${owner.user_type === 'clinical' ? owner.clinical_specialty || 'Clinical Professional' : 
+                                      owner.user_type === 'industry' ? owner.professional_role || 'Industry Professional' : 
+                                      'Guest Contributor'}
+                                    ${owner.company ? ` • ${owner.company}` : ''}
                                 </div>
-                            </div>
-                        ` : ''}
-                        
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                <div class="text-2xl font-bold text-clinical">${project.like_count || 0}</div>
-                                <div class="text-sm text-gray-500">Likes</div>
-                            </div>
-                            <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                <div class="text-2xl font-bold text-industry">${project.comment_count || 0}</div>
-                                <div class="text-sm text-gray-500">Comments</div>
-                            </div>
-                            <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                <div class="text-2xl font-bold text-accent">${project.view_count || 0}</div>
-                                <div class="text-sm text-gray-500">Views</div>
-                            </div>
-                        </div>
-                `;
-                
-                // Add import button for non-TRAci projects
-                if (!isFromTraci && this.currentUser) {
-                    content += `
-                        <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
-                            <h4 class="font-bold mb-2 text-green-800">Collaborate with Clinical Team</h4>
-                            <p class="text-sm text-green-700 mb-3">
-                                Share this industry project with the clinical team on TRAci for feedback and collaboration.
-                            </p>
-                            <button class="btn btn-import" onclick="window.thoraxLab.showImportModal('${projectId}', '${this.escapeHtml(project.title)}')">
-                                <i class="fas fa-download"></i>
-                                Import to TRAci
-                            </button>
-                        </div>
-                    `;
-                }
-                
-                // Add related discussions if any
-                if (relatedDiscussions.length > 0) {
-                    content += `
-                        <div>
-                            <h4 class="font-bold mb-3 text-lg">Related Discussions (${relatedDiscussions.length})</h4>
-                            <div class="space-y-2">
-                                ${relatedDiscussions.map(discussion => `
-                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer"
-                                         onclick="window.thoraxLab.showDiscussionDetails('${discussion.id}')">
-                                        <div>
-                                            <div class="font-medium">${this.escapeHtml(discussion.title)}</div>
-                                            <div class="text-sm text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
-                                        </div>
-                                        <div class="text-sm text-gray-500">
-                                            <i class="far fa-comment"></i> ${discussion.comment_count || 0}
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                // Add action buttons
-                content += `
-                        <div class="pt-6 border-t">
-                            <div class="flex gap-3 justify-between">
-                                <div class="flex gap-2">
-                                    <button class="btn btn-outline like-btn" data-type="project" data-id="${projectId}">
-                                        <i class="far fa-thumbs-up"></i>
-                                        Like (${project.like_count || 0})
-                                    </button>
-                                    <button class="btn btn-outline" onclick="window.thoraxLab.showDiscussionModal('${projectId}')">
-                                        <i class="fas fa-comment"></i>
-                                        Start Discussion
-                                    </button>
-                                </div>
-                                <button class="btn btn-secondary modal-close">
-                                    Close
-                                </button>
-                            </div>
+                            ` : ''}
+                            <div class="text-sm text-gray-500">${this.formatTimeAgo(project.created_at)}</div>
                         </div>
                     </div>
-                `;
+                    <div class="flex gap-2">
+                        <span class="project-badge ${project.visibility === 'private' ? 'badge-private' : 
+                                                  project.visibility === 'internal' ? 'badge-internal' : 
+                                                  'badge-public'}">
+                            ${project.visibility.charAt(0).toUpperCase() + project.visibility.slice(1)}
+                        </span>
+                        <span class="project-badge ${project.status === 'active' ? 'badge-active' : 'badge-archived'}">
+                            ${project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+                        </span>
+                    </div>
+                </div>
                 
-                document.getElementById('modalProjectContent').innerHTML = content;
-                this.showModal('projectDetailModal');
+                <div>
+                    <h4 class="font-bold mb-3 text-lg">Description</h4>
+                    <div class="prose max-w-none bg-gray-50 p-4 rounded-lg">
+                        ${this.escapeHtml(project.description || 'No description').replace(/\n/g, '<br>')}
+                    </div>
+                </div>
                 
-            } catch (error) {
-                console.error('Error loading project details:', error);
-                this.showToast('Failed to load project details', 'error');
-            } finally {
-                this.hideLoading();
-            }
+                ${project.tags?.length ? `
+                    <div>
+                        <h4 class="font-bold mb-3 text-lg">Tags</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${project.tags.map(tag => `
+                                <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                                    ${this.escapeHtml(tag)}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+                
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <div class="text-2xl font-bold text-clinical">${project.like_count || 0}</div>
+                        <div class="text-sm text-gray-500">Likes</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <div class="text-2xl font-bold text-industry">${project.comment_count || 0}</div>
+                        <div class="text-sm text-gray-500">Comments</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <div class="text-2xl font-bold text-accent">${project.view_count || 0}</div>
+                        <div class="text-sm text-gray-500">Views</div>
+                    </div>
+                </div>
+        `;
+        
+        // Add import button for non-TRAci projects
+        if (!isFromTraci && this.currentUser) {
+            content += `
+                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <h4 class="font-bold mb-2 text-green-800">Collaborate with Clinical Team</h4>
+                    <p class="text-sm text-green-700 mb-3">
+                        Share this industry project with the clinical team on TRAci for feedback and collaboration.
+                    </p>
+                    <button class="btn btn-import" onclick="window.thoraxLab.showImportModal('${projectId}', '${this.escapeHtml(project.title)}')">
+                        <i class="fas fa-download"></i>
+                        Import to TRAci
+                    </button>
+                </div>
+            `;
         }
+        
+        // Add related discussions if any
+        if (relatedDiscussions.length > 0) {
+            content += `
+                <div>
+                    <h4 class="font-bold mb-3 text-lg">Related Discussions (${relatedDiscussions.length})</h4>
+                    <div class="space-y-2">
+                        ${relatedDiscussions.map(discussion => `
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer"
+                                 onclick="window.thoraxLab.showDiscussionDetails('${discussion.id}')">
+                                <div>
+                                    <div class="font-medium">${this.escapeHtml(discussion.title)}</div>
+                                    <div class="text-sm text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    <i class="far fa-comment"></i> ${discussion.comment_count || 0}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Add action buttons
+        content += `
+                <div class="pt-6 border-t">
+                    <div class="flex gap-3 justify-between">
+                        <div class="flex gap-2">
+                            <button class="btn btn-outline like-btn" data-type="project" data-id="${projectId}">
+                                <i class="far fa-thumbs-up"></i>
+                                Like (${project.like_count || 0})
+                            </button>
+                            <button class="btn btn-outline" onclick="window.thoraxLab.showDiscussionModal('${projectId}')">
+                                <i class="fas fa-comment"></i>
+                                Start Discussion
+                            </button>
+                        </div>
+                        <button class="btn btn-secondary modal-close">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('modalProjectContent').innerHTML = content;
+        this.showModal('projectDetailModal');
+        
+    } catch (error) {
+        console.error('Error loading project details:', error);
+        this.showToast('Failed to load project details', 'error');
+    } finally {
+        this.hideLoading();
+    }
+}
         
         async showDiscussionDetails(discussionId) {
             this.showLoading('Loading discussion...');
