@@ -528,6 +528,7 @@
             padding: 0.25rem;
             border-radius: var(--radius-sm);
             transition: color 0.2s ease;
+            font-size: 0.9rem;
         }
 
         .password-toggle:hover {
@@ -535,17 +536,17 @@
             background: var(--gray-100);
         }
 
-        /* ===== BUTTONS ===== */
+        /* ===== BUTTONS - COMPACT DESIGN ===== */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius-lg);
+            gap: 0.375rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
             font-family: inherit;
             font-size: var(--text-sm);
-            font-weight: 600;
+            font-weight: 500;
             border: none;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -553,6 +554,7 @@
             position: relative;
             overflow: hidden;
             outline: none;
+            line-height: 1.25;
         }
 
         .btn::after {
@@ -584,26 +586,34 @@
             }
         }
 
+        .btn i {
+            font-size: 0.875rem;
+            width: 16px;
+            text-align: center;
+        }
+
         .btn-primary {
             background: linear-gradient(135deg, var(--clinical-blue) 0%, var(--industry-teal) 100%);
             color: white;
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--shadow-xs);
         }
 
         .btn-primary:hover:not(:disabled) {
             transform: translateY(-1px);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-primary:active:not(:disabled) {
             transform: translateY(0);
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--shadow-xs);
         }
 
         .btn-secondary {
             background: var(--bg-secondary);
             color: var(--text-primary);
-            border: 2px solid var(--border);
+            border: 1px solid var(--border);
+            font-size: 0.875rem;
+            padding: 0.375rem 0.75rem;
         }
 
         .btn-secondary:hover:not(:disabled) {
@@ -615,7 +625,9 @@
         .btn-outline {
             background: transparent;
             color: var(--clinical-blue);
-            border: 2px solid var(--clinical-blue);
+            border: 1px solid var(--clinical-blue);
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
         }
 
         .btn-outline:hover:not(:disabled) {
@@ -627,7 +639,9 @@
         .btn-ghost {
             background: transparent;
             color: var(--text-secondary);
-            border: 2px solid transparent;
+            border: 1px solid transparent;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
         }
 
         .btn-ghost:hover:not(:disabled) {
@@ -638,6 +652,8 @@
         .btn-danger {
             background: var(--error-red);
             color: white;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
         }
 
         .btn-danger:hover:not(:disabled) {
@@ -648,6 +664,8 @@
         .btn-success {
             background: var(--success-green);
             color: white;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
         }
 
         .btn-success:hover:not(:disabled) {
@@ -658,6 +676,8 @@
         .btn-warning {
             background: var(--warning-orange);
             color: white;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
         }
 
         .btn-warning:hover:not(:disabled) {
@@ -668,6 +688,8 @@
         .btn-sync {
             background: linear-gradient(135deg, var(--accent-purple), #9333ea);
             color: white;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
         }
 
         .btn-sync:hover:not(:disabled) {
@@ -678,6 +700,8 @@
         .btn-import {
             background: linear-gradient(135deg, var(--industry-teal), #0d9488);
             color: white;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
         }
 
         .btn-import:hover:not(:disabled) {
@@ -686,19 +710,30 @@
         }
 
         .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            gap: 0.25rem;
+        }
+
+        .btn-sm i {
+            font-size: 0.75rem;
+            width: 14px;
         }
 
         .btn-lg {
-            padding: 0.875rem 2rem;
+            padding: 0.75rem 1.5rem;
             font-size: 1rem;
         }
 
         .btn-icon {
-            padding: 0.5rem;
-            width: 2.5rem;
-            height: 2.5rem;
+            padding: 0.375rem;
+            width: 2rem;
+            height: 2rem;
+            border-radius: var(--radius-md);
+        }
+
+        .btn-icon i {
+            font-size: 1rem;
         }
 
         .btn:disabled {
@@ -715,8 +750,8 @@
         .btn-loading::before {
             content: '';
             position: absolute;
-            width: 1rem;
-            height: 1rem;
+            width: 0.875rem;
+            height: 0.875rem;
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: white;
@@ -730,51 +765,100 @@
             border-top-color: var(--clinical-blue);
         }
 
-        /* ===== PROJECT STICKERS ===== */
+        /* COMPACT ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .action-btn {
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+
+        /* SMALL SOCIAL/TEAM ICONS */
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            background: var(--gray-100);
+            transition: all 0.2s ease;
+        }
+
+        .social-icon:hover {
+            background: var(--gray-200);
+            color: var(--gray-900);
+        }
+
+        /* ===== PROJECT STICKERS - IMPROVED DESIGN ===== */
         .project-sticker {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
-            border-radius: 12px;
+            gap: 3px;
+            padding: 2px 6px;
+            border-radius: 10px;
             font-size: 10px;
-            font-weight: 700;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.3px;
-            margin-left: 6px;
-            border: 1.5px solid;
+            margin-left: 4px;
+            border: 1px solid;
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
         }
 
         .sticker-traci {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(37, 99, 235, 0.08));
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(37, 99, 235, 0.06));
             color: #2563eb;
-            border-color: rgba(37, 99, 235, 0.3);
+            border-color: rgba(37, 99, 235, 0.2);
         }
 
         .sticker-synced {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.08));
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.06));
             color: #8b5cf6;
-            border-color: rgba(139, 92, 246, 0.3);
+            border-color: rgba(139, 92, 246, 0.2);
         }
 
         .sticker-clinical {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.08));
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(59, 130, 246, 0.06));
             color: #3b82f6;
-            border-color: rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.2);
         }
 
         .sticker-featured {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.08));
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.06));
             color: #f59e0b;
-            border-color: rgba(245, 158, 11, 0.3);
+            border-color: rgba(245, 158, 11, 0.2);
         }
 
         .sticker-urgent {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.08));
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(239, 68, 68, 0.06));
             color: #ef4444;
-            border-color: rgba(239, 68, 68, 0.3);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .sticker-imported {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.06));
+            color: #10B981;
+            border-color: rgba(16, 185, 129, 0.2);
         }
 
         /* ===== MAIN APP LAYOUT ===== */
@@ -785,7 +869,7 @@
             background: var(--bg-secondary);
         }
 
-        /* ===== HEADER ===== */
+        /* ===== HEADER - COMPACT DESIGN ===== */
         .app-header {
             background: var(--bg-card);
             border-bottom: 1px solid var(--border);
@@ -802,21 +886,21 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: var(--space-xl);
-            padding: var(--space-md) var(--space-xl);
+            gap: var(--space-md);
+            padding: 0.75rem var(--space-xl);
             max-width: 1440px;
             margin: 0 auto;
             width: 100%;
         }
 
         .brand-main {
-            font-size: 1.25rem;
+            font-size: 1.125rem;
             font-weight: 800;
             color: var(--clinical-blue);
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: var(--space-sm);
+            gap: 0.5rem;
             transition: transform 0.2s ease;
         }
 
@@ -826,22 +910,28 @@
 
         .nav-main {
             display: flex;
-            gap: 0.25rem;
+            gap: 0.125rem;
             align-items: center;
         }
 
         .nav-link {
-            padding: 0.75rem 1.25rem;
+            padding: 0.5rem 0.875rem;
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            font-size: var(--text-sm);
-            border-radius: var(--radius-lg);
+            font-size: 0.875rem;
+            border-radius: var(--radius-md);
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.375rem;
             position: relative;
+            white-space: nowrap;
+        }
+
+        .nav-link i {
+            font-size: 0.875rem;
+            width: 16px;
         }
 
         .nav-link:hover {
@@ -860,25 +950,30 @@
             bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            width: 24px;
-            height: 3px;
+            width: 20px;
+            height: 2px;
             background: var(--clinical-blue);
-            border-radius: 2px;
+            border-radius: 1px;
         }
 
         .nav-badge {
             background: var(--accent-purple);
             color: white;
-            font-size: 0.75rem;
-            padding: 0.125rem 0.375rem;
+            font-size: 0.7rem;
+            padding: 0.125rem 0.25rem;
             border-radius: 9999px;
-            margin-left: 0.25rem;
+            margin-left: 0.125rem;
+            min-width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .user-section {
             display: flex;
             align-items: center;
-            gap: var(--space-md);
+            gap: 0.75rem;
         }
 
         .user-menu {
@@ -886,8 +981,8 @@
         }
 
         .user-avatar {
-            width: 2.5rem;
-            height: 2.5rem;
+            width: 2rem;
+            height: 2rem;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--clinical-blue), var(--industry-teal));
             color: white;
@@ -895,16 +990,16 @@
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            font-size: var(--text-sm);
+            font-size: 0.75rem;
             border: 2px solid white;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-xs);
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .user-avatar:hover {
             transform: scale(1.05);
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-sm);
         }
 
         .user-avatar.admin {
@@ -913,33 +1008,40 @@
 
         .user-dropdown {
             position: absolute;
-            top: calc(100% + 8px);
+            top: calc(100% + 6px);
             right: 0;
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
             border: 1px solid var(--border);
             box-shadow: var(--shadow-xl);
-            min-width: 240px;
+            min-width: 200px;
             z-index: 1000;
             animation: slideInDown 0.2s ease-out;
             overflow: hidden;
         }
 
         .dropdown-header {
-            padding: var(--space-md);
+            padding: 0.75rem;
             border-bottom: 1px solid var(--border-light);
             background: var(--bg-secondary);
+            font-size: 0.875rem;
         }
 
         .dropdown-item {
-            padding: 0.75rem 1rem;
+            padding: 0.5rem 0.75rem;
             color: var(--text-secondary);
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.5rem;
             transition: all 0.2s ease;
             cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .dropdown-item i {
+            width: 16px;
+            font-size: 0.875rem;
         }
 
         .dropdown-item:hover {
@@ -950,18 +1052,20 @@
         .dropdown-divider {
             height: 1px;
             background: var(--border-light);
-            margin: 0.5rem 0;
+            margin: 0.25rem 0;
         }
 
         .mobile-menu-btn {
             display: none;
             background: none;
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             color: var(--text-secondary);
             cursor: pointer;
-            padding: 0.5rem;
+            padding: 0.375rem;
             border-radius: var(--radius-md);
+            width: 32px;
+            height: 32px;
         }
 
         .mobile-menu-btn:hover {
@@ -971,23 +1075,23 @@
         /* Quick Actions Toolbar */
         .quick-actions-toolbar {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
+            bottom: 1.5rem;
+            right: 1.5rem;
             z-index: 100;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.375rem;
         }
 
         .quick-action-btn {
-            width: 3.5rem;
-            height: 3.5rem;
+            width: 3rem;
+            height: 3rem;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.25rem;
+            font-size: 1rem;
             box-shadow: var(--shadow-lg);
             transition: all 0.3s ease;
             cursor: pointer;
@@ -1013,13 +1117,13 @@
         /* Notification Badge */
         .notification-badge {
             position: absolute;
-            top: -5px;
-            right: -5px;
+            top: -4px;
+            right: -4px;
             background: var(--error-red);
             color: white;
-            font-size: 0.75rem;
-            min-width: 1.25rem;
-            height: 1.25rem;
+            font-size: 0.7rem;
+            min-width: 1.125rem;
+            height: 1.125rem;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1047,9 +1151,9 @@
 
         .page-header {
             margin-bottom: var(--space-xl);
-            padding: var(--space-xl);
+            padding: var(--space-lg);
             background: linear-gradient(135deg, var(--clinical-blue) 0%, var(--industry-teal) 100%);
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-lg);
             color: white;
             position: relative;
             overflow: hidden;
@@ -1068,16 +1172,16 @@
         }
 
         .page-title {
-            font-size: 2.5rem;
+            font-size: 1.75rem;
             font-weight: 800;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.375rem;
             line-height: 1.2;
             position: relative;
         }
 
         .page-subtitle {
             color: rgba(255, 255, 255, 0.9);
-            font-size: 1.125rem;
+            font-size: 1rem;
             max-width: 48rem;
             position: relative;
         }
@@ -1085,16 +1189,16 @@
         /* ===== STATS CARDS ===== */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: var(--space-md);
             margin-bottom: var(--space-xl);
         }
 
         .stat-card {
             background: var(--bg-card);
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-lg);
             border: 1px solid var(--border);
-            padding: var(--space-lg);
+            padding: var(--space-md);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -1112,28 +1216,28 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
+            height: 3px;
             background: linear-gradient(90deg, var(--clinical-blue), var(--industry-teal));
         }
 
         .stat-icon {
-            width: 3rem;
-            height: 3rem;
-            border-radius: var(--radius-lg);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: var(--radius-md);
             background: var(--bg-secondary);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: var(--space-md);
-            font-size: 1.25rem;
+            margin-bottom: var(--space-sm);
+            font-size: 1rem;
             color: var(--clinical-blue);
         }
 
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 800;
             line-height: 1;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.125rem;
             background: linear-gradient(135deg, var(--clinical-blue), var(--industry-teal));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -1150,10 +1254,10 @@
             display: inline-flex;
             align-items: center;
             gap: 0.25rem;
-            font-size: var(--text-sm);
+            font-size: 0.75rem;
             font-weight: 600;
             margin-top: 0.5rem;
-            padding: 0.25rem 0.5rem;
+            padding: 0.125rem 0.375rem;
             border-radius: var(--radius-sm);
         }
 
@@ -1167,11 +1271,11 @@
             background: rgba(239, 68, 68, 0.1);
         }
 
-        /* ===== ENHANCED PROJECT CARDS ===== */
+        /* ===== ENHANCED PROJECT CARDS - IMPROVED DESIGN ===== */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: var(--space-lg);
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: var(--space-md);
         }
 
         @media (max-width: 768px) {
@@ -1182,9 +1286,9 @@
 
         .project-card {
             background: var(--bg-card);
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-lg);
             border: 1px solid var(--border);
-            padding: var(--space-lg);
+            padding: var(--space-md);
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
@@ -1197,7 +1301,7 @@
         .project-card:hover {
             border-color: var(--clinical-blue);
             transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
+            box-shadow: var(--shadow-lg);
         }
 
         .project-card::before {
@@ -1206,7 +1310,7 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
+            height: 3px;
             background: linear-gradient(90deg, var(--clinical-blue), var(--industry-teal));
         }
 
@@ -1222,43 +1326,43 @@
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: var(--space-md);
-            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
+            gap: var(--space-xs);
         }
 
         .project-badges {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 0.375rem;
         }
 
         .project-badge {
-            padding: 0.25rem 0.75rem;
+            padding: 0.125rem 0.5rem;
             border-radius: 9999px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.125rem;
             border: 1px solid;
         }
 
         .badge-clinical {
-            background: rgba(26, 86, 219, 0.1);
+            background: rgba(26, 86, 219, 0.08);
             color: var(--clinical-blue);
-            border-color: rgba(26, 86, 219, 0.2);
+            border-color: rgba(26, 86, 219, 0.15);
         }
 
         .badge-industry {
-            background: rgba(14, 159, 110, 0.1);
+            background: rgba(14, 159, 110, 0.08);
             color: var(--industry-teal);
-            border-color: rgba(14, 159, 110, 0.2);
+            border-color: rgba(14, 159, 110, 0.15);
         }
 
         .badge-collaboration {
-            background: rgba(126, 58, 242, 0.1);
+            background: rgba(126, 58, 242, 0.08);
             color: var(--accent-purple);
-            border-color: rgba(126, 58, 242, 0.2);
+            border-color: rgba(126, 58, 242, 0.15);
         }
 
         .badge-private {
@@ -1268,50 +1372,50 @@
         }
 
         .badge-internal {
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(59, 130, 246, 0.08);
             color: #3B82F6;
-            border-color: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.15);
         }
 
         .badge-public {
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(16, 185, 129, 0.08);
             color: #10B981;
-            border-color: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.15);
         }
 
         .badge-archived {
-            background: rgba(107, 114, 128, 0.1);
+            background: rgba(107, 114, 128, 0.08);
             color: var(--gray-500);
-            border-color: rgba(107, 114, 128, 0.2);
+            border-color: rgba(107, 114, 128, 0.15);
         }
 
         .badge-active {
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(16, 185, 129, 0.08);
             color: #10B981;
-            border-color: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.15);
         }
 
         .project-actions {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.25rem;
         }
 
         .project-title {
-            font-size: 1.25rem;
+            font-size: 1.125rem;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
             line-height: 1.3;
             display: flex;
             align-items: center;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
         }
 
         .project-description {
             color: var(--text-secondary);
             font-size: 0.875rem;
-            line-height: 1.6;
+            line-height: 1.5;
             margin-bottom: var(--space-md);
             display: -webkit-box;
             -webkit-line-clamp: 3;
@@ -1320,28 +1424,59 @@
             flex: 1;
         }
 
+        /* QUICK STATS FOR PROJECTS */
+        .project-quick-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin: 0.75rem 0;
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+        }
+
+        .quick-stat {
+            text-align: center;
+            padding: 0.25rem;
+        }
+
+        .quick-stat .value {
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: var(--clinical-blue);
+            line-height: 1.2;
+        }
+
+        .quick-stat .label {
+            font-size: 0.7rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
         .project-meta {
             display: flex;
             align-items: center;
-            gap: var(--space-md);
-            margin-bottom: var(--space-md);
+            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
             color: var(--text-secondary);
-            font-size: var(--text-sm);
+            font-size: 0.75rem;
         }
 
         .project-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 0.375rem;
             margin-bottom: var(--space-md);
         }
 
         .project-tag {
-            padding: 0.25rem 0.5rem;
+            padding: 0.125rem 0.375rem;
             background: var(--bg-secondary);
             color: var(--text-secondary);
             border-radius: var(--radius-sm);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 500;
             transition: all 0.2s ease;
         }
@@ -1359,23 +1494,23 @@
         }
 
         .team-avatar {
-            width: 2rem;
-            height: 2rem;
+            width: 1.75rem;
+            height: 1.75rem;
             border-radius: 50%;
             background: var(--gray-300);
             color: var(--gray-700);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             border: 2px solid white;
             box-shadow: var(--shadow-xs);
         }
 
         .team-avatar.small {
-            width: 1.5rem;
-            height: 1.5rem;
+            width: 1.25rem;
+            height: 1.25rem;
             font-size: 0.625rem;
         }
 
@@ -1385,7 +1520,7 @@
         }
 
         .team-avatar-group .team-avatar {
-            margin-left: -0.5rem;
+            margin-left: -0.375rem;
         }
 
         .team-avatar-group .team-avatar:first-child {
@@ -1396,23 +1531,24 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-top: var(--space-md);
+            padding-top: var(--space-sm);
             border-top: 1px solid var(--border-light);
             margin-top: auto;
         }
 
         .project-stats {
             display: flex;
-            gap: var(--space-lg);
+            gap: var(--space-md);
             color: var(--gray-500);
-            font-size: 0.875rem;
+            font-size: 0.75rem;
         }
 
         .stat-item {
             display: flex;
             align-items: center;
-            gap: 0.375rem;
+            gap: 0.25rem;
             transition: color 0.2s ease;
+            cursor: pointer;
         }
 
         .stat-item:hover {
@@ -1427,13 +1563,80 @@
             color: var(--accent-pink);
         }
 
+        /* ===== IMPROVED TRAci PROJECTS DESIGN ===== */
+        .project-card.traci-project {
+            background: linear-gradient(135deg, #f0f9ff 0%, #f5f3ff 100%);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        .traci-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+        }
+
+        .traci-badge {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            padding: 0.125rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .traci-content {
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .traci-content h4 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin: 0.5rem 0 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .traci-progress {
+            margin: 0.75rem 0;
+        }
+
+        .traci-progress-bar {
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.25rem;
+        }
+
+        .traci-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .traci-progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
         /* ===== DISCUSSION CARDS ===== */
         .discussion-card {
             background: var(--bg-card);
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-lg);
             border: 1px solid var(--border);
-            padding: var(--space-lg);
-            margin-bottom: var(--space-lg);
+            padding: var(--space-md);
+            margin-bottom: var(--space-md);
             transition: all 0.3s ease;
             cursor: pointer;
         }
@@ -1441,21 +1644,21 @@
         .discussion-card:hover {
             border-color: var(--clinical-blue);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-md);
         }
 
         .discussion-header {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: var(--space-md);
-            gap: var(--space-md);
+            margin-bottom: var(--space-sm);
+            gap: var(--space-sm);
         }
 
         .discussion-author {
             display: flex;
             align-items: center;
-            gap: var(--space-sm);
+            gap: var(--space-xs);
             flex: 1;
         }
 
@@ -1465,17 +1668,17 @@
         }
 
         .discussion-title {
-            font-size: 1.25rem;
+            font-size: 1.125rem;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: var(--space-sm);
+            margin-bottom: var(--space-xs);
             line-height: 1.3;
         }
 
         .discussion-content {
             color: var(--text-secondary);
-            line-height: 1.7;
-            margin-bottom: var(--space-lg);
+            line-height: 1.6;
+            margin-bottom: var(--space-md);
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
@@ -1486,68 +1689,110 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-top: var(--space-md);
+            padding-top: var(--space-sm);
             border-top: 1px solid var(--border-light);
         }
 
         .discussion-stats {
             display: flex;
-            gap: var(--space-lg);
+            gap: var(--space-md);
             color: var(--gray-500);
-            font-size: 0.875rem;
+            font-size: 0.75rem;
         }
 
         /* ===== COMMENT SYSTEM ===== */
         .comment-card {
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
             border: 1px solid var(--border);
-            padding: var(--space-md);
-            margin-bottom: var(--space-sm);
+            padding: var(--space-sm);
+            margin-bottom: var(--space-xs);
             transition: all 0.2s ease;
         }
 
         .comment-card:hover {
             border-color: var(--gray-300);
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--shadow-xs);
         }
 
         .comment-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: var(--space-sm);
+            margin-bottom: 0.25rem;
         }
 
         .comment-author {
             display: flex;
             align-items: center;
-            gap: var(--space-sm);
+            gap: var(--space-xs);
         }
 
         .comment-content {
             color: var(--text-primary);
-            line-height: 1.6;
-            margin-bottom: var(--space-sm);
+            line-height: 1.5;
+            margin-bottom: var(--space-xs);
+            font-size: 0.875rem;
         }
 
         .comment-actions {
             display: flex;
             align-items: center;
-            gap: var(--space-md);
-            margin-top: var(--space-sm);
+            gap: var(--space-sm);
+            margin-top: var(--space-xs);
         }
 
         .comment-reply {
-            margin-left: var(--space-xl);
+            margin-left: var(--space-lg);
             border-left: 2px solid var(--border-light);
-            padding-left: var(--space-md);
+            padding-left: var(--space-sm);
         }
 
         .comment-form {
-            margin-top: var(--space-lg);
-            padding-top: var(--space-md);
+            margin-top: var(--space-md);
+            padding-top: var(--space-sm);
             border-top: 1px solid var(--border-light);
+        }
+
+        /* ===== QUICK PREVIEW (HOVER EFFECT) ===== */
+        .quick-preview {
+            position: fixed;
+            background: white;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-xl);
+            padding: var(--space-md);
+            max-width: 320px;
+            z-index: 9999;
+            animation: fadeIn 0.2s ease-out;
+            pointer-events: none;
+            font-size: 0.875rem;
+        }
+
+        .quick-preview::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 20px;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-left: 1px solid var(--border);
+            border-top: 1px solid var(--border);
+            transform: rotate(45deg);
+        }
+
+        .quick-preview .preview-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .quick-preview .preview-content {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            max-height: 200px;
+            overflow: hidden;
         }
 
         /* ===== MODALS ===== */
@@ -1574,8 +1819,8 @@
 
         .modal-content {
             background: var(--bg-card);
-            border-radius: var(--radius-2xl);
-            padding: var(--space-xl);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
             width: 100%;
             max-width: 800px;
             max-height: 90vh;
@@ -1598,13 +1843,13 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: var(--space-lg);
-            padding-bottom: var(--space-md);
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-sm);
             border-bottom: 1px solid var(--border);
         }
 
         .modal-title {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 800;
             color: var(--text-primary);
         }
@@ -1612,11 +1857,11 @@
         .modal-close {
             background: transparent;
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             color: var(--gray-500);
             cursor: pointer;
-            width: 2.5rem;
-            height: 2.5rem;
+            width: 2rem;
+            height: 2rem;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1630,41 +1875,41 @@
         }
 
         .modal-body {
-            margin-bottom: var(--space-lg);
+            margin-bottom: var(--space-md);
         }
 
         .modal-footer {
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            gap: var(--space-md);
-            padding-top: var(--space-md);
+            gap: var(--space-sm);
+            padding-top: var(--space-sm);
             border-top: 1px solid var(--border);
         }
 
         /* ===== TOAST NOTIFICATIONS ===== */
         .toast-container {
             position: fixed;
-            top: var(--space-xl);
-            right: var(--space-xl);
+            top: var(--space-lg);
+            right: var(--space-lg);
             z-index: 3000;
             display: flex;
             flex-direction: column;
-            gap: var(--space-sm);
+            gap: var(--space-xs);
         }
 
         .toast {
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-md);
+            padding: var(--space-sm) var(--space-md);
             box-shadow: var(--shadow-xl);
             animation: slideInRight 0.3s ease-out;
             display: flex;
             align-items: center;
             gap: var(--space-sm);
-            min-width: 320px;
-            max-width: 400px;
-            border-left: 4px solid;
+            min-width: 300px;
+            max-width: 380px;
+            border-left: 3px solid;
             transform: translateZ(0);
         }
 
@@ -1674,7 +1919,7 @@
         .toast.info { border-left-color: var(--clinical-blue); }
 
         .toast-icon {
-            font-size: 1.25rem;
+            font-size: 1rem;
             flex-shrink: 0;
         }
 
@@ -1692,6 +1937,7 @@
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 0.125rem;
+            font-size: 0.875rem;
         }
 
         .toast-message {
@@ -1705,9 +1951,9 @@
             border: none;
             color: var(--gray-400);
             cursor: pointer;
-            padding: 0.25rem;
+            padding: 0.125rem;
             border-radius: var(--radius-sm);
-            font-size: 1.25rem;
+            font-size: 1rem;
             line-height: 1;
             transition: color 0.2s ease;
         }
@@ -1744,23 +1990,24 @@
 
         .loading {
             text-align: center;
-            padding: var(--space-xl);
+            padding: var(--space-lg);
         }
 
         .loading-spinner {
             display: inline-block;
-            width: 3rem;
-            height: 3rem;
+            width: 2.5rem;
+            height: 2.5rem;
             border: 3px solid var(--gray-200);
             border-radius: 50%;
             border-top-color: var(--clinical-blue);
             animation: spin 1s ease-in-out infinite;
-            margin-bottom: var(--space-md);
+            margin-bottom: var(--space-sm);
         }
 
         .loading-text {
             color: var(--text-secondary);
             font-weight: 500;
+            font-size: 0.875rem;
         }
 
         .skeleton {
@@ -1771,42 +2018,42 @@
         }
 
         .skeleton-text {
-            height: 1rem;
-            margin-bottom: 0.5rem;
+            height: 0.875rem;
+            margin-bottom: 0.375rem;
         }
 
         .skeleton-title {
-            height: 2rem;
-            margin-bottom: 1rem;
+            height: 1.5rem;
+            margin-bottom: 0.75rem;
         }
 
         /* ===== EMPTY STATES ===== */
         .empty-state {
             text-align: center;
-            padding: var(--space-2xl);
+            padding: var(--space-xl);
             color: var(--text-secondary);
             background: var(--bg-card);
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-lg);
             border: 2px dashed var(--border);
         }
 
         .empty-state-icon {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: var(--gray-300);
-            margin-bottom: var(--space-md);
-        }
-
-        .empty-state-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
             margin-bottom: var(--space-sm);
         }
 
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
         .empty-state-description {
-            font-size: var(--text-lg);
-            margin-bottom: var(--space-lg);
-            max-width: 32rem;
+            font-size: var(--text-base);
+            margin-bottom: var(--space-md);
+            max-width: 28rem;
             margin-left: auto;
             margin-right: auto;
         }
@@ -1814,9 +2061,9 @@
         /* ===== FILTERS & SEARCH ===== */
         .filters-container {
             background: var(--bg-card);
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-lg);
             border: 1px solid var(--border);
-            padding: var(--space-lg);
+            padding: var(--space-md);
             margin-bottom: var(--space-xl);
         }
 
@@ -1827,18 +2074,19 @@
 
         .search-icon {
             position: absolute;
-            left: 1rem;
+            left: 0.875rem;
             top: 50%;
             transform: translateY(-50%);
             color: var(--gray-400);
             pointer-events: none;
+            font-size: 0.875rem;
         }
 
         .search-input {
             width: 100%;
-            padding: 0.875rem 1rem 0.875rem 2.75rem;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-lg);
+            padding: 0.75rem 0.875rem 0.75rem 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
             font-family: inherit;
             font-size: var(--text-sm);
             background: var(--bg-card);
@@ -1848,29 +2096,29 @@
         .search-input:focus {
             outline: none;
             border-color: var(--clinical-blue);
-            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+            box-shadow: 0 0 0 2px rgba(26, 86, 219, 0.1);
         }
 
         .filter-group {
             display: flex;
             align-items: center;
-            gap: var(--space-md);
+            gap: var(--space-sm);
             flex-wrap: wrap;
         }
 
         .filter-chip {
-            padding: 0.5rem 1rem;
+            padding: 0.375rem 0.75rem;
             background: var(--bg-secondary);
             color: var(--text-secondary);
-            border-radius: var(--radius-lg);
-            font-size: var(--text-sm);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
             font-weight: 500;
-            border: 2px solid transparent;
+            border: 1px solid transparent;
             cursor: pointer;
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.375rem;
         }
 
         .filter-chip:hover {
@@ -1892,10 +2140,10 @@
             background: transparent;
             border: none;
             color: var(--text-secondary);
-            font-size: var(--text-sm);
+            font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
-            padding: 0.5rem;
+            padding: 0.375rem;
             border-radius: var(--radius-md);
             transition: all 0.2s ease;
         }
@@ -1908,31 +2156,31 @@
         /* Advanced Search Panel */
         .advanced-search-panel {
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
             border: 1px solid var(--border);
-            padding: var(--space-lg);
-            margin-bottom: var(--space-lg);
+            padding: var(--space-md);
+            margin-bottom: var(--space-md);
         }
 
         /* ===== ADMIN DASHBOARD ===== */
         .admin-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--space-lg);
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: var(--space-md);
             margin-bottom: var(--space-xl);
         }
 
         .admin-card {
             background: var(--bg-card);
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-lg);
             border: 1px solid var(--border);
-            padding: var(--space-lg);
+            padding: var(--space-md);
             transition: all 0.3s ease;
         }
 
         .admin-card:hover {
             border-color: var(--clinical-blue);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-md);
         }
 
         .admin-table {
@@ -1940,27 +2188,27 @@
             border-collapse: separate;
             border-spacing: 0;
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
             overflow: hidden;
             border: 1px solid var(--border);
         }
 
         .admin-table th {
             background: var(--bg-secondary);
-            padding: 0.75rem 1rem;
+            padding: 0.5rem 0.75rem;
             text-align: left;
             font-weight: 600;
             color: var(--text-primary);
             border-bottom: 1px solid var(--border);
-            font-size: var(--text-sm);
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
         .admin-table td {
-            padding: 0.75rem 1rem;
+            padding: 0.5rem 0.75rem;
             border-bottom: 1px solid var(--border-light);
-            font-size: var(--text-sm);
+            font-size: 0.875rem;
             color: var(--text-secondary);
         }
 
@@ -1974,24 +2222,24 @@
 
         .table-actions {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.25rem;
         }
 
         /* Batch Operations */
         .batch-operations {
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
             border: 1px solid var(--border);
-            padding: var(--space-md);
-            margin-bottom: var(--space-md);
+            padding: var(--space-sm);
+            margin-bottom: var(--space-sm);
             display: flex;
             align-items: center;
-            gap: var(--space-md);
+            gap: var(--space-sm);
             flex-wrap: wrap;
         }
 
         .batch-selection-info {
-            font-size: var(--text-sm);
+            font-size: 0.875rem;
             color: var(--gray-600);
         }
 
@@ -2002,11 +2250,11 @@
             }
             
             .header-container {
-                padding: var(--space-md) var(--space-lg);
+                padding: 0.75rem var(--space-lg);
             }
             
             .page-header {
-                padding: var(--space-lg);
+                padding: var(--space-md);
             }
         }
 
@@ -2017,8 +2265,8 @@
             
             .header-container {
                 flex-wrap: wrap;
-                gap: var(--space-md);
-                padding: var(--space-md);
+                gap: var(--space-sm);
+                padding: 0.5rem var(--space-md);
             }
             
             .nav-main {
@@ -2033,9 +2281,9 @@
                 display: flex;
                 flex-direction: column;
                 background: var(--bg-card);
-                border-radius: var(--radius-lg);
-                padding: var(--space-md);
-                margin-top: var(--space-md);
+                border-radius: var(--radius-md);
+                padding: var(--space-sm);
+                margin-top: 0.5rem;
                 box-shadow: var(--shadow);
                 animation: slideInDown 0.2s ease-out;
             }
@@ -2058,11 +2306,11 @@
             }
             
             .page-title {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
             
             .modal-content {
-                padding: var(--space-lg);
+                padding: var(--space-md);
             }
             
             .projects-grid {
@@ -2074,8 +2322,8 @@
             }
             
             .toast-container {
-                right: var(--space-md);
-                left: var(--space-md);
+                right: var(--space-sm);
+                left: var(--space-sm);
             }
             
             .toast {
@@ -2089,37 +2337,54 @@
             }
             
             .quick-action-btn {
-                width: 3rem;
-                height: 3rem;
-                font-size: 1rem;
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Touch target optimization for mobile */
+        @media (max-width: 768px) {
+            .btn, .nav-link, .filter-chip {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            .project-card, .discussion-card {
+                padding: var(--space-md);
+            }
+            
+            .action-btn {
+                width: 36px;
+                height: 36px;
             }
         }
 
         @media (max-width: 480px) {
             .auth-body {
-                padding: var(--space-lg);
+                padding: var(--space-md);
             }
             
             .project-stats {
                 flex-direction: column;
-                gap: 0.5rem;
+                gap: 0.25rem;
                 align-items: flex-start;
             }
             
             .project-footer {
                 flex-direction: column;
-                gap: var(--space-md);
+                gap: var(--space-sm);
                 align-items: stretch;
             }
             
             .discussion-actions {
                 flex-direction: column;
-                gap: var(--space-md);
+                gap: var(--space-sm);
                 align-items: flex-start;
             }
             
             .modal-content {
-                padding: var(--space-md);
+                padding: var(--space-sm);
             }
         }
 
@@ -2169,14 +2434,17 @@
         <!-- Toast Container -->
         <div id="toastContainer" class="toast-container"></div>
         
+        <!-- Quick Preview -->
+        <div id="quickPreview" class="quick-preview hidden"></div>
+        
         <!-- Quick Actions Toolbar -->
         <div id="quickActionsToolbar" class="quick-actions-toolbar hidden">
             <div class="relative">
                 <button id="quickActionBtn" class="quick-action-btn primary">
                     <i class="fas fa-bolt"></i>
                 </button>
-                <div id="quickActionsMenu" class="hidden absolute bottom-full right-0 mb-2 bg-white rounded-lg shadow-xl border p-2 min-w-[200px]">
-                    <div class="text-sm font-semibold px-3 py-2 text-gray-700">Quick Actions</div>
+                <div id="quickActionsMenu" class="hidden absolute bottom-full right-0 mb-2 bg-white rounded-lg shadow-xl border p-2 min-w-[180px]">
+                    <div class="text-sm font-semibold px-2 py-1.5 text-gray-700">Quick Actions</div>
                     <div class="border-t"></div>
                     <div id="quickActionsList" class="py-1">
                         <!-- Dynamic quick actions -->
@@ -2208,9 +2476,9 @@
                         <i class="fas fa-user-md"></i>
                     </div>
                     
-                    <div class="text-center mb-8">
-                        <h2 class="text-2xl font-bold mb-2">Welcome to ThoraxLab</h2>
-                        <p class="text-gray-600">Collaborate. Innovate. Transform Healthcare.</p>
+                    <div class="text-center mb-6">
+                        <h2 class="text-xl font-bold mb-2">Welcome to ThoraxLab</h2>
+                        <p class="text-gray-600 text-sm">Collaborate. Innovate. Transform Healthcare.</p>
                     </div>
                     
                     <form id="authForm">
@@ -2246,12 +2514,12 @@
                         </div>
                         
                         <button type="submit" id="loginBtn" class="btn btn-primary w-full">
-                            <i class="fas fa-sign-in-alt mr-2"></i>
+                            <i class="fas fa-sign-in-alt"></i>
                             Sign In to Platform
                         </button>
                         
                         <div class="text-center mt-6">
-                            <p class="text-sm text-gray-600">
+                            <p class="text-xs text-gray-600">
                                 <i class="fas fa-info-circle mr-1"></i>
                                 Doctors: Use username "pneumo2025-2026" with password "pneumo2025-2026"
                             </p>
@@ -2312,7 +2580,7 @@
                                 <div id="userDropdown" class="user-dropdown hidden">
                                     <div class="dropdown-header">
                                         <div class="font-semibold" id="dropdownUserName">Loading...</div>
-                                        <div class="text-sm text-gray-500" id="dropdownUserRole">Loading...</div>
+                                        <div class="text-xs text-gray-500" id="dropdownUserRole">Loading...</div>
                                     </div>
                                     <div class="dropdown-item" onclick="window.thoraxLab.navigateTo('profile')">
                                         <i class="fas fa-user"></i>
@@ -2331,7 +2599,6 @@
                             </div>
                             <button id="logoutBtn" class="btn btn-ghost btn-sm hidden sm:flex">
                                 <i class="fas fa-sign-out-alt"></i>
-                                <span class="ml-2">Logout</span>
                             </button>
                         </div>
                     </div>
@@ -2349,7 +2616,7 @@
                                     <h1 class="page-title" id="welcomeMessage">Innovation Dashboard</h1>
                                     <p class="page-subtitle">Monitor your clinical-industry collaborations and platform activity</p>
                                 </div>
-                                <div class="flex gap-3">
+                                <div class="flex gap-2">
                                     <button id="newProjectBtn" class="btn btn-primary">
                                         <i class="fas fa-plus"></i>
                                         <span>New Project</span>
@@ -2368,41 +2635,41 @@
                         </div>
                         
                         <!-- Quick Actions -->
-                        <div class="bg-white rounded-xl border p-6 mb-8">
-                            <h2 class="text-xl font-bold mb-6">Quick Actions</h2>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <button class="btn btn-outline flex-col h-auto py-6" onclick="window.thoraxLab.navigateTo('myprojects')">
-                                    <i class="fas fa-project-diagram text-2xl mb-2"></i>
-                                    <span class="font-semibold">My Projects</span>
-                                    <span class="text-sm text-gray-500 mt-1">Manage your initiatives</span>
+                        <div class="bg-white rounded-lg border p-4 mb-6">
+                            <h2 class="text-lg font-bold mb-4">Quick Actions</h2>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                                <button class="btn btn-outline flex-col h-auto py-3" onclick="window.thoraxLab.navigateTo('myprojects')">
+                                    <i class="fas fa-project-diagram text-xl mb-1"></i>
+                                    <span class="font-semibold text-sm">My Projects</span>
+                                    <span class="text-xs text-gray-500 mt-0.5">Manage your initiatives</span>
                                 </button>
-                                <button class="btn btn-outline flex-col h-auto py-6" onclick="window.thoraxLab.showModal('newDiscussionModal')">
-                                    <i class="fas fa-comments text-2xl mb-2"></i>
-                                    <span class="font-semibold">Start Discussion</span>
-                                    <span class="text-sm text-gray-500 mt-1">Share ideas with community</span>
+                                <button class="btn btn-outline flex-col h-auto py-3" onclick="window.thoraxLab.showModal('newDiscussionModal')">
+                                    <i class="fas fa-comments text-xl mb-1"></i>
+                                    <span class="font-semibold text-sm">Start Discussion</span>
+                                    <span class="text-xs text-gray-500 mt-0.5">Share ideas with community</span>
                                 </button>
-                                <button class="btn btn-outline flex-col h-auto py-6" onclick="window.thoraxLab.navigateTo('fromtraci')">
-                                    <i class="fas fa-hospital text-2xl mb-2"></i>
-                                    <span class="font-semibold">TRAci Projects</span>
-                                    <span class="text-sm text-gray-500 mt-1">Clinical innovations</span>
+                                <button class="btn btn-outline flex-col h-auto py-3" onclick="window.thoraxLab.navigateTo('fromtraci')">
+                                    <i class="fas fa-hospital text-xl mb-1"></i>
+                                    <span class="font-semibold text-sm">TRAci Projects</span>
+                                    <span class="text-xs text-gray-500 mt-0.5">Clinical innovations</span>
                                 </button>
-                                <button class="btn btn-outline flex-col h-auto py-6" onclick="window.thoraxLab.showImportModal()">
-                                    <i class="fas fa-download text-2xl mb-2"></i>
-                                    <span class="font-semibold">Import to TRAci</span>
-                                    <span class="text-sm text-gray-500 mt-1">Share with clinical team</span>
+                                <button class="btn btn-outline flex-col h-auto py-3" onclick="window.thoraxLab.showImportModal()">
+                                    <i class="fas fa-download text-xl mb-1"></i>
+                                    <span class="font-semibold text-sm">Import to TRAci</span>
+                                    <span class="text-xs text-gray-500 mt-0.5">Share with clinical team</span>
                                 </button>
                             </div>
                         </div>
                         
                         <!-- Active Collaborations -->
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                             <div class="lg:col-span-2">
-                                <div class="bg-white rounded-xl border p-6">
-                                    <div class="flex items-center justify-between mb-6">
-                                        <h2 class="text-xl font-bold">Active Collaborations</h2>
-                                        <a href="#projects" class="btn btn-secondary">
+                                <div class="bg-white rounded-lg border p-4">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h2 class="text-lg font-bold">Active Collaborations</h2>
+                                        <a href="#projects" class="btn btn-secondary btn-sm">
                                             View All
-                                            <i class="fas fa-arrow-right ml-2"></i>
+                                            <i class="fas fa-arrow-right ml-1"></i>
                                         </a>
                                     </div>
                                     <div id="activeProjects" class="projects-grid">
@@ -2411,37 +2678,37 @@
                                 </div>
                             </div>
                             
-                            <div class="space-y-6">
+                            <div class="space-y-4">
                                 <!-- Recent Activity -->
-                                <div class="bg-white rounded-xl border p-6">
-                                    <h2 class="text-xl font-bold mb-6">Recent Activity</h2>
-                                    <div id="activityFeed" class="space-y-4">
+                                <div class="bg-white rounded-lg border p-4">
+                                    <h2 class="text-lg font-bold mb-4">Recent Activity</h2>
+                                    <div id="activityFeed" class="space-y-3">
                                         <!-- Dynamic activity feed -->
                                     </div>
                                 </div>
                                 
                                 <!-- Platform Updates -->
-                                <div class="bg-white rounded-xl border p-6">
-                                    <h2 class="text-xl font-bold mb-6">Platform Updates</h2>
-                                    <div class="space-y-4">
-                                        <div class="flex items-start gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-clinical text-white flex items-center justify-center">
-                                                <i class="fas fa-bullhorn text-sm"></i>
+                                <div class="bg-white rounded-lg border p-4">
+                                    <h2 class="text-lg font-bold mb-4">Platform Updates</h2>
+                                    <div class="space-y-3">
+                                        <div class="flex items-start gap-2">
+                                            <div class="w-6 h-6 rounded-full bg-clinical text-white flex items-center justify-center">
+                                                <i class="fas fa-bullhorn text-xs"></i>
                                             </div>
                                             <div>
-                                                <div class="font-medium">Enhanced Import System</div>
-                                                <div class="text-sm text-gray-500">Improved TRAci project synchronization</div>
-                                                <div class="text-xs text-gray-400 mt-1">2 days ago</div>
+                                                <div class="font-medium text-sm">Enhanced Import System</div>
+                                                <div class="text-xs text-gray-500">Improved TRAci project synchronization</div>
+                                                <div class="text-xs text-gray-400 mt-0.5">2 days ago</div>
                                             </div>
                                         </div>
-                                        <div class="flex items-start gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-industry text-white flex items-center justify-center">
-                                                <i class="fas fa-comment text-sm"></i>
+                                        <div class="flex items-start gap-2">
+                                            <div class="w-6 h-6 rounded-full bg-industry text-white flex items-center justify-center">
+                                                <i class="fas fa-comment text-xs"></i>
                                             </div>
                                             <div>
-                                                <div class="font-medium">New Discussion Features</div>
-                                                <div class="text-sm text-gray-500">Threaded comments and mentions added</div>
-                                                <div class="text-xs text-gray-400 mt-1">1 week ago</div>
+                                                <div class="font-medium text-sm">New Discussion Features</div>
+                                                <div class="text-xs text-gray-500">Threaded comments and mentions added</div>
+                                                <div class="text-xs text-gray-400 mt-0.5">1 week ago</div>
                                             </div>
                                         </div>
                                     </div>
@@ -2476,7 +2743,7 @@
                             <div class="batch-selection-info">
                                 <span id="selectedCount">0</span> projects selected
                             </div>
-                            <div class="flex gap-2">
+                            <div class="flex gap-1">
                                 <button class="btn btn-sm btn-secondary" onclick="window.thoraxLab.bulkExport()">
                                     <i class="fas fa-download"></i>
                                     Export
@@ -2498,20 +2765,20 @@
                         
                         <!-- Filters -->
                         <div class="filters-container">
-                            <div class="flex flex-col md:flex-row gap-4 md:items-center">
+                            <div class="flex flex-col md:flex-row gap-3 md:items-center">
                                 <div class="search-box">
                                     <i class="fas fa-search search-icon"></i>
                                     <input type="text" id="projectSearch" class="search-input" 
                                            placeholder="Search projects by title, description, or tags...">
                                 </div>
                                 <div class="flex gap-2">
-                                    <select id="projectTypeFilter" class="form-input form-select w-auto">
+                                    <select id="projectTypeFilter" class="form-input form-select w-auto text-sm">
                                         <option value="all">All Types</option>
                                         <option value="clinical">Clinical-Led</option>
                                         <option value="industry">Industry-Led</option>
                                         <option value="collaboration">Collaboration</option>
                                     </select>
-                                    <select id="projectStatusFilter" class="form-input form-select w-auto">
+                                    <select id="projectStatusFilter" class="form-input form-select w-auto text-sm">
                                         <option value="all">All Status</option>
                                         <option value="active">Active</option>
                                         <option value="archived">Archived</option>
@@ -2525,11 +2792,11 @@
                             </div>
                             
                             <!-- Advanced Search Panel -->
-                            <div id="advancedSearchPanel" class="advanced-search-panel hidden mt-4">
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div id="advancedSearchPanel" class="advanced-search-panel hidden mt-3">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                     <div class="form-group">
                                         <label class="form-label">Clinical Specialty</label>
-                                        <select id="specialtyFilter" class="form-input form-select">
+                                        <select id="specialtyFilter" class="form-input form-select text-sm">
                                             <option value="">All Specialties</option>
                                             <option value="pulmonology">Pulmonology</option>
                                             <option value="cardiology">Cardiology</option>
@@ -2538,7 +2805,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Technology</label>
-                                        <select id="technologyFilter" class="form-input form-select">
+                                        <select id="technologyFilter" class="form-input form-select text-sm">
                                             <option value="">All Technologies</option>
                                             <option value="ai">AI/Machine Learning</option>
                                             <option value="iot">IoT Devices</option>
@@ -2548,19 +2815,19 @@
                                     <div class="form-group">
                                         <label class="form-label">Date Range</label>
                                         <div class="flex gap-2">
-                                            <input type="date" id="startDateFilter" class="form-input">
-                                            <input type="date" id="endDateFilter" class="form-input">
+                                            <input type="date" id="startDateFilter" class="form-input text-sm">
+                                            <input type="date" id="endDateFilter" class="form-input text-sm">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="mt-4 flex flex-wrap gap-2">
+                            <div class="mt-3 flex flex-wrap gap-1">
                                 <button class="filter-chip active" data-filter="all">All</button>
                                 <button class="filter-chip" data-filter="fromtraci">From TRAci</button>
                                 <button class="filter-chip" data-filter="featured">Featured</button>
                                 <button class="filter-chip" data-filter="needs_review">Needs Review</button>
-                                <button class="filter-clear ml-auto">Clear Filters</button>
+                                <button class="filter-clear ml-auto text-sm">Clear Filters</button>
                             </div>
                         </div>
                         
@@ -2570,15 +2837,15 @@
                         </div>
                         
                         <!-- Pagination -->
-                        <div id="pagination" class="flex justify-center mt-8 hidden">
-                            <div class="flex gap-2">
-                                <button class="btn btn-ghost" disabled>
+                        <div id="pagination" class="flex justify-center mt-6 hidden">
+                            <div class="flex gap-1">
+                                <button class="btn btn-ghost btn-sm" disabled>
                                     <i class="fas fa-chevron-left"></i>
                                 </button>
-                                <button class="btn btn-ghost active">1</button>
-                                <button class="btn btn-ghost">2</button>
-                                <button class="btn btn-ghost">3</button>
-                                <button class="btn btn-ghost">
+                                <button class="btn btn-ghost btn-sm active">1</button>
+                                <button class="btn btn-ghost btn-sm">2</button>
+                                <button class="btn btn-ghost btn-sm">3</button>
+                                <button class="btn btn-ghost btn-sm">
                                     <i class="fas fa-chevron-right"></i>
                                 </button>
                             </div>
@@ -2713,36 +2980,36 @@
                         </div>
                         
                         <!-- Admin Tabs -->
-                        <div class="bg-white rounded-xl border overflow-hidden mb-8">
+                        <div class="bg-white rounded-lg border overflow-hidden mb-6">
                             <div class="border-b">
                                 <div class="flex overflow-x-auto">
                                     <button class="admin-tab active" data-tab="users">
-                                        <i class="fas fa-users mr-2"></i>
+                                        <i class="fas fa-users mr-1"></i>
                                         Users
                                     </button>
                                     <button class="admin-tab" data-tab="projects">
-                                        <i class="fas fa-project-diagram mr-2"></i>
+                                        <i class="fas fa-project-diagram mr-1"></i>
                                         Projects
                                     </button>
                                     <button class="admin-tab" data-tab="discussions">
-                                        <i class="fas fa-comments mr-2"></i>
+                                        <i class="fas fa-comments mr-1"></i>
                                         Discussions
                                     </button>
                                     <button class="admin-tab" data-tab="audit">
-                                        <i class="fas fa-history mr-2"></i>
+                                        <i class="fas fa-history mr-1"></i>
                                         Audit Log
                                     </button>
                                     <button class="admin-tab" data-tab="settings">
-                                        <i class="fas fa-cog mr-2"></i>
+                                        <i class="fas fa-cog mr-1"></i>
                                         Settings
                                     </button>
                                 </div>
                             </div>
                             
                             <!-- Users Tab -->
-                            <div id="adminUsersTab" class="admin-tab-content p-6">
-                                <div class="flex justify-between items-center mb-6">
-                                    <h3 class="text-lg font-bold">User Management</h3>
+                            <div id="adminUsersTab" class="admin-tab-content p-4">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-base font-bold">User Management</h3>
                                     <button class="btn btn-primary btn-sm" onclick="window.thoraxLab.showAddUserModal()">
                                         <i class="fas fa-plus"></i>
                                         Add User
@@ -2768,10 +3035,10 @@
                             </div>
                             
                             <!-- Projects Tab -->
-                            <div id="adminProjectsTab" class="admin-tab-content hidden p-6">
-                                <div class="flex justify-between items-center mb-6">
-                                    <h3 class="text-lg font-bold">Project Management</h3>
-                                    <div class="flex gap-2">
+                            <div id="adminProjectsTab" class="admin-tab-content hidden p-4">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-base font-bold">Project Management</h3>
+                                    <div class="flex gap-1">
                                         <button class="btn btn-secondary btn-sm" onclick="window.thoraxLab.exportProjects()">
                                             <i class="fas fa-download"></i>
                                             Export
@@ -2803,9 +3070,9 @@
                             </div>
                             
                             <!-- Discussions Tab -->
-                            <div id="adminDiscussionsTab" class="admin-tab-content hidden p-6">
-                                <div class="flex justify-between items-center mb-6">
-                                    <h3 class="text-lg font-bold">Discussion Management</h3>
+                            <div id="adminDiscussionsTab" class="admin-tab-content hidden p-4">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-base font-bold">Discussion Management</h3>
                                     <button class="btn btn-primary btn-sm" onclick="window.thoraxLab.moderateDiscussions()">
                                         <i class="fas fa-shield-alt"></i>
                                         Moderate
@@ -2832,10 +3099,10 @@
                             </div>
                             
                             <!-- Audit Tab -->
-                            <div id="adminAuditTab" class="admin-tab-content hidden p-6">
-                                <div class="flex justify-between items-center mb-6">
-                                    <h3 class="text-lg font-bold">Audit Log</h3>
-                                    <div class="flex gap-2">
+                            <div id="adminAuditTab" class="admin-tab-content hidden p-4">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-base font-bold">Audit Log</h3>
+                                    <div class="flex gap-1">
                                         <button class="btn btn-secondary btn-sm" onclick="window.thoraxLab.exportAuditLog()">
                                             <i class="fas fa-download"></i>
                                             Export
@@ -2865,16 +3132,16 @@
                             </div>
                             
                             <!-- Settings Tab -->
-                            <div id="adminSettingsTab" class="admin-tab-content hidden p-6">
-                                <h3 class="text-lg font-bold mb-6">Platform Settings</h3>
-                                <div class="space-y-6">
+                            <div id="adminSettingsTab" class="admin-tab-content hidden p-4">
+                                <h3 class="text-base font-bold mb-4">Platform Settings</h3>
+                                <div class="space-y-4">
                                     <div class="form-group">
                                         <label class="form-label">Platform Name</label>
-                                        <input type="text" class="form-input" value="ThoraxLab" id="platformName">
+                                        <input type="text" class="form-input text-sm" value="ThoraxLab" id="platformName">
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Default User Role</label>
-                                        <select class="form-input form-select" id="defaultUserRole">
+                                        <select class="form-input form-select text-sm" id="defaultUserRole">
                                             <option value="guest">Guest</option>
                                             <option value="clinical">Clinical</option>
                                             <option value="industry">Industry</option>
@@ -2882,7 +3149,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Project Visibility Default</label>
-                                        <select class="form-input form-select" id="defaultVisibility">
+                                        <select class="form-input form-select text-sm" id="defaultVisibility">
                                             <option value="internal">Internal (Registered Users)</option>
                                             <option value="public">Public</option>
                                             <option value="private">Private</option>
@@ -2890,7 +3157,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">TRAci Sync Interval (minutes)</label>
-                                        <input type="number" class="form-input" value="60" id="syncInterval" min="5" max="1440">
+                                        <input type="number" class="form-input text-sm" value="60" id="syncInterval" min="5" max="1440">
                                     </div>
                                     <div class="form-group">
                                         <div class="flex items-center justify-between">
@@ -2906,7 +3173,7 @@
                                     </div>
                                     <div class="flex justify-end">
                                         <button class="btn btn-primary" onclick="window.thoraxLab.saveSettings()">
-                                            <i class="fas fa-save mr-2"></i>
+                                            <i class="fas fa-save mr-1"></i>
                                             Save Settings
                                         </button>
                                     </div>
@@ -2931,54 +3198,54 @@
                         </div>
                         
                         <div class="max-w-4xl mx-auto">
-                            <div class="bg-white rounded-xl border p-6">
-                                <div class="flex flex-col md:flex-row gap-6">
+                            <div class="bg-white rounded-lg border p-4">
+                                <div class="flex flex-col md:flex-row gap-4">
                                     <div class="md:w-1/3">
                                         <div class="text-center">
-                                            <div class="w-32 h-32 rounded-full bg-gradient mx-auto mb-4 flex items-center justify-center text-white text-3xl font-bold" id="profileAvatar">
+                                            <div class="w-24 h-24 rounded-full bg-gradient mx-auto mb-3 flex items-center justify-center text-white text-2xl font-bold" id="profileAvatar">
                                                 ?
                                             </div>
-                                            <h3 class="text-xl font-bold" id="profileName">Loading...</h3>
-                                            <p class="text-gray-500" id="profileRole">Loading...</p>
-                                            <div class="mt-4">
-                                                <span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-clinical text-white" id="profileType">
+                                            <h3 class="text-lg font-bold" id="profileName">Loading...</h3>
+                                            <p class="text-gray-500 text-sm" id="profileRole">Loading...</p>
+                                            <div class="mt-3">
+                                                <span class="inline-block px-2 py-1 rounded-full text-xs font-medium bg-clinical text-white" id="profileType">
                                                     Loading...
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="md:w-2/3">
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div>
-                                                <h4 class="font-bold text-lg mb-4">Personal Information</h4>
-                                                <div class="space-y-3">
+                                                <h4 class="font-bold text-base mb-3">Personal Information</h4>
+                                                <div class="space-y-2">
                                                     <div>
-                                                        <label class="text-sm text-gray-500">Full Name</label>
-                                                        <div class="font-medium" id="profileFullName">-</div>
+                                                        <label class="text-xs text-gray-500">Full Name</label>
+                                                        <div class="font-medium text-sm" id="profileFullName">-</div>
                                                     </div>
                                                     <div>
-                                                        <label class="text-sm text-gray-500">Email</label>
-                                                        <div class="font-medium" id="profileEmail">-</div>
+                                                        <label class="text-xs text-gray-500">Email</label>
+                                                        <div class="font-medium text-sm" id="profileEmail">-</div>
                                                     </div>
                                                     <div>
-                                                        <label class="text-sm text-gray-500">Joined</label>
-                                                        <div class="font-medium" id="profileJoined">-</div>
+                                                        <label class="text-xs text-gray-500">Joined</label>
+                                                        <div class="font-medium text-sm" id="profileJoined">-</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div>
-                                                <h4 class="font-bold text-lg mb-4">Professional Information</h4>
-                                                <div class="space-y-3">
+                                                <h4 class="font-bold text-base mb-3">Professional Information</h4>
+                                                <div class="space-y-2">
                                                     <div id="profileSpecialty">
-                                                        <label class="text-sm text-gray-500">Specialty/Role</label>
-                                                        <div class="font-medium">-</div>
+                                                        <label class="text-xs text-gray-500">Specialty/Role</label>
+                                                        <div class="font-medium text-sm">-</div>
                                                     </div>
                                                     <div id="profileInstitution">
-                                                        <label class="text-sm text-gray-500">Institution/Company</label>
-                                                        <div class="font-medium">-</div>
+                                                        <label class="text-xs text-gray-500">Institution/Company</label>
+                                                        <div class="font-medium text-sm">-</div>
                                                     </div>
                                                     <div>
-                                                        <label class="text-sm text-gray-500">Expertise</label>
+                                                        <label class="text-xs text-gray-500">Expertise</label>
                                                         <div class="flex flex-wrap gap-1 mt-1" id="profileExpertise">
                                                             <!-- Expertise tags -->
                                                         </div>
@@ -2987,24 +3254,24 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="mt-8 pt-8 border-t">
-                                            <h4 class="font-bold text-lg mb-4">Activity Summary</h4>
-                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                                <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                                    <div class="text-2xl font-bold text-clinical" id="profileProjects">0</div>
-                                                    <div class="text-sm text-gray-500">Projects</div>
+                                        <div class="mt-6 pt-6 border-t">
+                                            <h4 class="font-bold text-base mb-3">Activity Summary</h4>
+                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                                <div class="text-center p-3 bg-gray-50 rounded-md">
+                                                    <div class="text-xl font-bold text-clinical" id="profileProjects">0</div>
+                                                    <div class="text-xs text-gray-500">Projects</div>
                                                 </div>
-                                                <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                                    <div class="text-2xl font-bold text-industry" id="profileDiscussions">0</div>
-                                                    <div class="text-sm text-gray-500">Discussions</div>
+                                                <div class="text-center p-3 bg-gray-50 rounded-md">
+                                                    <div class="text-xl font-bold text-industry" id="profileDiscussions">0</div>
+                                                    <div class="text-xs text-gray-500">Discussions</div>
                                                 </div>
-                                                <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                                    <div class="text-2xl font-bold text-accent" id="profileComments">0</div>
-                                                    <div class="text-sm text-gray-500">Comments</div>
+                                                <div class="text-center p-3 bg-gray-50 rounded-md">
+                                                    <div class="text-xl font-bold text-accent" id="profileComments">0</div>
+                                                    <div class="text-xs text-gray-500">Comments</div>
                                                 </div>
-                                                <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                                    <div class="text-2xl font-bold text-warning" id="profileLikes">0</div>
-                                                    <div class="text-sm text-gray-500">Likes</div>
+                                                <div class="text-center p-3 bg-gray-50 rounded-md">
+                                                    <div class="text-xl font-bold text-warning" id="profileLikes">0</div>
+                                                    <div class="text-xs text-gray-500">Likes</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -3037,9 +3304,9 @@
                             <label for="projectDescription" class="form-label">Description *</label>
                             <textarea id="projectDescription" class="form-input form-textarea" 
                                       placeholder="Describe the clinical need, innovation approach, and expected outcomes..." 
-                                      rows="5" required></textarea>
+                                      rows="4" required></textarea>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="form-group">
                                 <label for="projectType" class="form-label">Project Type *</label>
                                 <select id="projectType" class="form-input form-select" required>
@@ -3058,19 +3325,30 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label for="projectStatus" class="form-label">Initial Status</label>
+                                <select id="projectStatus" class="form-input form-select">
+                                    <option value="active">Active</option>
+                                    <option value="draft">Draft</option>
+                                    <option value="planning">Planning</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="projectTemplate" class="form-label">Use Template</label>
+                                <select id="projectTemplate" class="form-input form-select">
+                                    <option value="">No Template</option>
+                                    <option value="clinical">Clinical Innovation</option>
+                                    <option value="industry">Industry Development</option>
+                                    <option value="collaboration">Collaboration</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="projectTags" class="form-label">Tags & Keywords</label>
                             <input type="text" id="projectTags" class="form-input" 
                                    placeholder="e.g., COPD, digital health, medical device, adherence, telemedicine">
                             <div class="form-hint">Separate tags with commas</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="projectStatus" class="form-label">Initial Status</label>
-                            <select id="projectStatus" class="form-input form-select">
-                                <option value="active">Active</option>
-                                <option value="draft">Draft</option>
-                                <option value="planning">Planning</option>
-                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -3104,9 +3382,9 @@
                             <label for="discussionContent" class="form-label">Discussion Content *</label>
                             <textarea id="discussionContent" class="form-input form-textarea" 
                                       placeholder="Share your thoughts, questions, or insights..." 
-                                      rows="6" required></textarea>
+                                      rows="4" required></textarea>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="form-group">
                                 <label for="discussionProject" class="form-label">Link to Project (Optional)</label>
                                 <select id="discussionProject" class="form-input form-select">
@@ -3160,45 +3438,45 @@
                     <div class="form-group">
                         <label for="importNotes" class="form-label">Notes for TRAci Team (Optional)</label>
                         <textarea id="importNotes" class="form-input form-textarea" 
-                                  placeholder="Add context about this project for the clinical team..." rows="3"></textarea>
+                                  placeholder="Add context about this project for the clinical team..." rows="2"></textarea>
                     </div>
                     
-                    <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-6">
+                    <div class="p-3 bg-blue-50 border border-blue-200 rounded-md mb-4">
                         <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-info-circle text-blue-600"></i>
-                            <span class="font-semibold text-blue-700">Import Information</span>
+                            <i class="fas fa-info-circle text-blue-600 text-sm"></i>
+                            <span class="font-semibold text-blue-700 text-sm">Import Information</span>
                         </div>
-                        <ul class="text-sm text-blue-600 space-y-1">
+                        <ul class="text-xs text-blue-600 space-y-1">
                             <li class="flex items-start gap-2">
-                                <i class="fas fa-check mt-1"></i>
+                                <i class="fas fa-check mt-0.5 text-xs"></i>
                                 <span>Project will be created in TRAci with proper attribution</span>
                             </li>
                             <li class="flex items-start gap-2">
-                                <i class="fas fa-check mt-1"></i>
+                                <i class="fas fa-check mt-0.5 text-xs"></i>
                                 <span>TRAci admin can activate and modify the project</span>
                             </li>
                             <li class="flex items-start gap-2">
-                                <i class="fas fa-check mt-1"></i>
+                                <i class="fas fa-check mt-0.5 text-xs"></i>
                                 <span>Sync will be recorded in cross-platform audit logs</span>
                             </li>
                             <li class="flex items-start gap-2">
-                                <i class="fas fa-check mt-1"></i>
+                                <i class="fas fa-check mt-0.5 text-xs"></i>
                                 <span>Project gets "Imported from ThoraxLab" sticker</span>
                             </li>
                         </ul>
                     </div>
                     
-                    <div id="importError" class="p-3 bg-red-50 border border-red-200 rounded-lg mb-4 hidden">
+                    <div id="importError" class="p-2 bg-red-50 border border-red-200 rounded-md mb-3 hidden">
                         <div class="flex items-center gap-2 text-red-700">
-                            <i class="fas fa-exclamation-circle"></i>
-                            <span id="importErrorText"></span>
+                            <i class="fas fa-exclamation-circle text-sm"></i>
+                            <span id="importErrorText" class="text-sm"></span>
                         </div>
                     </div>
                     
-                    <div id="importSuccess" class="p-3 bg-green-50 border border-green-200 rounded-lg mb-4 hidden">
+                    <div id="importSuccess" class="p-2 bg-green-50 border border-green-200 rounded-md mb-3 hidden">
                         <div class="flex items-center gap-2 text-green-700">
-                            <i class="fas fa-check-circle"></i>
-                            <span id="importSuccessText"></span>
+                            <i class="fas fa-check-circle text-sm"></i>
+                            <span id="importSuccessText" class="text-sm"></span>
                         </div>
                     </div>
                 </div>
@@ -3261,7 +3539,7 @@
                             <label for="editEmail" class="form-label">Email Address *</label>
                             <input type="email" id="editEmail" class="form-input" required>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="form-group">
                                 <label for="editSpecialty" class="form-label">Specialty/Role</label>
                                 <input type="text" id="editSpecialty" class="form-input">
@@ -3279,7 +3557,7 @@
                         </div>
                         <div class="form-group">
                             <label for="editBio" class="form-label">Bio/Introduction</label>
-                            <textarea id="editBio" class="form-input form-textarea" rows="4"></textarea>
+                            <textarea id="editBio" class="form-input form-textarea" rows="3"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -3339,6 +3617,38 @@
             </div>
         </div>
         
+        <!-- Template Import Modal -->
+        <div id="importTemplateModal" class="modal-overlay">
+            <div class="modal-content modal-sm">
+                <div class="modal-header">
+                    <h2 class="modal-title">Import Template</h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Select Template File</label>
+                        <input type="file" id="templateFile" accept=".json" class="form-input">
+                        <div class="form-hint">Select a JSON template file exported from ThoraxLab</div>
+                    </div>
+                    <div id="templateImportError" class="p-2 bg-red-50 border border-red-200 rounded-md mb-3 hidden">
+                        <div class="flex items-center gap-2 text-red-700">
+                            <i class="fas fa-exclamation-circle text-sm"></i>
+                            <span id="templateImportErrorText" class="text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-close">
+                        Cancel
+                    </button>
+                    <button type="button" id="confirmTemplateImport" class="btn btn-primary">
+                        <i class="fas fa-upload"></i>
+                        Import Template
+                    </button>
+                </div>
+            </div>
+        </div>
+        
         <!-- Loading Overlay -->
         <div id="loadingOverlay" class="hidden">
             <div class="loading-overlay">
@@ -3349,6 +3659,7 @@
             </div>
         </div>
     </div>
+
 <script>
     // ============================================
     // THORAXLAB - ENHANCED PLATFORM JS
@@ -3397,7 +3708,8 @@
                 batchMode: false,
                 selectedProjects: new Set(),
                 notifications: [],
-                lastNotificationCheck: new Date()
+                lastNotificationCheck: new Date(),
+                userPreferences: {}
             };
             
             // Project templates
@@ -3479,8 +3791,17 @@
                 // Set up all event listeners
                 this.setupEventListeners();
                 
+                // Set up keyboard shortcuts
+                this.setupKeyboardShortcuts();
+                
+                // Set up hover previews
+                this.setupHoverPreviews();
+                
                 // Set up routing
                 this.setupRouter();
+                
+                // Load user preferences
+                this.loadUserPreferences();
                 
                 // Check for existing session
                 await this.checkSavedSession();
@@ -3611,11 +3932,18 @@
                 confirmImportBtn.addEventListener('click', () => this.handleImport());
             }
             
+            // Template Import Button
+            const confirmTemplateImport = document.getElementById('confirmTemplateImport');
+            if (confirmTemplateImport) {
+                confirmTemplateImport.addEventListener('click', () => this.importTemplateFile());
+            }
+            
             // Search and Filters
             const projectSearch = document.getElementById('projectSearch');
             if (projectSearch) {
                 projectSearch.addEventListener('input', (e) => {
                     this.state.searchQuery = e.target.value;
+                    this.saveUserPreferences();
                     this.loadAllProjects();
                 });
             }
@@ -3624,6 +3952,7 @@
             if (typeFilter) {
                 typeFilter.addEventListener('change', (e) => {
                     this.state.activeFilters.type = e.target.value;
+                    this.saveUserPreferences();
                     this.loadAllProjects();
                 });
             }
@@ -3632,6 +3961,7 @@
             if (statusFilter) {
                 statusFilter.addEventListener('change', (e) => {
                     this.state.activeFilters.status = e.target.value;
+                    this.saveUserPreferences();
                     this.loadAllProjects();
                 });
             }
@@ -3653,7 +3983,10 @@
             advancedFilters.forEach(id => {
                 const filter = document.getElementById(id);
                 if (filter) {
-                    filter.addEventListener('change', () => this.applyAdvancedFilters());
+                    filter.addEventListener('change', () => {
+                        this.saveUserPreferences();
+                        this.applyAdvancedFilters();
+                    });
                 }
             });
             
@@ -3708,6 +4041,15 @@
                 editProfileForm.addEventListener('submit', (e) => this.saveProfile(e));
             }
             
+            // Template Import
+            const templateFile = document.getElementById('templateFile');
+            if (templateFile) {
+                templateFile.addEventListener('change', () => {
+                    const errorDiv = document.getElementById('templateImportError');
+                    errorDiv.classList.add('hidden');
+                });
+            }
+            
             // Close modals on overlay click
             document.querySelectorAll('.modal-overlay').forEach(modal => {
                 modal.addEventListener('click', (e) => {
@@ -3715,13 +4057,6 @@
                         this.hideModal(modal.id);
                     }
                 });
-            });
-            
-            // Close modals on escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    this.hideAllModals();
-                }
             });
             
             // Scroll event for back to top button
@@ -3735,6 +4070,85 @@
             // Network status monitoring
             window.addEventListener('online', () => this.handleOnline());
             window.addEventListener('offline', () => this.handleOffline());
+        }
+        
+        setupKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // Don't trigger shortcuts in input fields
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                    return;
+                }
+                
+                // Ctrl/Cmd + K for search focus
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    const search = document.getElementById('projectSearch');
+                    if (search) {
+                        search.focus();
+                        search.select();
+                    }
+                }
+                
+                // Escape to close modals and dropdowns
+                if (e.key === 'Escape') {
+                    this.hideAllModals();
+                    this.hideUserDropdown();
+                    this.hideQuickActions();
+                    this.hideQuickPreview();
+                }
+                
+                // Alt + Number keys 1-6 for navigation
+                if (e.altKey && e.key >= '1' && e.key <= '6') {
+                    e.preventDefault();
+                    const pages = ['dashboard', 'projects', 'myprojects', 'discussions', 'fromtraci', 'admin'];
+                    const index = parseInt(e.key) - 1;
+                    if (pages[index] && (pages[index] !== 'admin' || this.isAdmin)) {
+                        this.navigateTo(pages[index]);
+                        this.showToast(`Navigated to ${pages[index]}`, 'info');
+                    }
+                }
+                
+                // Alt + N for new project
+                if (e.altKey && e.key.toLowerCase() === 'n') {
+                    e.preventDefault();
+                    this.showNewProjectModal();
+                }
+                
+                // Alt + D for new discussion
+                if (e.altKey && e.key.toLowerCase() === 'd') {
+                    e.preventDefault();
+                    this.showModal('newDiscussionModal');
+                }
+            });
+        }
+        
+        setupHoverPreviews() {
+            let previewTimeout;
+            let currentPreviewElement = null;
+            
+            document.addEventListener('mouseover', (e) => {
+                const card = e.target.closest('.project-card, .discussion-card');
+                if (card && !this.state.batchMode) {
+                    clearTimeout(previewTimeout);
+                    previewTimeout = setTimeout(() => {
+                        currentPreviewElement = card;
+                        this.showQuickPreview(card);
+                    }, 600);
+                }
+            });
+            
+            document.addEventListener('mouseout', (e) => {
+                if (e.target.closest('.project-card, .discussion-card')) {
+                    clearTimeout(previewTimeout);
+                    this.hideQuickPreview();
+                }
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (currentPreviewElement) {
+                    this.positionQuickPreview(e.clientX, e.clientY);
+                }
+            });
         }
         
         setupRouter() {
@@ -3803,6 +4217,175 @@
                 const linkPage = link.getAttribute('href').substring(1);
                 link.classList.toggle('active', linkPage === page);
             });
+        }
+
+        // ============================================
+        // USER PREFERENCES
+        // ============================================
+        
+        loadUserPreferences() {
+            try {
+                const saved = localStorage.getItem('thoraxlab_preferences');
+                if (saved) {
+                    this.state.userPreferences = JSON.parse(saved);
+                    
+                    // Restore search query
+                    if (this.state.userPreferences.search) {
+                        this.state.searchQuery = this.state.userPreferences.search;
+                        const searchInput = document.getElementById('projectSearch');
+                        if (searchInput) {
+                            searchInput.value = this.state.searchQuery;
+                        }
+                    }
+                    
+                    // Restore filters
+                    if (this.state.userPreferences.filters) {
+                        this.state.activeFilters = this.state.userPreferences.filters;
+                        const typeFilter = document.getElementById('projectTypeFilter');
+                        const statusFilter = document.getElementById('projectStatusFilter');
+                        
+                        if (typeFilter && this.state.activeFilters.type) {
+                            typeFilter.value = this.state.activeFilters.type;
+                        }
+                        if (statusFilter && this.state.activeFilters.status) {
+                            statusFilter.value = this.state.activeFilters.status;
+                        }
+                        
+                        // Restore advanced filters
+                        if (this.state.userPreferences.advancedFilters) {
+                            Object.keys(this.state.userPreferences.advancedFilters).forEach(id => {
+                                const filter = document.getElementById(id);
+                                if (filter) {
+                                    filter.value = this.state.userPreferences.advancedFilters[id];
+                                }
+                            });
+                        }
+                    }
+                    
+                    // Restore active filter chip
+                    if (this.state.userPreferences.activeFilter) {
+                        const chips = document.querySelectorAll('.filter-chip');
+                        chips.forEach(chip => {
+                            chip.classList.toggle('active', chip.dataset.filter === this.state.userPreferences.activeFilter);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading user preferences:', error);
+            }
+        }
+        
+        saveUserPreferences() {
+            try {
+                const preferences = {
+                    search: this.state.searchQuery,
+                    filters: this.state.activeFilters,
+                    advancedFilters: {},
+                    activeFilter: document.querySelector('.filter-chip.active')?.dataset.filter,
+                    lastPage: this.state.currentPage
+                };
+                
+                // Save advanced filters
+                ['specialtyFilter', 'technologyFilter', 'startDateFilter', 'endDateFilter'].forEach(id => {
+                    const filter = document.getElementById(id);
+                    if (filter && filter.value) {
+                        preferences.advancedFilters[id] = filter.value;
+                    }
+                });
+                
+                localStorage.setItem('thoraxlab_preferences', JSON.stringify(preferences));
+            } catch (error) {
+                console.error('Error saving user preferences:', error);
+            }
+        }
+
+        // ============================================
+        // QUICK PREVIEW FUNCTIONALITY
+        // ============================================
+        
+        showQuickPreview(element) {
+            const preview = document.getElementById('quickPreview');
+            if (!preview) return;
+            
+            const projectId = element.dataset.projectId;
+            const discussionId = element.dataset.discussionId;
+            
+            if (projectId) {
+                const project = this.cache.projects.find(p => p.id === projectId);
+                if (project) {
+                    const owner = this.cache.profiles.get(project.owner_id) || {};
+                    const tags = project.tags?.slice(0, 3).map(tag => `<span class="inline-block px-1 py-0.5 bg-gray-100 text-gray-600 rounded text-xs mr-1 mb-1">${this.escapeHtml(tag)}</span>`).join('') || '';
+                    
+                    preview.innerHTML = `
+                        <div class="preview-title text-sm font-semibold mb-2">${this.escapeHtml(project.title)}</div>
+                        <div class="preview-content text-xs mb-3">
+                            <div class="mb-2">${this.escapeHtml(project.description?.substring(0, 120) || 'No description')}...</div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-4 h-4 rounded-full bg-gray-300 flex items-center justify-center text-xs">${owner.full_name?.substring(0, 1) || '?'}</div>
+                                <span class="text-gray-600">${owner.full_name || 'Unknown'}</span>
+                            </div>
+                            ${tags ? `<div class="flex flex-wrap">${tags}</div>` : ''}
+                        </div>
+                        <div class="text-xs text-gray-500">
+                            <i class="fas fa-eye mr-1"></i> ${project.view_count || 0} views
+                            <i class="fas fa-comment ml-3 mr-1"></i> ${project.comment_count || 0} comments
+                        </div>
+                    `;
+                    preview.classList.remove('hidden');
+                }
+            } else if (discussionId) {
+                const discussion = this.cache.discussions.find(d => d.id === discussionId);
+                if (discussion) {
+                    const author = this.cache.profiles.get(discussion.author_id) || {};
+                    
+                    preview.innerHTML = `
+                        <div class="preview-title text-sm font-semibold mb-2">${this.escapeHtml(discussion.title)}</div>
+                        <div class="preview-content text-xs mb-3">
+                            <div class="mb-2">${this.escapeHtml(discussion.content?.substring(0, 150) || 'No content')}...</div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-4 h-4 rounded-full bg-gray-300 flex items-center justify-center text-xs">${author.full_name?.substring(0, 1) || '?'}</div>
+                                <span class="text-gray-600">${author.full_name || 'Unknown'}</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-500">
+                            <i class="fas fa-comment mr-1"></i> ${discussion.comment_count || 0} comments
+                            <i class="fas fa-thumbs-up ml-3 mr-1"></i> ${discussion.like_count || 0} likes
+                        </div>
+                    `;
+                    preview.classList.remove('hidden');
+                }
+            }
+        }
+        
+        positionQuickPreview(x, y) {
+            const preview = document.getElementById('quickPreview');
+            if (!preview || preview.classList.contains('hidden')) return;
+            
+            const width = preview.offsetWidth;
+            const height = preview.offsetHeight;
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            let left = x + 20;
+            let top = y + 20;
+            
+            // Adjust if preview goes beyond viewport
+            if (left + width > viewportWidth) {
+                left = x - width - 20;
+            }
+            if (top + height > viewportHeight) {
+                top = y - height - 20;
+            }
+            
+            preview.style.left = `${left}px`;
+            preview.style.top = `${top}px`;
+        }
+        
+        hideQuickPreview() {
+            const preview = document.getElementById('quickPreview');
+            if (preview) {
+                preview.classList.add('hidden');
+            }
         }
 
         // ============================================
@@ -4111,9 +4694,9 @@
             
             const actions = this.getQuickActions(this.state.currentPage);
             quickActionsList.innerHTML = actions.map(action => `
-                <button class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2"
+                <button class="w-full text-left px-2 py-1.5 text-xs hover:bg-gray-100 rounded flex items-center gap-2"
                         onclick="${action.action}">
-                    <i class="fas ${action.icon} w-5"></i>
+                    <i class="fas ${action.icon} w-4 text-sm"></i>
                     <span>${action.label}</span>
                 </button>
             `).join('');
@@ -4743,16 +5326,16 @@
             }
             
             container.innerHTML = activities.map(activity => `
-                <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition cursor-pointer" 
+                <div class="flex items-start gap-2 p-2 bg-gray-50 rounded-md hover:bg-gray-100 transition cursor-pointer" 
                      onclick="window.thoraxLab.show${activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}Activity('${activity.type}')">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center ${activity.color} text-white">
-                        <i class="fas ${activity.icon} text-sm"></i>
+                    <div class="w-6 h-6 rounded-full flex items-center justify-center ${activity.color} text-white">
+                        <i class="fas ${activity.icon} text-xs"></i>
                     </div>
                     <div class="flex-1">
-                        <div class="text-sm font-medium text-gray-900">${activity.title}</div>
+                        <div class="text-xs font-medium text-gray-900">${activity.title}</div>
                         <div class="text-xs text-gray-600 truncate">${this.escapeHtml(activity.item)}</div>
                         <div class="text-xs text-gray-500">by ${activity.author}</div>
-                        <div class="text-xs text-gray-400 mt-1">${activity.time}</div>
+                        <div class="text-xs text-gray-400 mt-0.5">${activity.time}</div>
                     </div>
                 </div>
             `).join('');
@@ -4893,7 +5476,7 @@
                     return;
                 }
                 
-                await this.renderProjects(projects, container, true);
+                await this.renderTraciProjects(projects, container);
             } catch (error) {
                 console.error('Error loading TRAci projects:', error);
                 this.showEmptyState(container, 'Failed to load TRAci projects', 'Please try again later');
@@ -4926,14 +5509,11 @@
             }
         }
         
-        async renderProjects(projects, container, isTraciPage = false) {
+        async renderProjects(projects, container) {
             if (!container) return;
             
             if (!projects || projects.length === 0) {
-                this.showEmptyState(container, 
-                    isTraciPage ? 'No projects from TRAci found' : 'No projects found',
-                    isTraciPage ? 'Clinical projects will appear here when published from TRAci' : 
-                                'Be the first to create a project');
+                this.showEmptyState(container, 'No projects found', 'Be the first to create a project');
                 return;
             }
             
@@ -4963,17 +5543,42 @@
                     const projectId = card.dataset.projectId;
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
-                    checkbox.className = 'absolute top-4 left-4 w-5 h-5 rounded border-gray-300 text-clinical focus:ring-clinical';
+                    checkbox.className = 'absolute top-3 left-3 w-4 h-4 rounded border-gray-300 text-clinical focus:ring-clinical';
                     checkbox.checked = this.state.selectedProjects.has(projectId);
                     checkbox.addEventListener('click', (e) => {
                         e.stopPropagation();
                         this.toggleProjectSelection(projectId, checkbox.checked);
                     });
                     card.style.position = 'relative';
-                    card.style.paddingLeft = '3rem';
+                    card.style.paddingLeft = '2.5rem';
                     card.querySelector('.project-header').prepend(checkbox);
                 });
             }
+        }
+        
+        async renderTraciProjects(projects, container) {
+            if (!container) return;
+            
+            if (!projects || projects.length === 0) {
+                this.showEmptyState(container, 'No projects from TRAci found', 'Clinical projects will appear here when published from TRAci');
+                return;
+            }
+            
+            const html = await Promise.all(projects.map(async (project) => {
+                return this.renderTraciProjectCard(project);
+            }));
+            
+            container.innerHTML = html.join('');
+            
+            // Add click handlers
+            container.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (!e.target.closest('button')) {
+                        const projectId = card.dataset.projectId;
+                        this.showProjectDetails(projectId);
+                    }
+                });
+            });
         }
         
         renderProjectCard(project, owner, options = {}) {
@@ -5003,36 +5608,41 @@
             
             let stickers = '';
             if (isFromTraci) {
-                stickers += `<span class="project-sticker sticker-traci"><i class="fas fa-hospital"></i> From TRAci</span>`;
+                stickers += `<span class="project-sticker sticker-traci"><i class="fas fa-hospital text-xs"></i> From TRAci</span>`;
             }
             if (isFeatured) {
-                stickers += `<span class="project-sticker sticker-featured"><i class="fas fa-star"></i> Featured</span>`;
+                stickers += `<span class="project-sticker sticker-featured"><i class="fas fa-star text-xs"></i> Featured</span>`;
             }
             
             let importButton = '';
             if (!isFromTraci && this.currentUser) {
                 importButton = `
                     <button class="btn btn-sm btn-import" onclick="event.stopPropagation(); window.thoraxLab.showImportModal('${project.id}', '${this.escapeHtml(project.title)}')">
-                        <i class="fas fa-download"></i>
+                        <i class="fas fa-download text-xs"></i>
                         Import to TRAci
                     </button>
                 `;
             }
             
-            // Add edit/delete buttons for project owners or admins
+            // Add edit/delete buttons for project owners or admins - COMPACT VERSION
             let actionButtons = '';
             if (this.currentUser && (this.currentUser.id === project.owner_id || this.isAdmin)) {
                 actionButtons = `
-                    <div class="flex gap-1">
-                        <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation(); window.thoraxLab.editProject('${project.id}')">
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary btn-sm action-btn" onclick="event.stopPropagation(); window.thoraxLab.editProject('${project.id}')" title="Edit">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger" onclick="event.stopPropagation(); window.thoraxLab.deleteProject('${project.id}')">
+                        <button class="btn btn-danger btn-sm action-btn" onclick="event.stopPropagation(); window.thoraxLab.deleteProject('${project.id}')" title="Delete">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 `;
             }
+            
+            // Generate quick stats
+            const progress = Math.min(Math.floor(Math.random() * 100), 100);
+            const teamSize = Math.max(1, Math.floor(Math.random() * 5));
+            const daysLeft = Math.max(1, Math.floor(Math.random() * 30));
             
             return `
                 <div class="project-card ${isFromTraci ? 'from-traci' : ''} ${isFeatured ? 'featured' : ''}" data-project-id="${project.id}">
@@ -5041,7 +5651,7 @@
                             <span class="project-badge ${typeClass}">
                                 <i class="fas ${project.project_type === 'clinical' ? 'fa-user-md' : 
                                                  project.project_type === 'industry' ? 'fa-industry' : 
-                                                 'fa-handshake'}"></i>
+                                                 'fa-handshake'} text-xs"></i>
                                 ${project.project_type === 'clinical' ? 'Clinical' : 
                                   project.project_type === 'industry' ? 'Industry' : 
                                   'Collaboration'}
@@ -5049,11 +5659,8 @@
                             <span class="project-badge ${visibilityClass}">
                                 <i class="fas ${project.visibility === 'private' ? 'fa-lock' : 
                                                  project.visibility === 'internal' ? 'fa-users' : 
-                                                 'fa-globe'}"></i>
+                                                 'fa-globe'} text-xs"></i>
                                 ${project.visibility.charAt(0).toUpperCase() + project.visibility.slice(1)}
-                            </span>
-                            <span class="project-badge ${statusClass}">
-                                ${project.status.charAt(0).toUpperCase() + project.status.slice(1)}
                             </span>
                         </div>
                         <div class="project-actions">
@@ -5067,15 +5674,31 @@
                         ${stickers}
                     </h3>
                     
-                    <p class="project-description">${this.escapeHtml(project.description?.substring(0, 200) || 'No description')}...</p>
+                    <p class="project-description">${this.escapeHtml(project.description?.substring(0, 180) || 'No description')}${project.description && project.description.length > 180 ? '...' : ''}</p>
+                    
+                    <!-- Quick Stats -->
+                    <div class="project-quick-stats">
+                        <div class="quick-stat">
+                            <div class="value">${progress}%</div>
+                            <div class="label">Progress</div>
+                        </div>
+                        <div class="quick-stat">
+                            <div class="value">${teamSize}</div>
+                            <div class="label">Team</div>
+                        </div>
+                        <div class="quick-stat">
+                            <div class="value">${daysLeft}d</div>
+                            <div class="label">Deadline</div>
+                        </div>
+                    </div>
                     
                     ${project.tags?.length ? `
                         <div class="project-tags">
-                            ${project.tags.slice(0, 5).map(tag => `
+                            ${project.tags.slice(0, 4).map(tag => `
                                 <span class="project-tag">${this.escapeHtml(tag)}</span>
                             `).join('')}
-                            ${project.tags.length > 5 ? `
-                                <span class="project-tag">+${project.tags.length - 5}</span>
+                            ${project.tags.length > 4 ? `
+                                <span class="project-tag">+${project.tags.length - 4}</span>
                             ` : ''}
                         </div>
                     ` : ''}
@@ -5091,11 +5714,11 @@
                             " title="${displayName}">
                                 ${avatarText}
                             </div>
-                            <span class="text-sm text-gray-600">
+                            <span class="text-xs text-gray-600 truncate max-w-[120px]">
                                 ${displayName}
                             </span>
                         </div>
-                        <div class="text-sm text-gray-500">
+                        <div class="text-xs text-gray-500 whitespace-nowrap">
                             ${this.formatTimeAgo(project.created_at)}
                         </div>
                     </div>
@@ -5103,21 +5726,138 @@
                     <div class="project-footer">
                         <div class="project-stats">
                             <span class="stat-item" onclick="event.stopPropagation(); window.thoraxLab.handleLike('project', '${project.id}')">
-                                <i class="far fa-thumbs-up"></i>
+                                <i class="far fa-thumbs-up text-xs"></i>
                                 <span class="like-count">${project.like_count || 0}</span>
                             </span>
                             <span class="stat-item" onclick="event.stopPropagation(); window.thoraxLab.showDiscussionModal('${project.id}')">
-                                <i class="far fa-comment"></i>
+                                <i class="far fa-comment text-xs"></i>
                                 ${project.comment_count || 0}
                             </span>
                             <span class="stat-item">
-                                <i class="far fa-eye"></i>
+                                <i class="far fa-eye text-xs"></i>
                                 ${project.view_count || 0}
                             </span>
                         </div>
                         <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); window.thoraxLab.showProjectDetails('${project.id}')">
-                            View Details
+                            Details
                         </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        renderTraciProjectCard(project) {
+            // Parse TRAci project data
+            const description = project.description || '';
+            const lines = description.split('\n');
+            
+            // Extract clinical context
+            let clinicalContext = '';
+            let progress = 0;
+            let status = 'planning';
+            
+            for (const line of lines) {
+                if (line.includes('**Clinical Context:**')) {
+                    clinicalContext = line.replace('**Clinical Context:**', '').trim();
+                }
+                if (line.includes('**Progress:**')) {
+                    const match = line.match(/Progress:\s*(\d+)%/);
+                    if (match) progress = parseInt(match[1]);
+                }
+                if (line.includes('**Status:**')) {
+                    status = line.replace('**Status:**', '').trim().toLowerCase();
+                }
+            }
+            
+            // Clean up the title (remove [Published from TRAci] prefix if present)
+            let title = project.title;
+            if (title.startsWith('[Published from TRAci]')) {
+                title = title.replace('[Published from TRAci]', '').trim();
+            }
+            
+            return `
+                <div class="project-card traci-project" data-project-id="${project.id}">
+                    <div class="traci-header">
+                        <div class="traci-badge">
+                            <i class="fas fa-hospital text-xs"></i>
+                            TRAci Clinical
+                        </div>
+                        <span class="project-badge ${status === 'active' ? 'badge-active' : status === 'completed' ? 'badge-public' : 'badge-private'}">
+                            <i class="fas ${status === 'active' ? 'fa-play' : status === 'completed' ? 'fa-check' : 'fa-clock'} text-xs"></i>
+                            ${status.charAt(0).toUpperCase() + status.slice(1)}
+                        </span>
+                    </div>
+                    
+                    <h3 class="project-title">
+                        ${this.escapeHtml(title)}
+                        <span class="project-sticker sticker-traci">
+                            <i class="fas fa-hospital text-xs"></i> From TRAci
+                        </span>
+                    </h3>
+                    
+                    ${clinicalContext ? `
+                        <div class="traci-content">
+                            <h4>Clinical Context</h4>
+                            <p>${this.escapeHtml(clinicalContext.substring(0, 150))}${clinicalContext.length > 150 ? '...' : ''}</p>
+                        </div>
+                    ` : `
+                        <div class="traci-content">
+                            <p>${this.escapeHtml(description.substring(0, 180) || 'Clinical project from TRAci platform')}${description.length > 180 ? '...' : ''}</p>
+                        </div>
+                    `}
+                    
+                    <!-- Progress Bar -->
+                    <div class="traci-progress">
+                        <div class="traci-progress-bar">
+                            <div class="traci-progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                        <div class="traci-progress-text">
+                            <span>Progress</span>
+                            <span>${progress}%</span>
+                        </div>
+                    </div>
+                    
+                    ${project.tags?.length ? `
+                        <div class="project-tags">
+                            ${project.tags.slice(0, 4).map(tag => `
+                                <span class="project-tag">${this.escapeHtml(tag)}</span>
+                            `).join('')}
+                            ${project.tags.length > 4 ? `
+                                <span class="project-tag">+${project.tags.length - 4}</span>
+                            ` : ''}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="project-team">
+                        <div class="flex items-center gap-2">
+                            <div class="team-avatar" style="background: var(--clinical-blue); color: white;" title="TRAci Platform">
+                                TR
+                            </div>
+                            <span class="text-xs text-gray-600">
+                                TRAci Clinical Platform
+                            </span>
+                        </div>
+                        <div class="text-xs text-gray-500">
+                            ${this.formatTimeAgo(project.created_at)}
+                        </div>
+                    </div>
+                    
+                    <div class="project-footer">
+                        <div class="project-stats">
+                            <span class="stat-item" onclick="event.stopPropagation(); window.thoraxLab.handleLike('project', '${project.id}')">
+                                <i class="far fa-thumbs-up text-xs"></i>
+                                <span class="like-count">${project.like_count || 0}</span>
+                            </span>
+                            <span class="stat-item" onclick="event.stopPropagation(); window.thoraxLab.showDiscussionModal('${project.id}')">
+                                <i class="far fa-comment text-xs"></i>
+                                ${project.comment_count || 0}
+                            </span>
+                        </div>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); window.thoraxLab.showProjectDetails('${project.id}')">
+                                Collaborate
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
@@ -5125,8 +5865,40 @@
         
         showNewProjectModal() {
             // Reset form
-            document.getElementById('projectForm').reset();
+            const form = document.getElementById('projectForm');
+            if (form) {
+                form.reset();
+                
+                // Apply template if selected
+                const templateSelect = document.getElementById('projectTemplate');
+                if (templateSelect) {
+                    templateSelect.addEventListener('change', (e) => {
+                        this.applyTemplate(e.target.value);
+                    });
+                }
+            }
             this.showModal('newProjectModal');
+        }
+        
+        applyTemplate(templateName) {
+            if (!templateName || !this.templates[templateName]) return;
+            
+            const template = this.templates[templateName];
+            const form = document.getElementById('projectForm');
+            
+            // Set form values based on template
+            document.getElementById('projectType').value = template.structure.project_type;
+            document.getElementById('projectVisibility').value = template.structure.visibility;
+            document.getElementById('projectStatus').value = template.structure.status;
+            document.getElementById('projectTags').value = template.structure.tags.join(', ');
+            
+            // Update description with template info
+            const description = document.getElementById('projectDescription');
+            if (description) {
+                description.value = `Using ${template.name} template.\n\nKey considerations:\n${template.checklist.map(item => `- ${item}`).join('\n')}\n\nProject tasks:\n${template.defaultTasks.map(task => `- [ ] ${task.title}`).join('\n')}`;
+            }
+            
+            this.showToast(`Applied ${template.name} template`, 'info');
         }
         
         async createProject(e) {
@@ -5266,11 +6038,11 @@
             if (batchOps && batchBtn) {
                 if (this.state.batchMode) {
                     batchOps.classList.remove('hidden');
-                    batchBtn.innerHTML = '<i class="fas fa-times"></i> Cancel Batch';
+                    batchBtn.innerHTML = '<i class="fas fa-times"></i> Cancel';
                     batchBtn.classList.add('btn-warning');
                 } else {
                     batchOps.classList.add('hidden');
-                    batchBtn.innerHTML = '<i class="fas fa-layer-group"></i> Batch Actions';
+                    batchBtn.innerHTML = '<i class="fas fa-layer-group"></i> Batch';
                     batchBtn.classList.remove('btn-warning');
                 }
                 
@@ -5367,6 +6139,95 @@
                 this.toggleBatchMode(); // Exit batch mode
             } catch (error) {
                 this.showToast('Failed to delete projects', 'error');
+            }
+        }
+
+        // ============================================
+        // TEMPLATE EXPORT/IMPORT
+        // ============================================
+        
+        exportTemplate(templateName) {
+            const template = this.templates[templateName];
+            if (!template) {
+                this.showToast('Template not found', 'error');
+                return;
+            }
+            
+            const exportData = {
+                type: 'thoraxlab_template',
+                name: template.name,
+                template: template,
+                exportedAt: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            this.exportToJSON(exportData, `thoraxlab-template-${templateName}.json`);
+            this.showToast(`Template "${template.name}" exported`, 'success');
+        }
+        
+        importTemplateFile() {
+            const fileInput = document.getElementById('templateFile');
+            if (!fileInput.files.length) {
+                this.showToast('Please select a template file', 'error');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.type !== 'thoraxlab_template') {
+                        throw new Error('Invalid template file format');
+                    }
+                    
+                    // Extract template name from filename or data
+                    const templateName = file.name.replace('.json', '').replace('thoraxlab-template-', '');
+                    this.templates[templateName] = data.template;
+                    
+                    // Update template selector
+                    this.updateTemplateSelector();
+                    
+                    this.showToast(`Template "${data.name}" imported successfully`, 'success');
+                    this.hideModal('importTemplateModal');
+                    
+                    // Clear file input
+                    fileInput.value = '';
+                    
+                } catch (error) {
+                    console.error('Error importing template:', error);
+                    const errorDiv = document.getElementById('templateImportError');
+                    const errorText = document.getElementById('templateImportErrorText');
+                    if (errorDiv && errorText) {
+                        errorText.textContent = `Failed to import template: ${error.message}`;
+                        errorDiv.classList.remove('hidden');
+                    }
+                }
+            };
+            
+            reader.onerror = () => {
+                this.showToast('Failed to read template file', 'error');
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        updateTemplateSelector() {
+            const selector = document.getElementById('projectTemplate');
+            if (selector) {
+                // Clear existing options except first
+                while (selector.options.length > 1) {
+                    selector.remove(1);
+                }
+                
+                // Add template options
+                Object.keys(this.templates).forEach(templateName => {
+                    const option = document.createElement('option');
+                    option.value = templateName;
+                    option.textContent = this.templates[templateName].name;
+                    selector.appendChild(option);
+                });
             }
         }
 
@@ -5599,7 +6460,7 @@
                     
                     // Transform TRAci project to ThoraxLab format
                     const thoraxlabProject = {
-                        title: traciProject.name,
+                        title: `[Published from TRAci] ${traciProject.name}`,
                         description: `[Published from TRAci Clinical Platform]\n\n${traciProject.description}\n\n**Clinical Status:** ${traciProject.status}\n**Progress:** ${traciProject.progress || 0}%`,
                         project_type: 'clinical',
                         visibility: 'internal',
@@ -5744,15 +6605,15 @@
         renderDiscussionCard(discussion, author, project) {
             const avatarText = author.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??';
             
-            // Add edit/delete buttons for discussion owners or admins
+            // Add edit/delete buttons for discussion owners or admins - COMPACT VERSION
             let actionButtons = '';
             if (this.currentUser && (this.currentUser.id === discussion.author_id || this.isAdmin)) {
                 actionButtons = `
-                    <div class="flex gap-1">
-                        <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation(); window.thoraxLab.editDiscussion('${discussion.id}')">
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary btn-sm action-btn" onclick="event.stopPropagation(); window.thoraxLab.editDiscussion('${discussion.id}')" title="Edit">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger" onclick="event.stopPropagation(); window.thoraxLab.deleteDiscussion('${discussion.id}')">
+                        <button class="btn btn-danger btn-sm action-btn" onclick="event.stopPropagation(); window.thoraxLab.deleteDiscussion('${discussion.id}')" title="Delete">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -5767,15 +6628,15 @@
                                 ${avatarText}
                             </div>
                             <div class="discussion-meta">
-                                <div class="font-semibold">${author.full_name || 'Unknown User'}</div>
-                                <div class="text-sm text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
+                                <div class="font-semibold text-sm">${author.full_name || 'Unknown User'}</div>
+                                <div class="text-xs text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
                             </div>
                         </div>
-                        <div class="flex gap-2">
+                        <div class="flex gap-1">
                             ${project ? `
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-700 border border-blue-200">
-                                    <i class="fas fa-project-diagram mr-2"></i>
-                                    ${this.escapeHtml(project.title.substring(0, 20))}...
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-blue-50 text-blue-700 border border-blue-200">
+                                    <i class="fas fa-project-diagram mr-1 text-xs"></i>
+                                    ${this.escapeHtml(project.title.substring(0, 15))}...
                                 </span>
                             ` : ''}
                             ${actionButtons}
@@ -5785,23 +6646,23 @@
                     <h3 class="discussion-title">${this.escapeHtml(discussion.title)}</h3>
                     
                     <div class="discussion-content">
-                        ${this.escapeHtml(discussion.content.substring(0, 300))}${discussion.content.length > 300 ? '...' : ''}
+                        ${this.escapeHtml(discussion.content.substring(0, 250))}${discussion.content.length > 250 ? '...' : ''}
                     </div>
                     
                     <div class="discussion-actions">
                         <div>
                             <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); window.thoraxLab.showDiscussionDetails('${discussion.id}')">
-                                <i class="fas fa-comment"></i>
+                                <i class="fas fa-comment text-xs"></i>
                                 Join Discussion
                             </button>
                         </div>
                         <div class="discussion-stats">
                             <span class="stat-item" onclick="event.stopPropagation(); window.thoraxLab.handleLike('discussion', '${discussion.id}')">
-                                <i class="far fa-thumbs-up"></i>
+                                <i class="far fa-thumbs-up text-xs"></i>
                                 <span class="like-count">${discussion.like_count || 0}</span>
                             </span>
                             <span class="stat-item">
-                                <i class="far fa-comment"></i>
+                                <i class="far fa-comment text-xs"></i>
                                 ${discussion.comment_count || 0}
                             </span>
                         </div>
@@ -5865,477 +6726,6 @@
             } catch (error) {
                 console.error('Error creating discussion:', error);
                 this.showToast('Failed to create discussion: ' + error.message, 'error');
-            }
-        }
-
-        // ============================================
-        // DETAIL VIEWS
-        // ============================================
-        
-        async showProjectDetails(projectId) {
-            this.showLoading('Loading project details...');
-            
-            try {
-                const project = this.cache.projects.find(p => p.id === projectId);
-                if (!project) {
-                    throw new Error('Project not found');
-                }
-                
-                const owner = this.cache.profiles.get(project.owner_id) || {};
-                const isFromTraci = !!project.source_traci_project_id;
-                
-                // Get related discussions
-                const relatedDiscussions = this.cache.discussions.filter(d => d.project_id === projectId);
-                
-                // Set modal title
-                document.getElementById('modalProjectTitle').textContent = project.title;
-                
-                // Build content
-                let content = `
-                    <div class="space-y-6">
-                        ${isFromTraci ? `
-                            <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <i class="fas fa-hospital text-blue-600"></i>
-                                    <span class="font-semibold text-blue-700">Published from TRAci Platform</span>
-                                </div>
-                                <p class="text-sm text-blue-600">
-                                    This clinical project was published from our internal TRAci platform for industry collaboration.
-                                </p>
-                            </div>
-                        ` : ''}
-                        
-                        <div class="flex items-start justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="team-avatar" style="width: 3rem; height: 3rem; font-size: 1rem; background: ${isFromTraci ? 'var(--clinical-blue)' : owner.user_type === 'clinical' ? 'var(--clinical-blue)' : owner.user_type === 'industry' ? 'var(--industry-teal)' : 'var(--accent-purple)'}; color: white;" 
-                                     title="${isFromTraci ? 'TRAci Platform' : (owner.full_name || 'Unknown')}">
-                                    ${isFromTraci ? 'TR' : (owner.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??')}
-                                </div>
-                                <div>
-                                    <div class="font-semibold">${isFromTraci ? 'TRAci Clinical Platform' : (owner.full_name || 'Unknown User')}</div>
-                                    ${!isFromTraci ? `
-                                        <div class="text-sm text-gray-500">
-                                            ${owner.user_type === 'clinical' ? owner.clinical_specialty || 'Clinical Professional' : 
-                                              owner.user_type === 'industry' ? owner.professional_role || 'Industry Professional' : 
-                                              'Guest Contributor'}
-                                            ${owner.company ? ` • ${owner.company}` : ''}
-                                        </div>
-                                    ` : ''}
-                                    <div class="text-sm text-gray-500">${this.formatTimeAgo(project.created_at)}</div>
-                                </div>
-                            </div>
-                            <div class="flex gap-2">
-                                <span class="project-badge ${project.visibility === 'private' ? 'badge-private' : 
-                                                          project.visibility === 'internal' ? 'badge-internal' : 
-                                                          'badge-public'}">
-                                    ${project.visibility.charAt(0).toUpperCase() + project.visibility.slice(1)}
-                                </span>
-                                <span class="project-badge ${project.status === 'active' ? 'badge-active' : 'badge-archived'}">
-                                    ${project.status.charAt(0).toUpperCase() + project.status.slice(1)}
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <h4 class="font-bold mb-3 text-lg">Description</h4>
-                            <div class="prose max-w-none bg-gray-50 p-4 rounded-lg">
-                                ${this.escapeHtml(project.description || 'No description').replace(/\n/g, '<br>')}
-                            </div>
-                        </div>
-                        
-                        ${project.tags?.length ? `
-                            <div>
-                                <h4 class="font-bold mb-3 text-lg">Tags</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    ${project.tags.map(tag => `
-                                        <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                                            ${this.escapeHtml(tag)}
-                                        </span>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        ` : ''}
-                        
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                <div class="text-2xl font-bold text-clinical">${project.like_count || 0}</div>
-                                <div class="text-sm text-gray-500">Likes</div>
-                            </div>
-                            <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                <div class="text-2xl font-bold text-industry">${project.comment_count || 0}</div>
-                                <div class="text-sm text-gray-500">Comments</div>
-                            </div>
-                            <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                <div class="text-2xl font-bold text-accent">${project.view_count || 0}</div>
-                                <div class="text-sm text-gray-500">Views</div>
-                            </div>
-                        </div>
-                `;
-                
-                // Add import button for non-TRAci projects
-                if (!isFromTraci && this.currentUser) {
-                    content += `
-                        <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
-                            <h4 class="font-bold mb-2 text-green-800">Collaborate with Clinical Team</h4>
-                            <p class="text-sm text-green-700 mb-3">
-                                Share this industry project with the clinical team on TRAci for feedback and collaboration.
-                            </p>
-                            <button class="btn btn-import" onclick="window.thoraxLab.showImportModal('${projectId}', '${this.escapeHtml(project.title)}')">
-                                <i class="fas fa-download"></i>
-                                Import to TRAci
-                            </button>
-                        </div>
-                    `;
-                }
-                
-                // Add related discussions if any
-                if (relatedDiscussions.length > 0) {
-                    content += `
-                        <div>
-                            <h4 class="font-bold mb-3 text-lg">Related Discussions (${relatedDiscussions.length})</h4>
-                            <div class="space-y-2">
-                                ${relatedDiscussions.map(discussion => `
-                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer"
-                                         onclick="window.thoraxLab.showDiscussionDetails('${discussion.id}')">
-                                        <div>
-                                            <div class="font-medium">${this.escapeHtml(discussion.title)}</div>
-                                            <div class="text-sm text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
-                                        </div>
-                                        <div class="text-sm text-gray-500">
-                                            <i class="far fa-comment"></i> ${discussion.comment_count || 0}
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                // Add action buttons
-                content += `
-                        <div class="pt-6 border-t">
-                            <div class="flex gap-3 justify-between">
-                                <div class="flex gap-2">
-                                    <button class="btn btn-outline" onclick="window.thoraxLab.handleLike('project', '${projectId}')">
-                                        <i class="far fa-thumbs-up"></i>
-                                        Like (${project.like_count || 0})
-                                    </button>
-                                    <button class="btn btn-outline" onclick="window.thoraxLab.showDiscussionModal('${projectId}')">
-                                        <i class="fas fa-comment"></i>
-                                        Start Discussion
-                                    </button>
-                                </div>
-                                <button class="btn btn-secondary modal-close">
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                document.getElementById('modalProjectContent').innerHTML = content;
-                this.showModal('projectDetailModal');
-                
-            } catch (error) {
-                console.error('Error loading project details:', error);
-                this.showToast('Failed to load project details', 'error');
-            } finally {
-                this.hideLoading();
-            }
-        }
-        
-        async showDiscussionDetails(discussionId) {
-            this.showLoading('Loading discussion...');
-            
-            try {
-                const discussion = this.cache.discussions.find(d => d.id === discussionId);
-                if (!discussion) {
-                    throw new Error('Discussion not found');
-                }
-                
-                const author = this.cache.profiles.get(discussion.author_id) || {};
-                const project = discussion.project_id ? 
-                    this.cache.projects.find(p => p.id === discussion.project_id) : null;
-                
-                // Load comments for this discussion
-                const comments = await this.loadDiscussionComments(discussionId);
-                
-                // Set modal title
-                document.getElementById('modalDiscussionTitle').textContent = discussion.title;
-                
-                // Build content
-                let content = `
-                    <div class="space-y-6">
-                        <div class="flex items-start justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="team-avatar" style="width: 3rem; height: 3rem; font-size: 1rem; background: var(--accent-purple); color: white;" 
-                                     title="${author.full_name || 'Unknown'}">
-                                    ${author.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??'}
-                                </div>
-                                <div>
-                                    <div class="font-semibold">${author.full_name || 'Unknown User'}</div>
-                                    <div class="text-sm text-gray-500">
-                                        ${author.user_type === 'clinical' ? author.clinical_specialty || 'Clinical Professional' : 
-                                          author.user_type === 'industry' ? author.professional_role || 'Industry Professional' : 
-                                          'Guest Contributor'}
-                                    </div>
-                                    <div class="text-sm text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
-                                </div>
-                            </div>
-                            ${project ? `
-                                <div class="text-right">
-                                    <div class="text-sm text-gray-500">Related to project:</div>
-                                    <div class="font-medium">${this.escapeHtml(project.title)}</div>
-                                </div>
-                            ` : ''}
-                        </div>
-                        
-                        <div>
-                            <h4 class="font-bold mb-3 text-lg">Discussion</h4>
-                            <div class="prose max-w-none bg-gray-50 p-4 rounded-lg">
-                                ${this.escapeHtml(discussion.content || 'No content').replace(/\n/g, '<br>')}
-                            </div>
-                        </div>
-                        
-                        <div class="flex gap-4">
-                            <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                <div class="text-2xl font-bold text-clinical">${discussion.like_count || 0}</div>
-                                <div class="text-sm text-gray-500">Likes</div>
-                            </div>
-                            <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                <div class="text-2xl font-bold text-industry">${discussion.comment_count || 0}</div>
-                                <div class="text-sm text-gray-500">Comments</div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <h4 class="font-bold mb-3 text-lg">Comments (${comments.length})</h4>
-                            ${comments.length > 0 ? `
-                                <div class="space-y-4 max-h-96 overflow-y-auto p-2">
-                                    ${comments.map(comment => {
-                                        const commentAuthor = this.cache.profiles.get(comment.author_id) || {};
-                                        return `
-                                            <div class="comment-card">
-                                                <div class="comment-header">
-                                                    <div class="comment-author">
-                                                        <div class="team-avatar small" style="background: var(--clinical-blue); color: white;">
-                                                            ${commentAuthor.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??'}
-                                                        </div>
-                                                        <div>
-                                                            <div class="font-medium">${commentAuthor.full_name || 'Unknown'}</div>
-                                                            <div class="text-xs text-gray-500">${this.formatTimeAgo(comment.created_at)}</div>
-                                                        </div>
-                                                    </div>
-                                                    ${(this.currentUser && (this.currentUser.id === comment.author_id || this.isAdmin)) ? `
-                                                        <button class="btn btn-sm btn-danger" onclick="window.thoraxLab.deleteComment('${comment.id}')">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    ` : ''}
-                                                </div>
-                                                <div class="comment-content">
-                                                    ${this.escapeHtml(comment.content)}
-                                                </div>
-                                            </div>
-                                        `;
-                                    }).join('')}
-                                </div>
-                            ` : `
-                                <div class="text-center py-8 text-gray-500">
-                                    <i class="fas fa-comment-slash text-3xl mb-3"></i>
-                                    <div>No comments yet. Be the first to comment!</div>
-                                </div>
-                            `}
-                            
-                            <div class="comment-form mt-6">
-                                <h5 class="font-bold mb-3">Add a Comment</h5>
-                                <form onsubmit="return window.thoraxLab.addComment('${discussionId}', event)">
-                                    <div class="flex gap-2">
-                                        <input type="text" id="commentInput-${discussionId}" 
-                                               class="form-input flex-1" 
-                                               placeholder="Type your comment here..." required>
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-paper-plane"></i>
-                                            Post
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        
-                        <div class="pt-6 border-t">
-                            <div class="flex gap-3 justify-between">
-                                <div class="flex gap-2">
-                                    <button class="btn btn-outline" onclick="window.thoraxLab.handleLike('discussion', '${discussionId}')">
-                                        <i class="far fa-thumbs-up"></i>
-                                        Like (${discussion.like_count || 0})
-                                    </button>
-                                </div>
-                                <button class="btn btn-secondary modal-close">
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                document.getElementById('modalDiscussionContent').innerHTML = content;
-                this.showModal('discussionDetailModal');
-                
-            } catch (error) {
-                console.error('Error loading discussion details:', error);
-                this.showToast('Failed to load discussion', 'error');
-            } finally {
-                this.hideLoading();
-            }
-        }
-        
-        async loadDiscussionComments(discussionId) {
-            try {
-                const { data: comments, error } = await this.supabase
-                    .from('thoraxlab_comments')
-                    .select('*')
-                    .eq('discussion_id', discussionId)
-                    .order('created_at', { ascending: true });
-                
-                if (error) throw error;
-                
-                this.cache.comments.set(discussionId, comments || []);
-                return comments || [];
-            } catch (error) {
-                console.error('Error loading discussion comments:', error);
-                return [];
-            }
-        }
-        
-        async addComment(discussionId, e) {
-            if (e) e.preventDefault();
-            
-            if (!this.currentUser) {
-                this.showToast('Please sign in to comment', 'error');
-                return false;
-            }
-            
-            const commentInput = document.getElementById(`commentInput-${discussionId}`);
-            const content = commentInput?.value.trim();
-            
-            if (!content) {
-                this.showToast('Please enter a comment', 'error');
-                return false;
-            }
-            
-            try {
-                const commentData = {
-                    discussion_id: discussionId,
-                    author_id: this.currentUser.id,
-                    author_name: this.currentUser.name,
-                    content,
-                    like_count: 0,
-                    created_at: new Date().toISOString()
-                };
-                
-                const { data: comment, error } = await this.supabase
-                    .from('thoraxlab_comments')
-                    .insert([commentData])
-                    .select()
-                    .single();
-                
-                if (error) throw error;
-                
-                // Update discussion comment count
-                const discussion = this.cache.discussions.find(d => d.id === discussionId);
-                if (discussion) {
-                    discussion.comment_count = (discussion.comment_count || 0) + 1;
-                    await this.supabase
-                        .from('thoraxlab_discussions')
-                        .update({ comment_count: discussion.comment_count })
-                        .eq('id', discussionId);
-                }
-                
-                // Update cache
-                if (!this.cache.comments.has(discussionId)) {
-                    this.cache.comments.set(discussionId, []);
-                }
-                this.cache.comments.get(discussionId).push(comment);
-                
-                // Clear input
-                if (commentInput) commentInput.value = '';
-                
-                // Refresh comments display
-                await this.showDiscussionDetails(discussionId);
-                
-                this.showToast('Comment added successfully!', 'success');
-                
-            } catch (error) {
-                console.error('Error adding comment:', error);
-                this.showToast('Failed to add comment: ' + error.message, 'error');
-            }
-            
-            return false;
-        }
-        
-        async deleteComment(commentId) {
-            if (!confirm('Are you sure you want to delete this comment?')) {
-                return;
-            }
-            
-            try {
-                const { error } = await this.supabase
-                    .from('thoraxlab_comments')
-                    .delete()
-                    .eq('id', commentId);
-                
-                if (error) throw error;
-                
-                this.showToast('Comment deleted', 'success');
-                // Real-time update will refresh the view
-            } catch (error) {
-                this.showToast('Failed to delete comment', 'error');
-            }
-        }
-
-        // ============================================
-        // INTERACTION METHODS
-        // ============================================
-        
-        async handleLike(type, id) {
-            if (!this.currentUser) {
-                this.showToast('Please sign in to like', 'error');
-                return;
-            }
-            
-            try {
-                let table, likeCount;
-                
-                if (type === 'project') {
-                    table = 'thoraxlab_projects';
-                    const project = this.cache.projects.find(p => p.id === id);
-                    if (!project) throw new Error('Project not found');
-                    likeCount = (project.like_count || 0) + 1;
-                } else if (type === 'discussion') {
-                    table = 'thoraxlab_discussions';
-                    const discussion = this.cache.discussions.find(d => d.id === id);
-                    if (!discussion) throw new Error('Discussion not found');
-                    likeCount = (discussion.like_count || 0) + 1;
-                } else {
-                    throw new Error('Invalid like type');
-                }
-                
-                // Update in database
-                const { error } = await this.supabase
-                    .from(table)
-                    .update({ like_count: likeCount })
-                    .eq('id', id);
-                
-                if (error) throw error;
-                
-                // Show visual feedback
-                this.showToast('Liked!', 'success');
-                
-                // Real-time update will refresh the counts
-                
-            } catch (error) {
-                console.error('Error handling like:', error);
-                this.showToast('Failed to like', 'error');
             }
         }
 
@@ -6472,6 +6862,7 @@
                 chip.classList.toggle('active', chip.dataset.filter === filter);
             });
             
+            this.saveUserPreferences();
             this.loadAllProjects();
         }
         
@@ -6502,6 +6893,7 @@
                 chip.classList.toggle('active', chip.dataset.filter === 'all');
             });
             
+            this.saveUserPreferences();
             this.loadAllProjects();
         }
         
@@ -6583,10 +6975,6 @@
         // Placeholder methods for UI buttons
         showSettings() {
             this.showToast('Settings feature coming soon', 'info');
-        }
-        
-        showImportModal() {
-            this.showToast('Select a project to import', 'info');
         }
         
         exportDashboard() {
@@ -6672,6 +7060,11 @@
             e.preventDefault();
             this.showToast('Profile updated', 'success');
             this.hideModal('editProfileModal');
+        }
+        
+        // Show template import modal
+        showTemplateImportModal() {
+            this.showModal('importTemplateModal');
         }
     }
 
