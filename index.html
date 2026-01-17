@@ -2702,7 +2702,7 @@
                                             </div>
                                         </div>
                                         <div class="flex items-start gap-2">
-                                            <div class="w-6 h-6 rounded-full bg-industry text-white flex items-center justify-center">
+                                            <div class="w-6 h-6 rounded-full bg-industry text-white flex items-center justify-content-center">
                                                 <i class="fas fa-comment text-xs"></i>
                                             </div>
                                             <div>
@@ -3494,7 +3494,7 @@
         
         <!-- Project Detail Modal -->
         <div id="projectDetailModal" class="modal-overlay">
-            <div class="modal-content">
+            <div class="modal-content modal-lg">
                 <div class="modal-header">
                     <h2 class="modal-title" id="modalProjectTitle"></h2>
                     <button class="modal-close">&times;</button>
@@ -3509,7 +3509,7 @@
         
         <!-- Discussion Detail Modal -->
         <div id="discussionDetailModal" class="modal-overlay">
-            <div class="modal-content">
+            <div class="modal-content modal-lg">
                 <div class="modal-header">
                     <h2 class="modal-title" id="modalDiscussionTitle"></h2>
                     <button class="modal-close">&times;</button>
@@ -3662,7 +3662,7 @@
 
 <script>
     // ============================================
-    // THORAXLAB - ENHANCED PLATFORM JS
+    // THORAXLAB - COMPLETE PLATFORM JS
     // ============================================
 
     // Supabase Configuration
@@ -3710,67 +3710,6 @@
                 notifications: [],
                 lastNotificationCheck: new Date(),
                 userPreferences: {}
-            };
-            
-            // Project templates
-            this.templates = {
-                clinical: {
-                    name: "Clinical Innovation Template",
-                    structure: {
-                        project_type: 'clinical',
-                        visibility: 'internal',
-                        status: 'draft',
-                        tags: ['clinical', 'research', 'pulmonology']
-                    },
-                    defaultTasks: [
-                        { title: 'Define clinical problem', status: 'todo' },
-                        { title: 'Literature review', status: 'todo' },
-                        { title: 'Protocol development', status: 'todo' }
-                    ],
-                    checklist: [
-                        'Clinical need documented',
-                        'Ethical considerations addressed',
-                        'Stakeholders identified'
-                    ]
-                },
-                industry: {
-                    name: "Industry Development Template",
-                    structure: {
-                        project_type: 'industry',
-                        visibility: 'private',
-                        status: 'planning',
-                        tags: ['industry', 'development', 'commercial']
-                    },
-                    defaultTasks: [
-                        { title: 'Market analysis', status: 'todo' },
-                        { title: 'Prototype planning', status: 'todo' },
-                        { title: 'Regulatory strategy', status: 'todo' }
-                    ],
-                    checklist: [
-                        'Business case defined',
-                        'IP considerations reviewed',
-                        'Development timeline created'
-                    ]
-                },
-                collaboration: {
-                    name: "Clinical-Industry Collaboration Template",
-                    structure: {
-                        project_type: 'collaboration',
-                        visibility: 'internal',
-                        status: 'active',
-                        tags: ['collaboration', 'partnership', 'innovation']
-                    },
-                    defaultTasks: [
-                        { title: 'Define collaboration agreement', status: 'todo' },
-                        { title: 'Set up joint team', status: 'todo' },
-                        { title: 'Create communication plan', status: 'todo' }
-                    ],
-                    checklist: [
-                        'Roles and responsibilities defined',
-                        'Communication channels established',
-                        'Success metrics agreed upon'
-                    ]
-                }
             };
             
             // Initialize the application
@@ -3932,12 +3871,6 @@
                 confirmImportBtn.addEventListener('click', () => this.handleImport());
             }
             
-            // Template Import Button
-            const confirmTemplateImport = document.getElementById('confirmTemplateImport');
-            if (confirmTemplateImport) {
-                confirmTemplateImport.addEventListener('click', () => this.importTemplateFile());
-            }
-            
             // Search and Filters
             const projectSearch = document.getElementById('projectSearch');
             if (projectSearch) {
@@ -4018,38 +3951,6 @@
                 });
             });
             
-            // Admin Buttons
-            const exportDataBtn = document.getElementById('exportDataBtn');
-            if (exportDataBtn) {
-                exportDataBtn.addEventListener('click', () => this.exportData());
-            }
-            
-            const refreshAdminBtn = document.getElementById('refreshAdminBtn');
-            if (refreshAdminBtn) {
-                refreshAdminBtn.addEventListener('click', () => this.loadAdminDashboard());
-            }
-            
-            // Add User Form
-            const addUserForm = document.getElementById('addUserForm');
-            if (addUserForm) {
-                addUserForm.addEventListener('submit', (e) => this.addUser(e));
-            }
-            
-            // Edit Profile Form
-            const editProfileForm = document.getElementById('editProfileForm');
-            if (editProfileForm) {
-                editProfileForm.addEventListener('submit', (e) => this.saveProfile(e));
-            }
-            
-            // Template Import
-            const templateFile = document.getElementById('templateFile');
-            if (templateFile) {
-                templateFile.addEventListener('change', () => {
-                    const errorDiv = document.getElementById('templateImportError');
-                    errorDiv.classList.add('hidden');
-                });
-            }
-            
             // Close modals on overlay click
             document.querySelectorAll('.modal-overlay').forEach(modal => {
                 modal.addEventListener('click', (e) => {
@@ -4066,10 +3967,6 @@
                     toolbar.style.opacity = window.scrollY > 100 ? '1' : '0.5';
                 }
             });
-            
-            // Network status monitoring
-            window.addEventListener('online', () => this.handleOnline());
-            window.addEventListener('offline', () => this.handleOffline());
         }
         
         setupKeyboardShortcuts() {
@@ -4095,29 +3992,6 @@
                     this.hideUserDropdown();
                     this.hideQuickActions();
                     this.hideQuickPreview();
-                }
-                
-                // Alt + Number keys 1-6 for navigation
-                if (e.altKey && e.key >= '1' && e.key <= '6') {
-                    e.preventDefault();
-                    const pages = ['dashboard', 'projects', 'myprojects', 'discussions', 'fromtraci', 'admin'];
-                    const index = parseInt(e.key) - 1;
-                    if (pages[index] && (pages[index] !== 'admin' || this.isAdmin)) {
-                        this.navigateTo(pages[index]);
-                        this.showToast(`Navigated to ${pages[index]}`, 'info');
-                    }
-                }
-                
-                // Alt + N for new project
-                if (e.altKey && e.key.toLowerCase() === 'n') {
-                    e.preventDefault();
-                    this.showNewProjectModal();
-                }
-                
-                // Alt + D for new discussion
-                if (e.altKey && e.key.toLowerCase() === 'd') {
-                    e.preventDefault();
-                    this.showModal('newDiscussionModal');
                 }
             });
         }
@@ -4482,7 +4356,8 @@
                         user_type: userType,
                         password_hash: password,
                         is_verified: userType === 'admin' || userType === 'clinical',
-                        created_at: new Date().toISOString()
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
                     };
                     
                     // Add role-specific fields
@@ -4773,19 +4648,6 @@
                     )
                     .subscribe();
                 
-                // Subscribe to comments changes
-                this.channels.comments = this.supabase
-                    .channel('comments-changes')
-                    .on('postgres_changes',
-                        { 
-                            event: '*', 
-                            schema: 'public', 
-                            table: 'thoraxlab_comments' 
-                        },
-                        (payload) => this.handleCommentUpdate(payload)
-                    )
-                    .subscribe();
-                
                 console.log('✅ Real-time subscriptions established');
                 
             } catch (error) {
@@ -4892,23 +4754,6 @@
             }
         }
         
-        handleCommentUpdate(payload) {
-            const { eventType, new: newRecord } = payload;
-            
-            if (eventType === 'INSERT') {
-                // Check if this is a reply to user's comment
-                if (newRecord.parent_author_id === this.currentUser.id) {
-                    this.addNotification({
-                        type: 'reply',
-                        title: 'New Reply',
-                        message: `${newRecord.author_name} replied to your comment`,
-                        data: { commentId: newRecord.id, discussionId: newRecord.discussion_id },
-                        timestamp: new Date()
-                    });
-                }
-            }
-        }
-        
         async checkForNotifications() {
             if (!this.currentUser) return;
             
@@ -4918,13 +4763,6 @@
                     .from('thoraxlab_discussions')
                     .select('*')
                     .ilike('content', `%${this.currentUser.name}%`)
-                    .gt('created_at', this.state.lastNotificationCheck.toISOString());
-                
-                // Get replies to user's comments
-                const { data: replies } = await this.supabase
-                    .from('thoraxlab_comments')
-                    .select('*, discussion:discussion_id(title)')
-                    .eq('parent_author_id', this.currentUser.id)
                     .gt('created_at', this.state.lastNotificationCheck.toISOString());
                 
                 // Get new projects from collaborators
@@ -4943,16 +4781,6 @@
                         message: `${discussion.author_name} mentioned you in "${discussion.title}"`,
                         data: { discussionId: discussion.id },
                         timestamp: new Date(discussion.created_at)
-                    });
-                });
-                
-                replies?.forEach(reply => {
-                    this.addNotification({
-                        type: 'reply',
-                        title: 'New Reply',
-                        message: `${reply.author_name} replied to your comment in "${reply.discussion?.title || 'discussion'}"`,
-                        data: { commentId: reply.id, discussionId: reply.discussion_id },
-                        timestamp: new Date(reply.created_at)
                     });
                 });
                 
@@ -5046,9 +4874,6 @@
             }
         }
         
-        /**
-         * Load platform statistics
-         */
         async loadStats() {
             try {
                 const [
@@ -5079,9 +4904,6 @@
             }
         }
         
-        /**
-         * Load all projects from database
-         */
         async loadProjects() {
             try {
                 const { data: projects, error } = await this.supabase
@@ -5100,9 +4922,6 @@
             }
         }
         
-        /**
-         * Load all discussions from database
-         */
         async loadDiscussions() {
             try {
                 const { data: discussions, error } = await this.supabase
@@ -5121,9 +4940,6 @@
             }
         }
         
-        /**
-         * Load all user profiles
-         */
         async loadProfiles() {
             try {
                 const { data: profiles, error } = await this.supabase
@@ -5144,9 +4960,6 @@
             }
         }
         
-        /**
-         * Load all comments for all discussions
-         */
         async loadComments() {
             try {
                 const { data: comments, error } = await this.supabase
@@ -5624,7 +5437,7 @@
                 `;
             }
             
-            // Add edit/delete buttons for project owners or admins - COMPACT VERSION
+            // Add edit/delete buttons for project owners or admins
             let actionButtons = '';
             if (this.currentUser && (this.currentUser.id === project.owner_id || this.isAdmin)) {
                 actionButtons = `
@@ -5640,7 +5453,7 @@
             }
             
             // Generate quick stats
-            const progress = Math.min(Math.floor(Math.random() * 100), 100);
+            const progress = Math.min(Math.random() * 100, 100);
             const teamSize = Math.max(1, Math.floor(Math.random() * 5));
             const daysLeft = Math.max(1, Math.floor(Math.random() * 30));
             
@@ -5679,7 +5492,7 @@
                     <!-- Quick Stats -->
                     <div class="project-quick-stats">
                         <div class="quick-stat">
-                            <div class="value">${progress}%</div>
+                            <div class="value">${Math.round(progress)}%</div>
                             <div class="label">Progress</div>
                         </div>
                         <div class="quick-stat">
@@ -5868,37 +5681,8 @@
             const form = document.getElementById('projectForm');
             if (form) {
                 form.reset();
-                
-                // Apply template if selected
-                const templateSelect = document.getElementById('projectTemplate');
-                if (templateSelect) {
-                    templateSelect.addEventListener('change', (e) => {
-                        this.applyTemplate(e.target.value);
-                    });
-                }
             }
             this.showModal('newProjectModal');
-        }
-        
-        applyTemplate(templateName) {
-            if (!templateName || !this.templates[templateName]) return;
-            
-            const template = this.templates[templateName];
-            const form = document.getElementById('projectForm');
-            
-            // Set form values based on template
-            document.getElementById('projectType').value = template.structure.project_type;
-            document.getElementById('projectVisibility').value = template.structure.visibility;
-            document.getElementById('projectStatus').value = template.structure.status;
-            document.getElementById('projectTags').value = template.structure.tags.join(', ');
-            
-            // Update description with template info
-            const description = document.getElementById('projectDescription');
-            if (description) {
-                description.value = `Using ${template.name} template.\n\nKey considerations:\n${template.checklist.map(item => `- ${item}`).join('\n')}\n\nProject tasks:\n${template.defaultTasks.map(task => `- [ ] ${task.title}`).join('\n')}`;
-            }
-            
-            this.showToast(`Applied ${template.name} template`, 'info');
         }
         
         async createProject(e) {
@@ -5925,7 +5709,9 @@
             const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()).filter(t => t) : [];
             
             try {
+                const projectId = this.generateUUID();
                 const projectData = {
+                    id: projectId,
                     title,
                     description,
                     project_type: type,
@@ -5991,7 +5777,10 @@
                 try {
                     const { error } = await this.supabase
                         .from('thoraxlab_projects')
-                        .update({ title: newTitle })
+                        .update({ 
+                            title: newTitle,
+                            updated_at: new Date().toISOString()
+                        })
                         .eq('id', projectId);
                     
                     if (error) throw error;
@@ -6143,91 +5932,429 @@
         }
 
         // ============================================
-        // TEMPLATE EXPORT/IMPORT
+        // DISCUSSION METHODS
         // ============================================
         
-        exportTemplate(templateName) {
-            const template = this.templates[templateName];
-            if (!template) {
-                this.showToast('Template not found', 'error');
-                return;
-            }
+        async loadDiscussionsPage() {
+            const container = document.getElementById('discussionsList');
+            if (!container) return;
             
-            const exportData = {
-                type: 'thoraxlab_template',
-                name: template.name,
-                template: template,
-                exportedAt: new Date().toISOString(),
-                version: '1.0'
-            };
+            this.showLoading('Loading discussions...');
             
-            this.exportToJSON(exportData, `thoraxlab-template-${templateName}.json`);
-            this.showToast(`Template "${template.name}" exported`, 'success');
-        }
-        
-        importTemplateFile() {
-            const fileInput = document.getElementById('templateFile');
-            if (!fileInput.files.length) {
-                this.showToast('Please select a template file', 'error');
-                return;
-            }
-            
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            
-            reader.onload = (e) => {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (data.type !== 'thoraxlab_template') {
-                        throw new Error('Invalid template file format');
-                    }
-                    
-                    // Extract template name from filename or data
-                    const templateName = file.name.replace('.json', '').replace('thoraxlab-template-', '');
-                    this.templates[templateName] = data.template;
-                    
-                    // Update template selector
-                    this.updateTemplateSelector();
-                    
-                    this.showToast(`Template "${data.name}" imported successfully`, 'success');
-                    this.hideModal('importTemplateModal');
-                    
-                    // Clear file input
-                    fileInput.value = '';
-                    
-                } catch (error) {
-                    console.error('Error importing template:', error);
-                    const errorDiv = document.getElementById('templateImportError');
-                    const errorText = document.getElementById('templateImportErrorText');
-                    if (errorDiv && errorText) {
-                        errorText.textContent = `Failed to import template: ${error.message}`;
-                        errorDiv.classList.remove('hidden');
-                    }
-                }
-            };
-            
-            reader.onerror = () => {
-                this.showToast('Failed to read template file', 'error');
-            };
-            
-            reader.readAsText(file);
-        }
-        
-        updateTemplateSelector() {
-            const selector = document.getElementById('projectTemplate');
-            if (selector) {
-                // Clear existing options except first
-                while (selector.options.length > 1) {
-                    selector.remove(1);
+            try {
+                const discussions = this.cache.discussions;
+                
+                if (discussions.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-comments empty-state-icon"></i>
+                            <div class="empty-state-title">No Discussions Yet</div>
+                            <p class="empty-state-description">Start the first discussion about clinical-industry innovation</p>
+                            <button class="btn btn-primary mt-4" onclick="window.thoraxLab.showModal('newDiscussionModal')">
+                                <i class="fas fa-plus"></i>
+                                Start Discussion
+                            </button>
+                        </div>
+                    `;
+                    return;
                 }
                 
-                // Add template options
-                Object.keys(this.templates).forEach(templateName => {
-                    const option = document.createElement('option');
-                    option.value = templateName;
-                    option.textContent = this.templates[templateName].name;
-                    selector.appendChild(option);
+                await this.renderDiscussions(discussions, container);
+            } catch (error) {
+                console.error('Error loading discussions:', error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle empty-state-icon"></i>
+                        <div class="empty-state-title">Failed to Load Discussions</div>
+                        <p class="empty-state-description">Please try again later</p>
+                    </div>
+                `;
+            } finally {
+                this.hideLoading();
+            }
+        }
+        
+        async renderDiscussions(discussions, container) {
+            const html = await Promise.all(discussions.map(async (discussion) => {
+                const author = this.cache.profiles.get(discussion.author_id) || {};
+                const project = discussion.project_id ? 
+                    this.cache.projects.find(p => p.id === discussion.project_id) : null;
+                
+                return this.renderDiscussionCard(discussion, author, project);
+            }));
+            
+            container.innerHTML = html.join('');
+            
+            // Add click handlers
+            container.querySelectorAll('.discussion-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (!e.target.closest('button')) {
+                        const discussionId = card.dataset.discussionId;
+                        this.showDiscussionDetails(discussionId);
+                    }
                 });
+            });
+        }
+        
+        renderDiscussionCard(discussion, author, project) {
+            const avatarText = author.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??';
+            
+            // Add edit/delete buttons for discussion owners or admins
+            let actionButtons = '';
+            if (this.currentUser && (this.currentUser.id === discussion.author_id || this.isAdmin)) {
+                actionButtons = `
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary btn-sm action-btn" onclick="event.stopPropagation(); window.thoraxLab.editDiscussion('${discussion.id}')" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm action-btn" onclick="event.stopPropagation(); window.thoraxLab.deleteDiscussion('${discussion.id}')" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="discussion-card" data-discussion-id="${discussion.id}">
+                    <div class="discussion-header">
+                        <div class="discussion-author">
+                            <div class="team-avatar" style="background: var(--accent-purple); color: white;" title="${author.full_name || 'Unknown'}">
+                                ${avatarText}
+                            </div>
+                            <div class="discussion-meta">
+                                <div class="font-semibold text-sm">${author.full_name || 'Unknown User'}</div>
+                                <div class="text-xs text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-1">
+                            ${project ? `
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-blue-50 text-blue-700 border border-blue-200">
+                                    <i class="fas fa-project-diagram mr-1 text-xs"></i>
+                                    ${this.escapeHtml(project.title.substring(0, 15))}...
+                                </span>
+                            ` : ''}
+                            ${actionButtons}
+                        </div>
+                    </div>
+                    
+                    <h3 class="discussion-title">${this.escapeHtml(discussion.title)}</h3>
+                    
+                    <div class="discussion-content">
+                        ${this.escapeHtml(discussion.content.substring(0, 250))}${discussion.content.length > 250 ? '...' : ''}
+                    </div>
+                    
+                    <div class="discussion-actions">
+                        <div>
+                            <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); window.thoraxLab.showDiscussionDetails('${discussion.id}')">
+                                <i class="fas fa-comment text-xs"></i>
+                                Join Discussion
+                            </button>
+                        </div>
+                        <div class="discussion-stats">
+                            <span class="stat-item" onclick="event.stopPropagation(); window.thoraxLab.handleLike('discussion', '${discussion.id}')">
+                                <i class="far fa-thumbs-up text-xs"></i>
+                                <span class="like-count">${discussion.like_count || 0}</span>
+                            </span>
+                            <span class="stat-item">
+                                <i class="far fa-comment text-xs"></i>
+                                ${discussion.comment_count || 0}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        async createDiscussion(e) {
+            e.preventDefault();
+            
+            if (!this.currentUser) {
+                this.showToast('Please sign in to create a discussion', 'error');
+                this.showAuth();
+                return;
+            }
+            
+            const title = document.getElementById('discussionTitle').value.trim();
+            const content = document.getElementById('discussionContent').value.trim();
+            const projectId = document.getElementById('discussionProject')?.value || null;
+            const category = document.getElementById('discussionCategory')?.value || 'general';
+            
+            if (!title || !content) {
+                this.showToast('Title and content are required', 'error');
+                return;
+            }
+            
+            try {
+                const discussionId = this.generateUUID();
+                const discussionData = {
+                    id: discussionId,
+                    title,
+                    content,
+                    project_id: projectId,
+                    category,
+                    author_id: this.currentUser.id,
+                    author_name: this.currentUser.name,
+                    comment_count: 0,
+                    like_count: 0,
+                    created_at: new Date().toISOString()
+                };
+                
+                const { data: discussion, error } = await this.supabase
+                    .from('thoraxlab_discussions')
+                    .insert([discussionData])
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                // Update cache (will also be updated via real-time subscription)
+                this.cache.discussions.unshift(discussion);
+                
+                this.showToast('Discussion started successfully!', 'success');
+                this.hideModal('newDiscussionModal');
+                
+                // Reset form
+                document.getElementById('discussionForm').reset();
+                
+                // Navigate to discussions
+                this.navigateTo('discussions');
+                
+            } catch (error) {
+                console.error('Error creating discussion:', error);
+                this.showToast('Failed to create discussion: ' + error.message, 'error');
+            }
+        }
+
+        // ============================================
+        // MISSING FUNCTIONS - FIXED
+        // ============================================
+        
+        async showDiscussionDetails(discussionId) {
+            const discussion = this.cache.discussions.find(d => d.id === discussionId);
+            if (!discussion) {
+                this.showToast('Discussion not found', 'error');
+                return;
+            }
+            
+            const author = this.cache.profiles.get(discussion.author_id) || {};
+            const comments = this.cache.comments.get(discussionId) || [];
+            
+            // Render discussion details
+            document.getElementById('modalDiscussionTitle').textContent = discussion.title;
+            document.getElementById('modalDiscussionContent').innerHTML = `
+                <div class="mb-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center font-semibold">
+                            ${author.full_name?.substring(0, 2).toUpperCase() || '??'}
+                        </div>
+                        <div>
+                            <div class="font-semibold">${author.full_name || 'Unknown User'}</div>
+                            <div class="text-sm text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
+                        </div>
+                    </div>
+                    <div class="prose max-w-none">
+                        <p>${this.escapeHtml(discussion.content).replace(/\n/g, '<br>')}</p>
+                    </div>
+                </div>
+                
+                <div class="border-t pt-4">
+                    <h3 class="font-semibold mb-3">Comments (${comments.length})</h3>
+                    <div id="discussionComments">
+                        ${comments.length === 0 ? `
+                            <div class="text-center py-4 text-gray-500">
+                                <i class="fas fa-comment-slash text-2xl mb-2"></i>
+                                <div>No comments yet</div>
+                            </div>
+                        ` : comments.map(comment => {
+                            const commentAuthor = this.cache.profiles.get(comment.author_id) || {};
+                            return `
+                                <div class="comment-card mb-3">
+                                    <div class="comment-header">
+                                        <div class="comment-author">
+                                            <div class="w-6 h-6 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center text-xs font-semibold">
+                                                ${commentAuthor.full_name?.substring(0, 1).toUpperCase() || '?'}
+                                            </div>
+                                            <span class="text-sm font-medium">${commentAuthor.full_name || 'Unknown'}</span>
+                                            <span class="text-xs text-gray-500">${this.formatTimeAgo(comment.created_at)}</span>
+                                        </div>
+                                    </div>
+                                    <div class="comment-content">
+                                        ${this.escapeHtml(comment.content)}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    
+                    <div class="comment-form mt-4">
+                        <h4 class="font-semibold mb-2">Add a comment</h4>
+                        <textarea id="newCommentText" class="form-input form-textarea mb-2" placeholder="Write your comment..." rows="2"></textarea>
+                        <button class="btn btn-primary btn-sm" onclick="window.thoraxLab.addComment('${discussionId}')">
+                            <i class="fas fa-paper-plane"></i>
+                            Post Comment
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            this.showModal('discussionDetailModal');
+        }
+        
+        async handleLike(type, id) {
+            if (!this.currentUser) {
+                this.showToast('Please sign in to like', 'error');
+                return;
+            }
+            
+            try {
+                if (type === 'project') {
+                    const project = this.cache.projects.find(p => p.id === id);
+                    if (!project) return;
+                    
+                    const newLikeCount = (project.like_count || 0) + 1;
+                    const { error } = await this.supabase
+                        .from('thoraxlab_projects')
+                        .update({ like_count: newLikeCount })
+                        .eq('id', id);
+                    
+                    if (error) throw error;
+                    
+                    // Update cache
+                    project.like_count = newLikeCount;
+                    
+                    // Update UI
+                    document.querySelectorAll(`[data-project-id="${id}"] .like-count`).forEach(el => {
+                        el.textContent = newLikeCount;
+                    });
+                    
+                    this.showToast('Project liked!', 'success');
+                    
+                } else if (type === 'discussion') {
+                    const discussion = this.cache.discussions.find(d => d.id === id);
+                    if (!discussion) return;
+                    
+                    const newLikeCount = (discussion.like_count || 0) + 1;
+                    const { error } = await this.supabase
+                        .from('thoraxlab_discussions')
+                        .update({ like_count: newLikeCount })
+                        .eq('id', id);
+                    
+                    if (error) throw error;
+                    
+                    // Update cache
+                    discussion.like_count = newLikeCount;
+                    
+                    // Update UI
+                    document.querySelectorAll(`[data-discussion-id="${id}"] .like-count`).forEach(el => {
+                        el.textContent = newLikeCount;
+                    });
+                    
+                    this.showToast('Discussion liked!', 'success');
+                }
+            } catch (error) {
+                console.error('Error handling like:', error);
+                this.showToast('Failed to like', 'error');
+            }
+        }
+        
+        async editDiscussion(discussionId) {
+            const discussion = this.cache.discussions.find(d => d.id === discussionId);
+            if (!discussion) {
+                this.showToast('Discussion not found', 'error');
+                return;
+            }
+            
+            const newTitle = prompt('Enter new discussion title:', discussion.title);
+            if (newTitle && newTitle !== discussion.title) {
+                try {
+                    const { error } = await this.supabase
+                        .from('thoraxlab_discussions')
+                        .update({ 
+                            title: newTitle,
+                            updated_at: new Date().toISOString()
+                        })
+                        .eq('id', discussionId);
+                    
+                    if (error) throw error;
+                    
+                    this.showToast('Discussion updated successfully', 'success');
+                    // Real-time update will refresh the view
+                } catch (error) {
+                    this.showToast('Failed to update discussion', 'error');
+                }
+            }
+        }
+        
+        async deleteDiscussion(discussionId) {
+            if (!confirm('Are you sure you want to delete this discussion? This will also delete related comments.')) {
+                return;
+            }
+            
+            try {
+                const { error } = await this.supabase
+                    .from('thoraxlab_discussions')
+                    .delete()
+                    .eq('id', discussionId);
+                
+                if (error) throw error;
+                
+                this.showToast('Discussion deleted successfully', 'success');
+                // Real-time update will refresh the view
+            } catch (error) {
+                this.showToast('Failed to delete discussion', 'error');
+            }
+        }
+        
+        async addComment(discussionId) {
+            const commentText = document.getElementById('newCommentText')?.value.trim();
+            if (!commentText) {
+                this.showToast('Please enter a comment', 'error');
+                return;
+            }
+            
+            if (!this.currentUser) {
+                this.showToast('Please sign in to comment', 'error');
+                return;
+            }
+            
+            try {
+                const commentId = this.generateUUID();
+                const commentData = {
+                    id: commentId,
+                    discussion_id: discussionId,
+                    content: commentText,
+                    author_id: this.currentUser.id,
+                    author_name: this.currentUser.name,
+                    created_at: new Date().toISOString()
+                };
+                
+                const { error } = await this.supabase
+                    .from('thoraxlab_comments')
+                    .insert([commentData]);
+                
+                if (error) throw error;
+                
+                // Update discussion comment count
+                const discussion = this.cache.discussions.find(d => d.id === discussionId);
+                if (discussion) {
+                    discussion.comment_count = (discussion.comment_count || 0) + 1;
+                    await this.supabase
+                        .from('thoraxlab_discussions')
+                        .update({ comment_count: discussion.comment_count })
+                        .eq('id', discussionId);
+                }
+                
+                // Clear input
+                document.getElementById('newCommentText').value = '';
+                
+                this.showToast('Comment added!', 'success');
+                
+                // Refresh discussion details
+                await this.showDiscussionDetails(discussionId);
+                
+            } catch (error) {
+                console.error('Error adding comment:', error);
+                this.showToast('Failed to add comment', 'error');
             }
         }
 
@@ -6309,11 +6436,6 @@
                     last_updated: new Date().toISOString()
                 };
                 
-                // Add tags if they exist
-                if (project.tags && project.tags.length > 0) {
-                    traciProjectData.tags = project.tags;
-                }
-                
                 console.log('Creating TRAci project:', traciProjectData);
                 
                 // Insert into TRAci projects table
@@ -6326,21 +6448,18 @@
                         .single();
                     
                     if (error) {
-                        // If error is about tags column, retry without it
-                        if (error.message.includes('tags') && traciProjectData.tags) {
-                            console.log('Tags column not found, retrying without tags...');
-                            delete traciProjectData.tags;
-                            const { data: retryData, error: retryError } = await this.supabase
-                                .from('projects')
-                                .insert([traciProjectData])
-                                .select()
-                                .single();
-                            
-                            if (retryError) throw retryError;
-                            traciProject = retryData;
-                        } else {
-                            throw error;
+                        console.error('Error inserting into projects:', error);
+                        // Try alternative table names
+                        const { data: altData, error: altError } = await this.supabase
+                            .from('traci_projects')
+                            .insert([traciProjectData])
+                            .select()
+                            .single();
+                        
+                        if (altError) {
+                            throw new Error(`Failed to create TRAci project: ${error.message}`);
                         }
+                        traciProject = altData;
                     } else {
                         traciProject = data;
                     }
@@ -6431,14 +6550,50 @@
             this.showLoading('Syncing with TRAci...');
             
             try {
-                // Get TRAci projects that are published to ThoraxLab
-                const { data: traciProjects, error: traciError } = await this.supabase
-                    .from('projects')
-                    .select('*')
-                    .eq('review_status', 'published_to_thoraxlab')
-                    .order('last_updated', { ascending: false });
+                // First, check if TRAci projects table exists
+                let traciProjects = [];
                 
-                if (traciError) throw traciError;
+                // Try different table names
+                try {
+                    // First try 'projects' table
+                    const { data: projectsData, error: projectsError } = await this.supabase
+                        .from('projects')
+                        .select('*')
+                        .or('review_status.eq.published_to_thoraxlab,status.eq.published')
+                        .order('last_updated', { ascending: false })
+                        .limit(20);
+                    
+                    if (projectsError) {
+                        console.log('Trying traci_projects table...');
+                        // Try 'traci_projects' table
+                        const { data: traciData, error: traciError } = await this.supabase
+                            .from('traci_projects')
+                            .select('*')
+                            .or('review_status.eq.published_to_thoraxlab,status.eq.published')
+                            .order('last_updated', { ascending: false })
+                            .limit(20);
+                        
+                        if (traciError) throw traciError;
+                        traciProjects = traciData || [];
+                    } else {
+                        traciProjects = projectsData || [];
+                    }
+                } catch (error) {
+                    console.error('Error fetching TRAci projects:', error);
+                    // If no TRAci projects found, show message
+                    if (error.message.includes('does not exist')) {
+                        this.showToast('TRAci projects table not found. Please check database setup.', 'warning');
+                        this.hideLoading();
+                        return;
+                    }
+                    throw error;
+                }
+                
+                if (traciProjects.length === 0) {
+                    this.showToast('No TRAci projects available for sync', 'info');
+                    this.hideLoading();
+                    return;
+                }
                 
                 // Get existing sync records
                 const { data: existingSyncs, error: syncError } = await this.supabase
@@ -6446,22 +6601,34 @@
                     .select('traci_project_id')
                     .eq('sync_direction', 'traci_to_thoraxlab');
                 
-                if (syncError) throw syncError;
+                if (syncError) {
+                    console.error('Error fetching sync records:', syncError);
+                    // Continue without sync records check
+                }
                 
                 const existingTraciIds = new Set(existingSyncs?.map(s => s.traci_project_id) || []);
                 
                 // Create ThoraxLab projects for new TRAci projects
                 let newProjectsCount = 0;
                 
-                for (const traciProject of traciProjects || []) {
+                for (const traciProject of traciProjects) {
+                    // Skip if already synced
                     if (existingTraciIds.has(traciProject.id)) {
-                        continue; // Already synced
+                        continue;
+                    }
+                    
+                    // Skip if already exists in ThoraxLab (by source_traci_project_id)
+                    const existingThoraxLabProject = this.cache.projects.find(p => p.source_traci_project_id === traciProject.id);
+                    if (existingThoraxLabProject) {
+                        existingTraciIds.add(traciProject.id);
+                        continue;
                     }
                     
                     // Transform TRAci project to ThoraxLab format
                     const thoraxlabProject = {
+                        id: this.generateUUID(),
                         title: `[Published from TRAci] ${traciProject.name}`,
-                        description: `[Published from TRAci Clinical Platform]\n\n${traciProject.description}\n\n**Clinical Status:** ${traciProject.status}\n**Progress:** ${traciProject.progress || 0}%`,
+                        description: `[Published from TRAci Clinical Platform]\n\n${traciProject.description || ''}\n\n**Clinical Status:** ${traciProject.status || 'unknown'}\n**Progress:** ${traciProject.progress || 0}%`,
                         project_type: 'clinical',
                         visibility: 'internal',
                         status: 'active',
@@ -6489,40 +6656,56 @@
                     }
                     
                     // Create sync record
-                    await this.supabase
-                        .from('project_sync')
-                        .insert([{
-                            traci_project_id: traciProject.id,
-                            thoraxlab_project_id: newProject.id,
-                            sync_direction: 'traci_to_thoraxlab',
-                            sync_purpose: 'clinical_collaboration',
-                            initiated_by: this.currentUser.id,
-                            initiated_at: new Date().toISOString(),
-                            status: 'completed',
-                            sync_notes: 'Auto-synced from TRAci'
-                        }]);
+                    try {
+                        await this.supabase
+                            .from('project_sync')
+                            .insert([{
+                                traci_project_id: traciProject.id,
+                                thoraxlab_project_id: newProject.id,
+                                sync_direction: 'traci_to_thoraxlab',
+                                sync_purpose: 'clinical_collaboration',
+                                initiated_by: this.currentUser.id,
+                                initiated_at: new Date().toISOString(),
+                                status: 'completed',
+                                sync_notes: 'Auto-synced from TRAci'
+                            }]);
+                    } catch (syncCreateError) {
+                        console.error('Error creating sync record:', syncCreateError);
+                        // Continue even if sync record fails
+                    }
                     
                     // Create discussion
-                    await this.supabase
-                        .from('thoraxlab_discussions')
-                        .insert([{
-                            title: `Clinical Innovation: ${traciProject.name}`,
-                            content: `This project was published from our clinical TRAci platform. Let's discuss how industry can collaborate with clinical experts.\n\n**Clinical Context:** ${traciProject.description}\n\n**Status:** ${traciProject.status}\n**Progress:** ${traciProject.progress || 0}%`,
-                            project_id: newProject.id,
-                            author_id: 'traci-platform',
-                            author_name: 'TRAci Platform',
-                            comment_count: 0,
-                            like_count: 0,
-                            created_at: new Date().toISOString()
-                        }]);
+                    try {
+                        await this.supabase
+                            .from('thoraxlab_discussions')
+                            .insert([{
+                                id: this.generateUUID(),
+                                title: `Clinical Innovation: ${traciProject.name}`,
+                                content: `This project was published from our clinical TRAci platform. Let's discuss how industry can collaborate with clinical experts.\n\n**Clinical Context:** ${traciProject.description || ''}\n\n**Status:** ${traciProject.status || 'unknown'}\n**Progress:** ${traciProject.progress || 0}%`,
+                                project_id: newProject.id,
+                                author_id: 'traci-platform',
+                                author_name: 'TRAci Platform',
+                                comment_count: 0,
+                                like_count: 0,
+                                created_at: new Date().toISOString()
+                            }]);
+                    } catch (discussionError) {
+                        console.error('Error creating discussion:', discussionError);
+                        // Continue even if discussion creation fails
+                    }
                     
                     newProjectsCount++;
+                    existingTraciIds.add(traciProject.id);
                 }
                 
                 // Refresh cache
                 await this.loadProjects();
                 
-                this.showToast(`✅ Synced ${newProjectsCount} new projects from TRAci`, 'success');
+                if (newProjectsCount > 0) {
+                    this.showToast(`✅ Synced ${newProjectsCount} new projects from TRAci`, 'success');
+                } else {
+                    this.showToast('✅ All TRAci projects are already synced', 'info');
+                }
                 
                 // Refresh current page
                 if (this.state.currentPage === 'fromtraci') {
@@ -6535,215 +6718,6 @@
             } finally {
                 this.hideLoading();
             }
-        }
-
-        // ============================================
-        // DISCUSSION METHODS
-        // ============================================
-        
-        async loadDiscussionsPage() {
-            const container = document.getElementById('discussionsList');
-            if (!container) return;
-            
-            this.showLoading('Loading discussions...');
-            
-            try {
-                const discussions = this.cache.discussions;
-                
-                if (discussions.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-comments empty-state-icon"></i>
-                            <div class="empty-state-title">No Discussions Yet</div>
-                            <p class="empty-state-description">Start the first discussion about clinical-industry innovation</p>
-                            <button class="btn btn-primary mt-4" onclick="window.thoraxLab.showModal('newDiscussionModal')">
-                                <i class="fas fa-plus"></i>
-                                Start Discussion
-                            </button>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                await this.renderDiscussions(discussions, container);
-            } catch (error) {
-                console.error('Error loading discussions:', error);
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle empty-state-icon"></i>
-                        <div class="empty-state-title">Failed to Load Discussions</div>
-                        <p class="empty-state-description">Please try again later</p>
-                    </div>
-                `;
-            } finally {
-                this.hideLoading();
-            }
-        }
-        
-        async renderDiscussions(discussions, container) {
-            const html = await Promise.all(discussions.map(async (discussion) => {
-                const author = this.cache.profiles.get(discussion.author_id) || {};
-                const project = discussion.project_id ? 
-                    this.cache.projects.find(p => p.id === discussion.project_id) : null;
-                
-                return this.renderDiscussionCard(discussion, author, project);
-            }));
-            
-            container.innerHTML = html.join('');
-            
-            // Add click handlers
-            container.querySelectorAll('.discussion-card').forEach(card => {
-                card.addEventListener('click', (e) => {
-                    if (!e.target.closest('button')) {
-                        const discussionId = card.dataset.discussionId;
-                        this.showDiscussionDetails(discussionId);
-                    }
-                });
-            });
-        }
-        
-        renderDiscussionCard(discussion, author, project) {
-            const avatarText = author.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || '??';
-            
-            // Add edit/delete buttons for discussion owners or admins - COMPACT VERSION
-            let actionButtons = '';
-            if (this.currentUser && (this.currentUser.id === discussion.author_id || this.isAdmin)) {
-                actionButtons = `
-                    <div class="action-buttons">
-                        <button class="btn btn-secondary btn-sm action-btn" onclick="event.stopPropagation(); window.thoraxLab.editDiscussion('${discussion.id}')" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm action-btn" onclick="event.stopPropagation(); window.thoraxLab.deleteDiscussion('${discussion.id}')" title="Delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-            }
-            
-            return `
-                <div class="discussion-card" data-discussion-id="${discussion.id}">
-                    <div class="discussion-header">
-                        <div class="discussion-author">
-                            <div class="team-avatar" style="background: var(--accent-purple); color: white;" title="${author.full_name || 'Unknown'}">
-                                ${avatarText}
-                            </div>
-                            <div class="discussion-meta">
-                                <div class="font-semibold text-sm">${author.full_name || 'Unknown User'}</div>
-                                <div class="text-xs text-gray-500">${this.formatTimeAgo(discussion.created_at)}</div>
-                            </div>
-                        </div>
-                        <div class="flex gap-1">
-                            ${project ? `
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-blue-50 text-blue-700 border border-blue-200">
-                                    <i class="fas fa-project-diagram mr-1 text-xs"></i>
-                                    ${this.escapeHtml(project.title.substring(0, 15))}...
-                                </span>
-                            ` : ''}
-                            ${actionButtons}
-                        </div>
-                    </div>
-                    
-                    <h3 class="discussion-title">${this.escapeHtml(discussion.title)}</h3>
-                    
-                    <div class="discussion-content">
-                        ${this.escapeHtml(discussion.content.substring(0, 250))}${discussion.content.length > 250 ? '...' : ''}
-                    </div>
-                    
-                    <div class="discussion-actions">
-                        <div>
-                            <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); window.thoraxLab.showDiscussionDetails('${discussion.id}')">
-                                <i class="fas fa-comment text-xs"></i>
-                                Join Discussion
-                            </button>
-                        </div>
-                        <div class="discussion-stats">
-                            <span class="stat-item" onclick="event.stopPropagation(); window.thoraxLab.handleLike('discussion', '${discussion.id}')">
-                                <i class="far fa-thumbs-up text-xs"></i>
-                                <span class="like-count">${discussion.like_count || 0}</span>
-                            </span>
-                            <span class="stat-item">
-                                <i class="far fa-comment text-xs"></i>
-                                ${discussion.comment_count || 0}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        async createDiscussion(e) {
-            e.preventDefault();
-            
-            if (!this.currentUser) {
-                this.showToast('Please sign in to create a discussion', 'error');
-                this.showAuth();
-                return;
-            }
-            
-            const title = document.getElementById('discussionTitle').value.trim();
-            const content = document.getElementById('discussionContent').value.trim();
-            const projectId = document.getElementById('discussionProject')?.value || null;
-            const category = document.getElementById('discussionCategory')?.value || 'general';
-            
-            if (!title || !content) {
-                this.showToast('Title and content are required', 'error');
-                return;
-            }
-            
-            try {
-                const discussionData = {
-                    title,
-                    content,
-                    project_id: projectId,
-                    category,
-                    author_id: this.currentUser.id,
-                    author_name: this.currentUser.name,
-                    comment_count: 0,
-                    like_count: 0,
-                    created_at: new Date().toISOString()
-                };
-                
-                const { data: discussion, error } = await this.supabase
-                    .from('thoraxlab_discussions')
-                    .insert([discussionData])
-                    .select()
-                    .single();
-                
-                if (error) throw error;
-                
-                // Update cache (will also be updated via real-time subscription)
-                this.cache.discussions.unshift(discussion);
-                
-                this.showToast('Discussion started successfully!', 'success');
-                this.hideModal('newDiscussionModal');
-                
-                // Reset form
-                document.getElementById('discussionForm').reset();
-                
-                // Navigate to discussions
-                this.navigateTo('discussions');
-                
-            } catch (error) {
-                console.error('Error creating discussion:', error);
-                this.showToast('Failed to create discussion: ' + error.message, 'error');
-            }
-        }
-
-        // ============================================
-        // NETWORK STATUS HANDLING
-        // ============================================
-        
-        handleOnline() {
-            this.showToast('Back online! Syncing data...', 'success');
-            // Reload data when coming back online
-            setTimeout(() => {
-                this.loadInitialData();
-                this.setupRealtimeSubscriptions();
-            }, 1000);
-        }
-        
-        handleOffline() {
-            this.showToast('You are offline. Some features may be limited.', 'warning');
         }
 
         // ============================================
@@ -6916,21 +6890,6 @@
             }
         }
         
-        formatDate(dateString) {
-            try {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'short', 
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-            } catch (error) {
-                return 'Unknown date';
-            }
-        }
-        
         escapeHtml(text) {
             if (!text) return '';
             const div = document.createElement('div');
@@ -6972,6 +6931,581 @@
             this.showModal('newDiscussionModal');
         }
         
+        showProjectDetails(projectId) {
+            const project = this.cache.projects.find(p => p.id === projectId);
+            if (!project) {
+                this.showToast('Project not found', 'error');
+                return;
+            }
+            
+            const owner = this.cache.profiles.get(project.owner_id) || {};
+            const isFromTraci = !!project.source_traci_project_id;
+            
+            document.getElementById('modalProjectTitle').textContent = project.title;
+            document.getElementById('modalProjectContent').innerHTML = `
+                <div class="mb-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full ${isFromTraci ? 'bg-clinical' : 'bg-accent'} text-white flex items-center justify-center font-semibold">
+                            ${owner.full_name?.substring(0, 2).toUpperCase() || '??'}
+                        </div>
+                        <div>
+                            <div class="font-semibold">${owner.full_name || 'Unknown User'}</div>
+                            <div class="text-sm text-gray-500">${this.formatTimeAgo(project.created_at)}</div>
+                        </div>
+                    </div>
+                    <div class="prose max-w-none">
+                        <p>${this.escapeHtml(project.description).replace(/\n/g, '<br>')}</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="text-sm font-medium text-gray-500 mb-1">Project Type</div>
+                        <div class="font-semibold">${project.project_type?.charAt(0).toUpperCase() + project.project_type?.slice(1) || 'Unknown'}</div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="text-sm font-medium text-gray-500 mb-1">Status</div>
+                        <div class="font-semibold">${project.status?.charAt(0).toUpperCase() + project.status?.slice(1) || 'Unknown'}</div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="text-sm font-medium text-gray-500 mb-1">Visibility</div>
+                        <div class="font-semibold">${project.visibility?.charAt(0).toUpperCase() + project.visibility?.slice(1) || 'Unknown'}</div>
+                    </div>
+                </div>
+                
+                ${project.tags?.length ? `
+                    <div class="mb-6">
+                        <div class="text-sm font-medium text-gray-500 mb-2">Tags</div>
+                        <div class="flex flex-wrap gap-2">
+                            ${project.tags.map(tag => `
+                                <span class="inline-block px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
+                                    ${this.escapeHtml(tag)}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+                
+                ${isFromTraci ? `
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-hospital text-blue-600"></i>
+                            <div class="font-semibold text-blue-700">From TRAci Platform</div>
+                        </div>
+                        <p class="text-sm text-blue-600">This project was imported from the TRAci clinical platform for industry collaboration.</p>
+                    </div>
+                ` : ''}
+                
+                <div class="flex gap-2">
+                    <button class="btn btn-primary" onclick="window.thoraxLab.showDiscussionModal('${projectId}')">
+                        <i class="fas fa-comment"></i>
+                        Discuss This Project
+                    </button>
+                    ${!isFromTraci ? `
+                        <button class="btn btn-import" onclick="window.thoraxLab.showImportModal('${projectId}', '${this.escapeHtml(project.title)}')">
+                            <i class="fas fa-download"></i>
+                            Import to TRAci
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+            
+            this.showModal('projectDetailModal');
+        }
+        
+        // Admin methods
+        async loadAdminDashboard() {
+            if (!this.isAdmin) {
+                this.navigateTo('dashboard');
+                return;
+            }
+            
+            this.showLoading('Loading admin dashboard...');
+            
+            try {
+                // Load admin data
+                const [users, projects, discussions] = await Promise.all([
+                    this.supabase.from('thoraxlab_profiles').select('*'),
+                    this.supabase.from('thoraxlab_projects').select('*'),
+                    this.supabase.from('thoraxlab_discussions').select('*')
+                ]);
+                
+                // Update stats
+                document.getElementById('adminUserCount').textContent = users.data?.length || 0;
+                document.getElementById('adminProjectCount').textContent = projects.data?.length || 0;
+                document.getElementById('adminDiscussionCount').textContent = discussions.data?.length || 0;
+                
+                // Load sync count
+                const { data: syncs } = await this.supabase
+                    .from('project_sync')
+                    .select('id')
+                    .eq('status', 'pending');
+                
+                document.getElementById('adminSyncCount').textContent = syncs?.length || 0;
+                
+                // Load users table
+                this.renderAdminUsersTable(users.data || []);
+                
+                this.showToast('Admin dashboard loaded', 'success');
+            } catch (error) {
+                console.error('Error loading admin dashboard:', error);
+                this.showToast('Failed to load admin dashboard', 'error');
+            } finally {
+                this.hideLoading();
+            }
+        }
+        
+        renderAdminUsersTable(users) {
+            const table = document.getElementById('adminUsersTable');
+            if (!table) return;
+            
+            table.innerHTML = users.map(user => `
+                <tr>
+                    <td class="font-medium">${this.escapeHtml(user.full_name)}</td>
+                    <td>
+                        <span class="inline-block px-2 py-1 rounded text-xs font-medium 
+                            ${user.user_type === 'admin' ? 'bg-purple-100 text-purple-800' : 
+                              user.user_type === 'clinical' ? 'bg-blue-100 text-blue-800' : 
+                              user.user_type === 'industry' ? 'bg-green-100 text-green-800' : 
+                              'bg-gray-100 text-gray-800'}">
+                            ${user.user_type?.charAt(0).toUpperCase() + user.user_type?.slice(1)}
+                        </span>
+                    </td>
+                    <td>${user.hospital_institution || user.company || '-'}</td>
+                    <td>
+                        <span class="inline-block px-2 py-1 rounded text-xs font-medium 
+                            ${user.is_verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
+                            ${user.is_verified ? 'Verified' : 'Pending'}
+                        </span>
+                    </td>
+                    <td>${this.formatTimeAgo(user.created_at)}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-secondary btn-sm action-btn" onclick="window.thoraxLab.editUser('${user.user_id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm action-btn" onclick="window.thoraxLab.deleteUser('${user.user_id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        switchAdminTab(tabId) {
+            this.state.adminTab = tabId;
+            
+            // Hide all tab contents
+            document.querySelectorAll('.admin-tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Show selected tab content
+            const selectedTab = document.getElementById(`admin${tabId.charAt(0).toUpperCase() + tabId.slice(1)}Tab`);
+            if (selectedTab) {
+                selectedTab.classList.remove('hidden');
+            }
+            
+            // Update active tab button
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.tab === tabId);
+            });
+            
+            // Load tab-specific data
+            switch(tabId) {
+                case 'projects':
+                    this.loadAdminProjects();
+                    break;
+                case 'discussions':
+                    this.loadAdminDiscussions();
+                    break;
+            }
+        }
+        
+        async loadAdminProjects() {
+            try {
+                const { data: projects } = await this.supabase
+                    .from('thoraxlab_projects')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                this.renderAdminProjectsTable(projects || []);
+            } catch (error) {
+                console.error('Error loading admin projects:', error);
+            }
+        }
+        
+        renderAdminProjectsTable(projects) {
+            const table = document.getElementById('adminProjectsTable');
+            if (!table) return;
+            
+            table.innerHTML = projects.map(project => `
+                <tr>
+                    <td class="font-medium truncate max-w-xs">${this.escapeHtml(project.title)}</td>
+                    <td>
+                        <span class="inline-block px-2 py-1 rounded text-xs font-medium 
+                            ${project.project_type === 'clinical' ? 'bg-blue-100 text-blue-800' : 
+                              project.project_type === 'industry' ? 'bg-green-100 text-green-800' : 
+                              'bg-purple-100 text-purple-800'}">
+                            ${project.project_type?.charAt(0).toUpperCase() + project.project_type?.slice(1)}
+                        </span>
+                    </td>
+                    <td>${project.owner_name || 'Unknown'}</td>
+                    <td>
+                        <span class="inline-block px-2 py-1 rounded text-xs font-medium 
+                            ${project.visibility === 'public' ? 'bg-green-100 text-green-800' : 
+                              project.visibility === 'private' ? 'bg-red-100 text-red-800' : 
+                              'bg-blue-100 text-blue-800'}">
+                            ${project.visibility?.charAt(0).toUpperCase() + project.visibility?.slice(1)}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="inline-block px-2 py-1 rounded text-xs font-medium 
+                            ${project.status === 'active' ? 'bg-green-100 text-green-800' : 
+                              project.status === 'archived' ? 'bg-gray-100 text-gray-800' : 
+                              'bg-yellow-100 text-yellow-800'}">
+                            ${project.status?.charAt(0).toUpperCase() + project.status?.slice(1)}
+                        </span>
+                    </td>
+                    <td>${this.formatTimeAgo(project.created_at)}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-secondary btn-sm action-btn" onclick="window.thoraxLab.editProject('${project.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm action-btn" onclick="window.thoraxLab.deleteProject('${project.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        async loadAdminDiscussions() {
+            try {
+                const { data: discussions } = await this.supabase
+                    .from('thoraxlab_discussions')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                this.renderAdminDiscussionsTable(discussions || []);
+            } catch (error) {
+                console.error('Error loading admin discussions:', error);
+            }
+        }
+        
+        renderAdminDiscussionsTable(discussions) {
+            const table = document.getElementById('adminDiscussionsTable');
+            if (!table) return;
+            
+            table.innerHTML = discussions.map(discussion => `
+                <tr>
+                    <td class="font-medium truncate max-w-xs">${this.escapeHtml(discussion.title)}</td>
+                    <td>${discussion.author_name || 'Unknown'}</td>
+                    <td>${discussion.project_id ? 'Linked' : 'None'}</td>
+                    <td>${discussion.comment_count || 0}</td>
+                    <td>${this.formatTimeAgo(discussion.created_at)}</td>
+                    <td>
+                        <span class="inline-block px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800">
+                            Active
+                        </span>
+                    </td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-secondary btn-sm action-btn" onclick="window.thoraxLab.editDiscussion('${discussion.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm action-btn" onclick="window.thoraxLab.deleteDiscussion('${discussion.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        async editUser(userId) {
+            const user = Array.from(this.cache.profiles.values()).find(u => u.user_id === userId);
+            if (!user) {
+                this.showToast('User not found', 'error');
+                return;
+            }
+            
+            const newRole = prompt('Enter new user role (clinical/industry/admin/guest):', user.user_type);
+            if (newRole && ['clinical', 'industry', 'admin', 'guest'].includes(newRole)) {
+                try {
+                    const { error } = await this.supabase
+                        .from('thoraxlab_profiles')
+                        .update({ user_type: newRole })
+                        .eq('user_id', userId);
+                    
+                    if (error) throw error;
+                    
+                    this.showToast('User role updated', 'success');
+                    this.loadAdminDashboard();
+                } catch (error) {
+                    this.showToast('Failed to update user', 'error');
+                }
+            }
+        }
+        
+        async deleteUser(userId) {
+            if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                return;
+            }
+            
+            try {
+                // Delete user's projects first
+                const { error: projectsError } = await this.supabase
+                    .from('thoraxlab_projects')
+                    .delete()
+                    .eq('owner_id', userId);
+                
+                if (projectsError) throw projectsError;
+                
+                // Delete user's discussions
+                const { error: discussionsError } = await this.supabase
+                    .from('thoraxlab_discussions')
+                    .delete()
+                    .eq('author_id', userId);
+                
+                if (discussionsError) throw discussionsError;
+                
+                // Delete user profile
+                const { error: userError } = await this.supabase
+                    .from('thoraxlab_profiles')
+                    .delete()
+                    .eq('user_id', userId);
+                
+                if (userError) throw userError;
+                
+                this.showToast('User deleted successfully', 'success');
+                this.loadAdminDashboard();
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                this.showToast('Failed to delete user', 'error');
+            }
+        }
+        
+        showAddUserModal() {
+            this.showModal('addUserModal');
+        }
+        
+        async addUser(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('newUserName').value.trim();
+            const email = document.getElementById('newUserEmail').value.trim();
+            const type = document.getElementById('newUserType').value;
+            const password = document.getElementById('newUserPassword').value.trim();
+            
+            if (!name || !email || !type || !password) {
+                this.showToast('Please fill in all fields', 'error');
+                return;
+            }
+            
+            try {
+                const userId = this.generateUUID();
+                const userData = {
+                    user_id: userId,
+                    full_name: name,
+                    user_type: type,
+                    password_hash: password,
+                    is_verified: true,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                };
+                
+                // Add role-specific fields
+                if (type === 'clinical') {
+                    userData.clinical_specialty = 'Pulmonology';
+                    userData.hospital_institution = 'General Hospital';
+                } else if (type === 'industry') {
+                    userData.professional_role = 'Industry Professional';
+                    userData.company = 'Technology Company';
+                }
+                
+                const { error } = await this.supabase
+                    .from('thoraxlab_profiles')
+                    .insert([userData]);
+                
+                if (error) throw error;
+                
+                this.showToast('User added successfully', 'success');
+                this.hideModal('addUserModal');
+                this.loadAdminDashboard();
+                
+                // Reset form
+                document.getElementById('addUserForm').reset();
+                
+            } catch (error) {
+                console.error('Error adding user:', error);
+                this.showToast('Failed to add user: ' + error.message, 'error');
+            }
+        }
+        
+        saveSettings() {
+            this.showToast('Settings saved', 'success');
+        }
+        
+        exportData() {
+            const data = {
+                exportedAt: new Date().toISOString(),
+                stats: this.cache.stats,
+                projects: this.cache.projects,
+                discussions: this.cache.discussions,
+                users: Array.from(this.cache.profiles.values())
+            };
+            this.exportToJSON(data, 'thoraxlab-full-export.json');
+            this.showToast('Data exported', 'success');
+        }
+        
+        // Profile methods
+        async loadProfilePage() {
+            if (!this.currentUser) return;
+            
+            this.showLoading('Loading profile...');
+            
+            try {
+                const user = this.cache.profiles.get(this.currentUser.id);
+                if (!user) {
+                    this.showToast('Profile not found', 'error');
+                    return;
+                }
+                
+                // Update profile display
+                document.getElementById('profileAvatar').textContent = 
+                    user.full_name?.substring(0, 2).toUpperCase() || '??';
+                document.getElementById('profileName').textContent = user.full_name || 'Unknown';
+                document.getElementById('profileRole').textContent = 
+                    user.user_type?.charAt(0).toUpperCase() + user.user_type?.slice(1) || 'User';
+                document.getElementById('profileType').textContent = user.user_type || 'guest';
+                document.getElementById('profileFullName').textContent = user.full_name || '-';
+                document.getElementById('profileEmail').textContent = user.email || '-';
+                document.getElementById('profileJoined').textContent = this.formatTimeAgo(user.created_at);
+                document.getElementById('profileSpecialty').querySelector('div').textContent = 
+                    user.clinical_specialty || user.professional_role || '-';
+                document.getElementById('profileInstitution').querySelector('div').textContent = 
+                    user.hospital_institution || user.company || '-';
+                
+                // Expertise tags
+                const expertiseDiv = document.getElementById('profileExpertise');
+                if (user.expertise && Array.isArray(user.expertise)) {
+                    expertiseDiv.innerHTML = user.expertise.map(tag => `
+                        <span class="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
+                            ${this.escapeHtml(tag)}
+                        </span>
+                    `).join('');
+                } else {
+                    expertiseDiv.innerHTML = '<span class="text-gray-500 text-xs">No expertise listed</span>';
+                }
+                
+                // Activity stats
+                document.getElementById('profileProjects').textContent = 
+                    this.cache.projects.filter(p => p.owner_id === this.currentUser.id).length;
+                document.getElementById('profileDiscussions').textContent = 
+                    this.cache.discussions.filter(d => d.author_id === this.currentUser.id).length;
+                
+                const allComments = Array.from(this.cache.comments.values()).flat();
+                document.getElementById('profileComments').textContent = 
+                    allComments.filter(c => c.author_id === this.currentUser.id).length;
+                
+                const allLikes = this.cache.projects.reduce((sum, p) => sum + (p.like_count || 0), 0) +
+                               this.cache.discussions.reduce((sum, d) => sum + (d.like_count || 0), 0);
+                document.getElementById('profileLikes').textContent = allLikes;
+                
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                this.showToast('Failed to load profile', 'error');
+            } finally {
+                this.hideLoading();
+            }
+        }
+        
+        editProfile() {
+            const user = this.cache.profiles.get(this.currentUser.id);
+            if (!user) {
+                this.showToast('Profile not found', 'error');
+                return;
+            }
+            
+            // Fill form with current data
+            document.getElementById('editFullName').value = user.full_name || '';
+            document.getElementById('editEmail').value = user.email || '';
+            document.getElementById('editSpecialty').value = user.clinical_specialty || user.professional_role || '';
+            document.getElementById('editInstitution').value = user.hospital_institution || user.company || '';
+            document.getElementById('editExpertise').value = user.expertise?.join(', ') || '';
+            document.getElementById('editBio').value = user.bio || '';
+            
+            this.showModal('editProfileModal');
+        }
+        
+        async saveProfile(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('editFullName').value.trim();
+            const email = document.getElementById('editEmail').value.trim();
+            const specialty = document.getElementById('editSpecialty').value.trim();
+            const institution = document.getElementById('editInstitution').value.trim();
+            const expertise = document.getElementById('editExpertise').value.trim();
+            const bio = document.getElementById('editBio').value.trim();
+            
+            if (!fullName || !email) {
+                this.showToast('Name and email are required', 'error');
+                return;
+            }
+            
+            try {
+                const updateData = {
+                    full_name: fullName,
+                    email: email,
+                    bio: bio,
+                    updated_at: new Date().toISOString()
+                };
+                
+                // Add role-specific fields
+                if (this.currentUser.type === 'clinical') {
+                    updateData.clinical_specialty = specialty;
+                    updateData.hospital_institution = institution;
+                } else if (this.currentUser.type === 'industry') {
+                    updateData.professional_role = specialty;
+                    updateData.company = institution;
+                }
+                
+                // Parse expertise
+                if (expertise) {
+                    updateData.expertise = expertise.split(',').map(e => e.trim()).filter(e => e);
+                }
+                
+                const { error } = await this.supabase
+                    .from('thoraxlab_profiles')
+                    .update(updateData)
+                    .eq('user_id', this.currentUser.id);
+                
+                if (error) throw error;
+                
+                // Update current user
+                this.currentUser.name = fullName;
+                this.updateUserDisplay();
+                
+                // Update cache
+                const userProfile = this.cache.profiles.get(this.currentUser.id);
+                if (userProfile) {
+                    Object.assign(userProfile, updateData);
+                }
+                
+                this.showToast('Profile updated successfully', 'success');
+                this.hideModal('editProfileModal');
+                this.loadProfilePage();
+                
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                this.showToast('Failed to save profile: ' + error.message, 'error');
+            }
+        }
+        
         // Placeholder methods for UI buttons
         showSettings() {
             this.showToast('Settings feature coming soon', 'info');
@@ -7009,60 +7543,7 @@
             this.showToast('View exported', 'success');
         }
         
-        // Admin methods (simplified placeholders)
-        async loadAdminDashboard() {
-            if (!this.isAdmin) {
-                this.navigateTo('dashboard');
-                return;
-            }
-            
-            this.showToast('Admin dashboard loaded', 'info');
-        }
-        
-        switchAdminTab(tabId) {
-            this.state.adminTab = tabId;
-            this.showToast(`Switched to ${tabId} tab`, 'info');
-        }
-        
-        async addUser(e) {
-            e.preventDefault();
-            this.showToast('User added (placeholder)', 'info');
-            this.hideModal('addUserModal');
-        }
-        
-        saveSettings() {
-            this.showToast('Settings saved (placeholder)', 'success');
-        }
-        
-        exportData() {
-            const data = {
-                exportedAt: new Date().toISOString(),
-                stats: this.cache.stats,
-                projects: this.cache.projects,
-                discussions: this.cache.discussions
-            };
-            this.exportToJSON(data, 'thoraxlab-full-export.json');
-            this.showToast('Data exported', 'success');
-        }
-        
-        // Profile methods
-        async loadProfilePage() {
-            if (!this.currentUser) return;
-            
-            this.showToast('Profile loaded', 'info');
-        }
-        
-        editProfile() {
-            this.showModal('editProfileModal');
-        }
-        
-        async saveProfile(e) {
-            e.preventDefault();
-            this.showToast('Profile updated', 'success');
-            this.hideModal('editProfileModal');
-        }
-        
-        // Show template import modal
+        // Template methods
         showTemplateImportModal() {
             this.showModal('importTemplateModal');
         }
